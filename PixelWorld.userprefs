@@ -1,0 +1,17 @@
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Window\PanelLogin.cs">
+    <Files>
+      <File FileName="Assets\Scripts\AssetBundleManager.cs" Line="160" Column="32" />
+      <File FileName="Assets\Scripts\ResourceManager.cs" Line="57" Column="45" />
+      <File FileName="Assets\Scripts\Window\PanelLogin.cs" Line="19" Column="62" />
+      <File FileName="Assets\Editor\AssetBundleBuild.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\RotateScript.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\CfgManager.cs" Line="29" Column="51" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
