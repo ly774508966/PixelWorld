@@ -137,8 +137,24 @@ public class GUIManager : MonoBehaviour {
 		return m_Stack.Exists(x => x.name==window);
 	}
 
+	// 提示框
+	public void ShowAlert(string title, string msg, AlertCallback callback=null) {
+		RectTransform rt = ShowWindow("PanelAlert");
+
+		PanelAlert script = rt.GetComponent<PanelAlert>();
+		script.SetTitle(title);
+		script.SetMsg(msg);
+		script.SetCallback(callback);
+	}
+	public void HideAlert() {
+		HideWindow("PanelAlert");
+	}
+
 	public Sprite LoadSprite(string spriteName) {
 		return Resources.Load<GameObject>("UI/" + spriteName).GetComponent<SpriteRenderer>().sprite;
 	}
+
+
+
 
 }

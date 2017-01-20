@@ -51,4 +51,10 @@ public class PanelLogin : MonoBehaviour {
 		text_items.text = CfgManager.GetInstance().cfg_items;
 		text_skills.text = CfgManager.GetInstance().cfg_skills;
 	}
+
+
+
+	public void OnBtnAlert() {
+		GUIManager.GetInstance().
+	}
 }
