@@ -133,10 +133,11 @@ public class AssetBundleManager : MonoBehaviour {
 
 		if (www.error != null) {
 			Debug.LogError("downloading error! " + www.error);
-		}
-		if (www.isDone) {
-			if (handler != null) {
-				handler(www);
+		} else {
+			if (www.isDone) {
+				if (handler != null) {
+					handler(www);
+				}
 			}
 		}
 

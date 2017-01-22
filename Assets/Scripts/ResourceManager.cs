@@ -40,7 +40,7 @@ public class ResourceManager : MonoBehaviour {
 					pos = assets[i].LastIndexOf(".");
 					string assetName = assets[i].Substring(17, pos-17);
 					Debug.Log("assetName " + assetName);
-					m_AssetMapAssetBundle.Add(assetName, assetBundle);
+					m_AssetMapAssetBundle.Add(assetName.ToLower(), assetBundle);
 				}
 			}
 		}
@@ -48,10 +48,11 @@ public class ResourceManager : MonoBehaviour {
 
 
 	public AssetBundle GetAssetBundleFormName(string assetName) {
-		if (!m_AssetMapAssetBundle.ContainsKey(assetName))
+		string name = assetName.ToLower();
+		if (!m_AssetMapAssetBundle.ContainsKey(name))
 			return null;
 
-		return m_AssetMapAssetBundle[assetName];
+		return m_AssetMapAssetBundle[name];
 	}
 
 	public Object LoadAsset(string assetName) {

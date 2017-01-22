@@ -8,9 +8,9 @@ public class GUIManager : MonoBehaviour {
 
 	private static GUIManager _instance;
 	public static GUIManager GetInstance() {
-		GameObject main = GameObject.Find("UI");
+		GameObject main = GameObject.Find("Main");
 		if (main == null) {
-			main = new GameObject("UI");
+			main = new GameObject("Main");
 			DontDestroyOnLoad(main);
 		}
 	
@@ -30,9 +30,7 @@ public class GUIManager : MonoBehaviour {
 		public RectTransform rt;
 	}
 
-
 	private RectTransform	m_Root;
-	private RectTransform	m_Root_top;
 
 	private Dictionary<string, string> m_PanelMap = new Dictionary<string, string>();
 	private Dictionary<string, LayerPriority> m_PanelLayerMap = new Dictionary<string, LayerPriority>();
@@ -40,19 +38,16 @@ public class GUIManager : MonoBehaviour {
 
 
 	void Awake () {
-		Canvas canvas = transform.Find("Canvas").GetComponent<Canvas>();
+		Canvas canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
 		m_Root = canvas.GetComponent<RectTransform>();
+	
 
-
-		m_Root_top = transform.Find("Canvas Top") as RectTransform;
-
-		m_PanelMap.Add("PanelAlert", "Prefabs/UI/Panel Alert");
-		m_PanelMap.Add("PanelWait", "Prefabs/UI/Panel Wait");
+		m_PanelMap.Add("PanelAlert", "UI/PanelAlert");
+		m_PanelMap.Add("PanelWait", "UI/PanelWait");
 
 
 		m_PanelLayerMap.Add("PanelAlert", LayerPriority.Top);
 		m_PanelLayerMap.Add("PanelWait", LayerPriority.Top);
-		m_PanelLayerMap.Add("PanelTutorial", LayerPriority.Top);
 	
 	}
 
@@ -72,7 +67,8 @@ public class GUIManager : MonoBehaviour {
 			view = m_Stack[index];
 			m_Stack.RemoveAt(index);
 		} else {
-			GameObject panel = Instantiate(Resources.Load(m_PanelMap[window]) as GameObject);
+			Object obj = ResourceManager.GetInstance().LoadAsset(m_PanelMap[window]);
+			GameObject panel = Instantiate(obj as GameObject);
 
 			RectTransform rt = panel.GetComponent<RectTransform>();
 			rt.SetParent(m_Root);

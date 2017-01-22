@@ -1,1 +1,1 @@
-equips1.0.1
+equips1.0.0

@@ -18,7 +18,7 @@ public class PanelAlert : BaseWindow {
 	public AlertCallback _callback;
 
 	void Awake () {
-		btn_ok = transform.FindChild("Button Ok") as RectTransform;
+		btn_ok = transform.FindChild("Button OK") as RectTransform;
 		btn_cancel = transform.FindChild("Button Cancel") as RectTransform;
 
 		text_title = transform.FindChild("Text Title").GetComponent<Text>();
@@ -26,7 +26,6 @@ public class PanelAlert : BaseWindow {
 	}
 
 	public override void Init(object data) {
-		transform.localPosition = new Vector3(0, 0, -1000);
 	}
 
 	public void SetTitle(string title) {
@@ -44,12 +43,6 @@ public class PanelAlert : BaseWindow {
 			btn_ok.anchoredPosition = new Vector2(0, btn_ok.anchoredPosition.y);
 			btn_cancel.gameObject.SetActive(false);
 		}
-	}
-
-	public void OnBtnClose() {
-		if (_callback != null) _callback(AlertRet.CANCEL);
-		GUIManager.GetInstance().HideAlert();
-		SoundManager.instance.PlaySE(SoundManager.UI_BTN);
 	}
 
 	public void OnBtnOk() {

@@ -16,6 +16,7 @@ public class PanelLogin : MonoBehaviour {
 	}
 
 	void Start() {
+		AssetBundleManager.GetInstance().AddLoadAssetBundle("ui/panelalert");
 		AssetBundleManager.GetInstance().AddLoadAssetBundle("box");
 		AssetBundleManager.GetInstance().AddLoadAssetBundle("cfg");
 	}
@@ -40,11 +41,12 @@ public class PanelLogin : MonoBehaviour {
 		CfgManager.GetInstance().Init();
 
 		AssetBundle assetBundle = AssetBundleManager.GetInstance().GetLoadedAssetBundle("box");
-		Debug.Assert(assetBundle != null);
-		GameObject go =  (GameObject)Instantiate(assetBundle.LoadAsset("box", typeof(GameObject)));
-		go.transform.localPosition = new Vector3(300, 0, 500);
-		go =  (GameObject)Instantiate(assetBundle.LoadAsset("box", typeof(GameObject)));
-		go.transform.localPosition = new Vector3(-300, 0, 500);
+		if (assetBundle != null) {
+			GameObject go =  (GameObject)Instantiate(assetBundle.LoadAsset("box", typeof(GameObject)));
+			go.transform.localPosition = new Vector3(300, 0, 500);
+			go =  (GameObject)Instantiate(assetBundle.LoadAsset("box", typeof(GameObject)));
+			go.transform.localPosition = new Vector3(-300, 0, 500);
+		}
 
 
 		text_equips.text = CfgManager.GetInstance().cfg_equips;
@@ -55,6 +57,6 @@ public class PanelLogin : MonoBehaviour {
 
 
 	public void OnBtnAlert() {
-		GUIManager.GetInstance().
+		GUIManager.GetInstance().ShowAlert("提示", "提示框测试");
 	}
 }
