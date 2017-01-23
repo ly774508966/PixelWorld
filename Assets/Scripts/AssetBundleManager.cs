@@ -6,6 +6,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
+public delegate void HandleDownloadFinish(WWW www);
+public delegate void HandleDownloadCallback();
 
 public class AssetBundleManager : MonoBehaviour {
 
@@ -33,9 +35,9 @@ public class AssetBundleManager : MonoBehaviour {
 		return instance;
 	}
 
-	public delegate void HandleDownloadFinish(WWW www);
 
 	static string m_BaseDownloadingURL = "http://192.168.1.106:8080/update/AssetBundles/";
+	public string BaseDownloaindURL {get {return m_BaseDownloadingURL;}}
 
 
 	static Queue<string> m_ToLoadAssetBundles = new Queue<string>();
@@ -43,6 +45,8 @@ public class AssetBundleManager : MonoBehaviour {
 	static Dictionary<string, AssetBundle> m_LoadedAssetBundles = new Dictionary<string, AssetBundle>();
 
 	public Dictionary<string, AssetBundle> LoadedAssetBundles {get {return m_LoadedAssetBundles;}}
+
+	static HandleDownloadCallback m_callback;
 
 #if UNITY_EDITOR
 	public static string GetPlatformFolderForAssetBundles(BuildTarget target)
@@ -109,7 +113,11 @@ public class AssetBundleManager : MonoBehaviour {
 		m_ToLoadAssetBundles.Enqueue(assetBundleName);
 	}
 
-	public void LoadAssetBundle(string assetBundleName) {
+	public void SetDownloadCallback(HandleDownloadCallback callback) {
+		m_callback = callback;
+	}
+
+	private void LoadAssetBundle(string assetBundleName) {
 		Debug.Log("LoadAssetBundle " + assetBundleName);
 		StartCoroutine( DownloadAssetBundle(assetBundleName, delegate (WWW www){
 
@@ -117,6 +125,7 @@ public class AssetBundleManager : MonoBehaviour {
 
 			// write to local 
 			WriteToLocal(assetBundleName, www.bytes);	
+
 		}
 		));
 	}
@@ -151,11 +160,13 @@ public class AssetBundleManager : MonoBehaviour {
 			if (m_ToLoadAssetBundles.Count > 0) {
 				string assetBundleName = m_ToLoadAssetBundles.Dequeue();
 				LoadAssetBundle(assetBundleName);
+
+				if (m_callback != null) m_callback();
 			}
 		}
 	}
 
-	void WriteToLocal(string name, byte [] data) {
+	private void WriteToLocal(string name, byte [] data) {
 		Debug.Log("WriteToLocal " + name);
 		string filename = Path.Combine(Application.persistentDataPath, name);
 		if (!File.Exists(filename)) {
@@ -168,7 +179,5 @@ public class AssetBundleManager : MonoBehaviour {
 		FileStream file = new FileStream(filename, FileMode.Create);
 		file.Write(data, 0, data.Length);
 		file.Close();
-
-		//File.WriteAllBytes(filename, data);
 	}
 }

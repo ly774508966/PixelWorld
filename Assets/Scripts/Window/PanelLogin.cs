@@ -6,29 +6,50 @@ using System.Collections.Generic;
 
 public class PanelLogin : MonoBehaviour {
 
-	Text text_msg, text_equips, text_items, text_skills;
+	Text text_msg;
+	GameObject btn_ok;
 	void Awake() {
-		text_msg = transform.Find("Text").GetComponent<Text>();
-		text_equips = transform.Find("Text equips").GetComponent<Text>();
-		text_items = transform.Find("Text items").GetComponent<Text>();
-		text_skills = transform.Find("Text skills").GetComponent<Text>();
-		text_msg.text = Application.persistentDataPath;
+		text_msg = transform.Find("Text msg").GetComponent<Text>();
+		btn_ok = transform.Find("Button OK").gameObject;
+
 	}
+
+
+	bool bDownloading = false;
 
 	void Start() {
-		AssetBundleManager.GetInstance().AddLoadAssetBundle("ui/panelalert");
-		AssetBundleManager.GetInstance().AddLoadAssetBundle("box");
-		AssetBundleManager.GetInstance().AddLoadAssetBundle("cfg");
+		text_msg.text = "检查更新";
+		btn_ok.SetActive(false);
+
+		UpdateManager.GetInstance().RequestVersion(delegate (WWW www){
+			
+			bool bNeedUpdate = UpdateManager.GetInstance().CompareVersion(www.text);
+
+			// download resources
+			if (bNeedUpdate) {
+				string[] files = UpdateManager.GetInstance().UpdateFiles;
+				int count = 1;
+				AssetBundleManager.GetInstance().SetDownloadCallback(delegate {
+					text_msg.text = string.Format("更新资源({0}/{1})", count++, files.Length);
+				});
+				for(int i = 0; i < files.Length; i ++) {
+					AssetBundleManager.GetInstance().AddLoadAssetBundle(files[i]);
+				}
+				bDownloading = true;
+			} else {
+				// load local assetbundle
+				RefreshPanel();
+			}
+		});
 	}
 
-	bool bFirst = true;
 	void Update() {
 		
-		if (bFirst) {
+		if (bDownloading) {
 			if (AssetBundleManager.GetInstance().GetDownloadingWWWNum() == 0 && 
 			AssetBundleManager.GetInstance().GetToLoadAssetBundleNum() == 0 ) {
 				OnDownloadFinish();
-				bFirst = false;
+				bDownloading = false;
 			}
 		}
 	}
@@ -40,6 +61,17 @@ public class PanelLogin : MonoBehaviour {
 
 		CfgManager.GetInstance().Init();
 
+		UpdateManager.GetInstance().UpdateVersion();
+
+		RefreshPanel();
+	}
+
+
+	void RefreshPanel() {
+
+		text_msg.text = "已是最新版本";
+		btn_ok.SetActive(true);
+
 		AssetBundle assetBundle = AssetBundleManager.GetInstance().GetLoadedAssetBundle("box");
 		if (assetBundle != null) {
 			GameObject go =  (GameObject)Instantiate(assetBundle.LoadAsset("box", typeof(GameObject)));
@@ -47,13 +79,7 @@ public class PanelLogin : MonoBehaviour {
 			go =  (GameObject)Instantiate(assetBundle.LoadAsset("box", typeof(GameObject)));
 			go.transform.localPosition = new Vector3(-300, 0, 500);
 		}
-
-
-		text_equips.text = CfgManager.GetInstance().cfg_equips;
-		text_items.text = CfgManager.GetInstance().cfg_items;
-		text_skills.text = CfgManager.GetInstance().cfg_skills;
 	}
-
 
 
 	public void OnBtnAlert() {

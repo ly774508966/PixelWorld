@@ -65,4 +65,15 @@ public class ResourceManager : MonoBehaviour {
 		}
 	}
 
+	public long GetFileSize(string filename) {
+		if (!File.Exists(filename)) {
+			Debug.LogFormat("GetFileSize: {0} not Exist!", filename);
+			return 0;
+		}
+
+		FileStream fs = new FileStream(filename, FileMode.Open);
+		long length = fs.Length;
+		fs.Close();
+		return length;
+	}
 }
