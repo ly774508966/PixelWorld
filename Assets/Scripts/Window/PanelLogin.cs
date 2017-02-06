@@ -7,10 +7,10 @@ using System.Collections.Generic;
 public class PanelLogin : MonoBehaviour {
 
 	Text text_msg;
-	GameObject btn_ok;
+	GameObject btn_login;
 	void Awake() {
 		text_msg = transform.Find("Text msg").GetComponent<Text>();
-		btn_ok = transform.Find("Button OK").gameObject;
+		btn_login = transform.Find("Button Login").gameObject;
 
 	}
 
@@ -19,7 +19,7 @@ public class PanelLogin : MonoBehaviour {
 
 	void Start() {
 		text_msg.text = "检查更新";
-		btn_ok.SetActive(false);
+		btn_login.SetActive(false);
 
 		UpdateManager.GetInstance().RequestVersion(delegate (WWW www){
 			
@@ -38,7 +38,12 @@ public class PanelLogin : MonoBehaviour {
 				bDownloading = true;
 			} else {
 				// load local assetbundle
-				RefreshPanel();
+				Dictionary<string, string> localfiles = UpdateManager.GetInstance().LocalFiles;
+				foreach(string file in localfiles.Keys) {
+					AssetBundleManager.GetInstance().LoadAssetBundleLocal(file);
+				}
+
+				bDownloading = true;
 			}
 		});
 	}
@@ -70,19 +75,12 @@ public class PanelLogin : MonoBehaviour {
 	void RefreshPanel() {
 
 		text_msg.text = "已是最新版本";
-		btn_ok.SetActive(true);
+		btn_login.SetActive(true);
 
-		AssetBundle assetBundle = AssetBundleManager.GetInstance().GetLoadedAssetBundle("box");
-		if (assetBundle != null) {
-			GameObject go =  (GameObject)Instantiate(assetBundle.LoadAsset("box", typeof(GameObject)));
-			go.transform.localPosition = new Vector3(300, 0, 500);
-			go =  (GameObject)Instantiate(assetBundle.LoadAsset("box", typeof(GameObject)));
-			go.transform.localPosition = new Vector3(-300, 0, 500);
-		}
 	}
 
 
-	public void OnBtnAlert() {
-		GUIManager.GetInstance().ShowAlert("提示", "提示框测试");
+	public void OnBtnLogin() {
+		SceneManager.GetInstance().GotoScene(SceneID.Main);
 	}
 }

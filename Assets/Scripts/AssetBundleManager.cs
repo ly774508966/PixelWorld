@@ -117,9 +117,20 @@ public class AssetBundleManager : MonoBehaviour {
 		m_callback = callback;
 	}
 
+	public void LoadAssetBundleLocal(string assetBundleName) {
+		Debug.Log("LoadAssetBundleLocal " + assetBundleName);
+
+		StartCoroutine( DownloadAssetBundle(Path.Combine("file:///"+Application.persistentDataPath, assetBundleName), assetBundleName, delegate (WWW www){
+
+			m_LoadedAssetBundles.Add(assetBundleName, www.assetBundle);
+
+		}
+		));
+	}
+
 	private void LoadAssetBundle(string assetBundleName) {
 		Debug.Log("LoadAssetBundle " + assetBundleName);
-		StartCoroutine( DownloadAssetBundle(assetBundleName, delegate (WWW www){
+		StartCoroutine( DownloadAssetBundle(m_BaseDownloadingURL+assetBundleName, assetBundleName, delegate (WWW www){
 
 			m_LoadedAssetBundles.Add(assetBundleName, www.assetBundle);
 
@@ -130,9 +141,8 @@ public class AssetBundleManager : MonoBehaviour {
 		));
 	}
 
- 	IEnumerator DownloadAssetBundle(string assetBundleName, HandleDownloadFinish handler) {
+ 	IEnumerator DownloadAssetBundle(string url, string assetBundleName, HandleDownloadFinish handler) {
 
-		string url = m_BaseDownloadingURL + assetBundleName;
 		Debug.Log("start downloading " + url);
 
 		WWW www = new WWW(url);

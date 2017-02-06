@@ -7,10 +7,8 @@ using UnityEngine;
 using System.Collections;
 
 public enum SceneID : byte {
-	Loading=0,
 	Login,
-	Create,
-	World,		
+	Main,		
 }
 
 public class SceneManager {
@@ -25,16 +23,10 @@ public class SceneManager {
 
 	public void GotoScene(SceneID id) {
 		switch(id) {
-		case SceneID.Loading:
-			UnityEngine.SceneManagement.SceneManager.LoadScene(2);
-			break;
 		case SceneID.Login:
-			UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(0);
+			UnityEngine.SceneManagement.SceneManager.LoadScene(0);
 			break;
-		case SceneID.Create:
-			UnityEngine.SceneManagement.SceneManager.LoadScene(3);
-			break;
-		case SceneID.World:
+		case SceneID.Main:
 			UnityEngine.SceneManagement.SceneManager.LoadScene(1);
 			break;
 		default:

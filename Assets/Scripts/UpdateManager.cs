@@ -22,6 +22,7 @@ public class UpdateManager : MonoBehaviour {
 
 	List<string> m_UpdateFiles = new List<string>();
 	public string[] UpdateFiles {get {return m_UpdateFiles.ToArray();}}
+	public Dictionary<string, string> LocalFiles {get {return m_LocalFiles;}}
 
 	// version files
 	string m_ServerVersionFile;
@@ -121,8 +122,7 @@ public class UpdateManager : MonoBehaviour {
 		if (m_LocalVersion.CompareTo(m_ServerVersion) != 0) {
 			return true;
 		} else {
-			Debug.Assert(m_UpdateFiles.Count == 0);
-			return false;
+			return m_UpdateFiles.Count > 0;
 		}
 	}
 

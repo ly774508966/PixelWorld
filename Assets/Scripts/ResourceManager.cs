@@ -33,13 +33,12 @@ public class ResourceManager : MonoBehaviour {
 		foreach(AssetBundle assetBundle in assetBundles.Values) {
 			string[] assets = assetBundle.GetAllAssetNames();
 			for(int i = 0; i < assets.Length; i ++) {
-				Debug.Log("asset " + assets[i]);
+				//Debug.Log("asset " + assets[i]);
 
 				int pos = assets[i].IndexOf("assets/resources/");
 				if (pos != -1) {
 					pos = assets[i].LastIndexOf(".");
 					string assetName = assets[i].Substring(17, pos-17);
-					Debug.Log("assetName " + assetName);
 					m_AssetMapAssetBundle.Add(assetName.ToLower(), assetBundle);
 				}
 			}
