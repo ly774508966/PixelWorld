@@ -1,0 +1,13 @@
+# 定义assetbundle打包策略
+#无依赖文件，整体打包
+0
+Resources/Cfg
+Resources/Localization
+
+#有依赖文件，逐个独立打包
+1
+Resources/Prefabs
+Resources/UI
+
+
+#剩余独立打包
