@@ -1,17 +1,20 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Window\PanelLogin.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Editor\AssetBundleBuild.cs">
     <Files>
-      <File FileName="Assets\Scripts\AssetBundleManager.cs" Line="160" Column="32" />
-      <File FileName="Assets\Scripts\ResourceManager.cs" Line="57" Column="45" />
-      <File FileName="Assets\Scripts\Window\PanelLogin.cs" Line="19" Column="62" />
-      <File FileName="Assets\Editor\AssetBundleBuild.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\RotateScript.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\CfgManager.cs" Line="29" Column="51" />
+      <File FileName="Assets\Scripts\CfgManager.cs" Line="27" Column="1" />
+      <File FileName="Assets\Scripts\AssetBundleManager.cs" Line="125" Column="51" />
+      <File FileName="Assets\Scripts\UpdateManager.cs" Line="97" Column="1" />
+      <File FileName="Assets\Scripts\Window\PanelMenu.cs" Line="11" Column="54" />
+      <File FileName="Assets\Scripts\SceneManager.cs" Line="22" Column="63" />
+      <File FileName="Assets\Editor\AssetBundleBuild.cs" Line="84" Column="33" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="D:\PixelWorld\Assets\Scripts\Window\PanelMenu.cs" line="11" column="53" />
+      <Breakpoint file="D:\PixelWorld\Assets\Scripts\ResourceManager.cs" line="59" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

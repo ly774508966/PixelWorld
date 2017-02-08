@@ -64,6 +64,8 @@ public class UpdateManager : MonoBehaviour {
 	// compare local version 
 	public bool CompareVersion(string versionFile) {
 		m_ServerVersionFile = versionFile;
+		m_LocalFiles.Clear();
+		m_ServerFiles.Clear();
 		m_UpdateFiles.Clear();
 
 		string[] lines = versionFile.Split(new char[]{'\r', '\n'}, System.StringSplitOptions.RemoveEmptyEntries);
@@ -81,18 +83,10 @@ public class UpdateManager : MonoBehaviour {
 		// local version files
 		string filename = Path.Combine(Application.persistentDataPath, "resourcelist.txt");
 		if (!File.Exists(filename)) {
-			TextAsset asset = Resources.Load("resourcelist", typeof(TextAsset)) as TextAsset;
+			TextAsset asset = Resources.Load("version", typeof(TextAsset)) as TextAsset;
 			lines = asset.text.Split(new char[]{'\r', '\n'}, System.StringSplitOptions.RemoveEmptyEntries);
 			m_LocalVersion = lines[0];
 			m_LocalVersion = m_LocalVersion.Split(' ')[1];
-			for(int i = 1; i < lines.Length; i ++) {
-				string[] strs = lines[i].Split(' ');
-				if (strs.Length != 3) {
-					Debug.Log("error format!");
-				} else {
-					m_LocalFiles.Add(strs[0], strs[1]);
-				}
-			}
 		} else {
 			FileStream fs = new FileStream(filename, FileMode.Open);
 			StreamReader reader = new StreamReader(fs);

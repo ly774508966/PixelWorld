@@ -48,13 +48,21 @@
      <Compile Include="Assets\Scripts\AssetBundleManager.cs" />
      <Compile Include="Assets\Scripts\CfgManager.cs" />
      <Compile Include="Assets\Scripts\GUIManager.cs" />
+     <Compile Include="Assets\Scripts\LanguageManager.cs" />
      <Compile Include="Assets\Scripts\ResourceManager.cs" />
      <Compile Include="Assets\Scripts\RotateScript.cs" />
+     <Compile Include="Assets\Scripts\SceneManager.cs" />
+     <Compile Include="Assets\Scripts\SoundManager.cs" />
+     <Compile Include="Assets\Scripts\UpdateManager.cs" />
      <Compile Include="Assets\Scripts\Window\BaseWindow.cs" />
+     <Compile Include="Assets\Scripts\Window\PanelAlert.cs" />
      <Compile Include="Assets\Scripts\Window\PanelLogin.cs" />
+     <Compile Include="Assets\Scripts\Window\PanelMenu.cs" />
      <None Include="Assets\Resources\Cfg\skills.txt" />
+     <None Include="Assets\Resources\resourcelist.txt" />
      <None Include="Assets\Resources\Cfg\equips.txt" />
      <None Include="Assets\Resources\Cfg\items.txt" />
+     <None Include="Assets\Resources\Localization\zh-cn.txt" />
      <None Include="Assets\Shaders\UnlitColorTexture.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
@@ -62,6 +70,10 @@
  <Reference Include="UnityEngine.Networking">
  <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{30D26581-49B5-6AC9-F91B-861A9E0B3B15}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

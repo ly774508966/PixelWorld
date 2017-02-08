@@ -47,8 +47,10 @@
   <ItemGroup>
      <Compile Include="Assets\Editor\AssetBundleBuild.cs" />
      <None Include="Assets\Resources\Cfg\skills.txt" />
+     <None Include="Assets\Resources\resourcelist.txt" />
      <None Include="Assets\Resources\Cfg\equips.txt" />
      <None Include="Assets\Resources\Cfg\items.txt" />
+     <None Include="Assets\Resources\Localization\zh-cn.txt" />
      <None Include="Assets\Shaders\UnlitColorTexture.shader" />
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
@@ -94,6 +96,8 @@
  </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{30D26581-49B5-6AC9-F91B-861A9E0B3B15}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
     <ProjectReference Include="Assembly-CSharp.csproj">
       <Project>{7CD4E2EE-ECF9-246F-D10B-5A136BD82A9B}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
   </ItemGroup>
