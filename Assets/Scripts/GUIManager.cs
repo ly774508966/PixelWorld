@@ -31,18 +31,21 @@ public class GUIManager : MonoBehaviour {
 	}
 
 	private RectTransform	m_Root;
+	public RectTransform Root {
+		get {
+			if (m_Root == null) {
+				Canvas canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+				m_Root = canvas.GetComponent<RectTransform>();
+			}
+			return m_Root;
+		}
+	}
 
-	private Dictionary<string, string> m_PanelMap = new Dictionary<string, string>();
 	private Dictionary<string, LayerPriority> m_PanelLayerMap = new Dictionary<string, LayerPriority>();
 	private List<UIView>		m_Stack = new List<UIView>();
 
 
 	void Awake () {
-		Canvas canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-		m_Root = canvas.GetComponent<RectTransform>();
-	
-		m_PanelMap.Add("PanelAlert", "UI/PanelAlert");
-		m_PanelMap.Add("PanelWait", "UI/PanelWait");
 
 		m_PanelLayerMap.Add("PanelAlert", LayerPriority.Top);
 		m_PanelLayerMap.Add("PanelWait", LayerPriority.Top);
@@ -50,26 +53,25 @@ public class GUIManager : MonoBehaviour {
 	}
 
 	public float GetUIScale() {
-		Vector3 scale = m_Root.localScale;
+		Vector3 scale = Root.localScale;
 		return scale.x;
 	}
 
 	public RectTransform ShowWindow(string window, object data=null) {
-		if(!m_PanelMap.ContainsKey(window)) {
-			Debug.Log(string.Format("Window {0} not found!", window));
-			return null;
-		}
 		int index = m_Stack.FindIndex(x => x.name==window);
 		UIView view = null;
 		if (index >= 0) {
 			view = m_Stack[index];
 			m_Stack.RemoveAt(index);
 		} else {
-			Object obj = ResourceManager.GetInstance().LoadAsset(m_PanelMap[window]);
+			Object obj = ResourceManager.GetInstance().LoadAsset("UI/"+window);
 			GameObject panel = Instantiate(obj as GameObject);
+			panel.name = window;
+			LuaBehaviour lua = panel.GetComponent<LuaBehaviour>();
+			if (lua == null) panel.AddComponent<LuaBehaviour>();
 
 			RectTransform rt = panel.GetComponent<RectTransform>();
-			rt.SetParent(m_Root);
+			rt.SetParent(Root);
 			rt.sizeDelta = new Vector2(0, 0);
 			rt.localScale = Vector3.one;
 			rt.localPosition = new Vector3(0, 0, 0);
@@ -101,7 +103,7 @@ public class GUIManager : MonoBehaviour {
 			}
 		} else {
 			m_Stack.Add(view);
-			view.rt.SetSiblingIndex(m_Root.childCount-1);
+			view.rt.SetSiblingIndex(Root.childCount-1);
 		}
 
 		return view.rt;
@@ -129,19 +131,6 @@ public class GUIManager : MonoBehaviour {
 
 	public bool IsWindowOpen(string window) {
 		return m_Stack.Exists(x => x.name==window);
-	}
-
-	// 提示框
-	public void ShowAlert(string title, string msg, AlertCallback callback=null) {
-		RectTransform rt = ShowWindow("PanelAlert");
-
-		PanelAlert script = rt.GetComponent<PanelAlert>();
-		script.SetTitle(title);
-		script.SetMsg(msg);
-		script.SetCallback(callback);
-	}
-	public void HideAlert() {
-		HideWindow("PanelAlert");
 	}
 
 	public Sprite LoadSprite(string spriteName) {

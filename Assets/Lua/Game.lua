@@ -6,6 +6,7 @@ local util = require "cjson/util"
 
 -- windows
 require "Window/PanelMenu"
+require "Window/PanelAlert"
 
 
 -- manager

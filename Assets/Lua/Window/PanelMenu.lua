@@ -29,5 +29,5 @@ end
 
 function PanelMenu.OnBtnAlert(go)
 	print('OnBtnAlert')
-	--guiMgr:ShowWindow('PanelAlert', go)
+	guiMgr:ShowWindow('PanelAlert', go)
 end

@@ -12,11 +12,10 @@ public class GUIManagerWrap
 		L.RegFunction("ShowWindow", ShowWindow);
 		L.RegFunction("HideWindow", HideWindow);
 		L.RegFunction("IsWindowOpen", IsWindowOpen);
-		L.RegFunction("ShowAlert", ShowAlert);
-		L.RegFunction("HideAlert", HideAlert);
 		L.RegFunction("LoadSprite", LoadSprite);
 		L.RegFunction("__eq", op_Equality);
 		L.RegFunction("__tostring", ToLua.op_ToString);
+		L.RegVar("Root", get_Root, null);
 		L.EndClass();
 	}
 
@@ -130,53 +129,6 @@ public class GUIManagerWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int ShowAlert(IntPtr L)
-	{
-		try
-		{
-			ToLua.CheckArgsCount(L, 4);
-			GUIManager obj = (GUIManager)ToLua.CheckObject(L, 1, typeof(GUIManager));
-			string arg0 = ToLua.CheckString(L, 2);
-			string arg1 = ToLua.CheckString(L, 3);
-			AlertCallback arg2 = null;
-			LuaTypes funcType4 = LuaDLL.lua_type(L, 4);
-
-			if (funcType4 != LuaTypes.LUA_TFUNCTION)
-			{
-				 arg2 = (AlertCallback)ToLua.CheckObject(L, 4, typeof(AlertCallback));
-			}
-			else
-			{
-				LuaFunction func = ToLua.ToLuaFunction(L, 4);
-				arg2 = DelegateFactory.CreateDelegate(typeof(AlertCallback), func) as AlertCallback;
-			}
-
-			obj.ShowAlert(arg0, arg1, arg2);
-			return 0;
-		}
-		catch(Exception e)
-		{
-			return LuaDLL.toluaL_exception(L, e);
-		}
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int HideAlert(IntPtr L)
-	{
-		try
-		{
-			ToLua.CheckArgsCount(L, 1);
-			GUIManager obj = (GUIManager)ToLua.CheckObject(L, 1, typeof(GUIManager));
-			obj.HideAlert();
-			return 0;
-		}
-		catch(Exception e)
-		{
-			return LuaDLL.toluaL_exception(L, e);
-		}
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int LoadSprite(IntPtr L)
 	{
 		try
@@ -209,6 +161,25 @@ public class GUIManagerWrap
 		catch(Exception e)
 		{
 			return LuaDLL.toluaL_exception(L, e);
+		}
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_Root(IntPtr L)
+	{
+		object o = null;
+
+		try
+		{
+			o = ToLua.ToObject(L, 1);
+			GUIManager obj = (GUIManager)o;
+			UnityEngine.RectTransform ret = obj.Root;
+			ToLua.Push(L, ret);
+			return 1;
+		}
+		catch(Exception e)
+		{
+			return LuaDLL.toluaL_exception(L, e, o == null ? "attempt to index Root on a nil value" : e.Message);
 		}
 	}
 }
