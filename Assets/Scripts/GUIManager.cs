@@ -41,10 +41,8 @@ public class GUIManager : MonoBehaviour {
 		Canvas canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
 		m_Root = canvas.GetComponent<RectTransform>();
 	
-
 		m_PanelMap.Add("PanelAlert", "UI/PanelAlert");
 		m_PanelMap.Add("PanelWait", "UI/PanelWait");
-
 
 		m_PanelLayerMap.Add("PanelAlert", LayerPriority.Top);
 		m_PanelLayerMap.Add("PanelWait", LayerPriority.Top);

@@ -138,6 +138,20 @@ public static class CustomSettings
         _GT(typeof(BlendWeights)),           
         _GT(typeof(RenderTexture)),
         _GT(typeof(Resources)),
+
+        // 自定义类导出
+	_GT(typeof(GameConfig)),
+	_GT(typeof(Util)),
+	_GT(typeof(LuaBehaviour)),
+
+        _GT(typeof(GameManager)),
+	_GT(typeof(LuaManager)),
+	_GT(typeof(GUIManager)),
+	_GT(typeof(ResourceManager)),
+	_GT(typeof(CfgManager)),
+	_GT(typeof(SoundManager)),
+	_GT(typeof(LanguageManager)),
+	_GT(typeof(SceneManager)),
     };
 
     public static List<Type> dynamicList = new List<Type>()

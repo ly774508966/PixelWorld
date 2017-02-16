@@ -27,6 +27,7 @@ public static class DelegateFactory
 		dict.Add(typeof(UnityEngine.Application.AdvertisingIdentifierCallback), UnityEngine_Application_AdvertisingIdentifierCallback);
 		dict.Add(typeof(UnityEngine.AudioClip.PCMReaderCallback), UnityEngine_AudioClip_PCMReaderCallback);
 		dict.Add(typeof(UnityEngine.AudioClip.PCMSetPositionCallback), UnityEngine_AudioClip_PCMSetPositionCallback);
+		dict.Add(typeof(AlertCallback), AlertCallback);
 	}
 
     [NoToLuaAttribute]
@@ -617,6 +618,53 @@ public static class DelegateFactory
 		{
 			UnityEngine_AudioClip_PCMSetPositionCallback_Event target = new UnityEngine_AudioClip_PCMSetPositionCallback_Event(func, self);
 			UnityEngine.AudioClip.PCMSetPositionCallback d = target.CallWithSelf;
+			target.method = d.Method;
+			return d;
+		}
+	}
+
+	class AlertCallback_Event : LuaDelegate
+	{
+		public AlertCallback_Event(LuaFunction func) : base(func) { }
+		public AlertCallback_Event(LuaFunction func, LuaTable self) : base(func, self) { }
+
+		public void Call(AlertRet param0)
+		{
+			func.BeginPCall();
+			func.Push(param0);
+			func.PCall();
+			func.EndPCall();
+		}
+
+		public void CallWithSelf(AlertRet param0)
+		{
+			func.BeginPCall();
+			func.Push(self);
+			func.Push(param0);
+			func.PCall();
+			func.EndPCall();
+		}
+	}
+
+	public static Delegate AlertCallback(LuaFunction func, LuaTable self, bool flag)
+	{
+		if (func == null)
+		{
+			AlertCallback fn = delegate(AlertRet param0) { };
+			return fn;
+		}
+
+		if(!flag)
+		{
+			AlertCallback_Event target = new AlertCallback_Event(func);
+			AlertCallback d = target.Call;
+			target.method = d.Method;
+			return d;
+		}
+		else
+		{
+			AlertCallback_Event target = new AlertCallback_Event(func, self);
+			AlertCallback d = target.CallWithSelf;
 			target.method = d.Method;
 			return d;
 		}
