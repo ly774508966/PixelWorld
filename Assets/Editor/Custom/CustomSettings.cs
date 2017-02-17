@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
 using LuaInterface;
@@ -138,6 +139,10 @@ public static class CustomSettings
         _GT(typeof(BlendWeights)),           
         _GT(typeof(RenderTexture)),
         _GT(typeof(Resources)),
+
+	// ugui
+	_GT(typeof(Text)),
+        _GT(typeof(RectTransform)),
 
         // 自定义类导出
 	_GT(typeof(GameConfig)),

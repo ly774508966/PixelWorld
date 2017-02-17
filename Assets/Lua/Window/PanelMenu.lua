@@ -15,11 +15,15 @@ end
 
 --初始化面板--
 function PanelMenu.InitPanel()
-	this.btnAlert = transform:FindChild("Button Alert").gameObject
+	local btnAlert = transform:FindChild("Button Alert").gameObject
+	local btnBag = transform:FindChild("Button Bag").gameObject
+	local btnEquip = transform:FindChild("Button Equip").gameObject
 
-	window = transform:GetComponent('LuaBehaviour');
+	window = transform:GetComponent('LuaBehaviour')
 
-	window:AddClick(this.btnAlert, this.OnBtnAlert);
+	window:AddClick(btnAlert, this.OnBtnAlert)
+	window:AddClick(btnBag, this.OnBtnBag)
+	window:AddClick(btnEquip, this.OnBtnEquip)
 end
 
 --单击事件--
@@ -29,5 +33,15 @@ end
 
 function PanelMenu.OnBtnAlert(go)
 	print('OnBtnAlert')
+	PanelAlert.setTitleMsg(lanMgr:GetValue('TITLE_TIP'), lanMgr:GetValue('NETWORK_TIMEOUT'))
 	guiMgr:ShowWindow('PanelAlert', go)
+end
+
+function PanelMenu.OnBtnBag(go)
+	print('OnBtnAlert')
+	guiMgr:ShowWindow('PanelBag', go)
+end
+
+function PanelMenu.OnBtnEquip(go)
+	print('OnBtnEquip')
 end

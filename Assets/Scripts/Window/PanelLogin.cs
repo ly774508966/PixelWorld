@@ -66,6 +66,8 @@ public class PanelLogin : MonoBehaviour {
 
 		CfgManager.GetInstance().Init();
 
+		LanguageManager.GetInstance().Init();
+
 		UpdateManager.GetInstance().UpdateVersion();
 
 		RefreshPanel();

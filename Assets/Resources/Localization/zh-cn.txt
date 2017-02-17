@@ -18,18 +18,9 @@ LOGIN_PWD_NOT_MATCH					= 两次输入密码不一致！
 TITLE_TIP							= 提示
 TITLE_ERR							= 错误
 INPUT_NONE							= 输入不能为空！
-ARRANGE_SUCCESS						= 整理成功！
-COST								= 您确认要花费
-GETREWARD_SUCCESS					= 领取奖励成功！
 
 # item
 ITEM_COMPOSE_SUCCESS				= 合成成功！
-ITEM_DECOMPOSE_SUCCESS				= 加工成功！
-
-# strength
-EQUIP_STR_SUCCESS					= 强化成功！
-EQUIP_ADVANCE_SUCCESS				= 进阶成功！
-EQUIP_COLOR_SUCCESS					= 变色成功！
 
 # shop
 SHOP_BUY_SUCCESS					= 购买成功！
@@ -38,13 +29,3 @@ SHOP_BUY_FAIL						= 购买失败！
 # mail
 MAIL_GET_SUCCESS					= 邮件提取成功！
 MAIL_DEL_SUCCESS					= 邮件已删除！
-
-# pet
-PET_MAKE_SUCCESS					= 激活成功！
-PET_DISCARD_SUCCESS					= 放生成功！
-
-# task
-
-# faction
-FACTION_CREATE						= 创建帮派
-

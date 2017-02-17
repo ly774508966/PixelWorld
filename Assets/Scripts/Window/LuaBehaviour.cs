@@ -10,11 +10,11 @@ public class LuaBehaviour : BaseWindow {
         private Dictionary<string, LuaFunction> buttons = new Dictionary<string, LuaFunction>();
 
         protected void Awake() {
-            Util.CallMethod(name, "Awake", gameObject);
+        	Util.CallMethod(name, "Awake", gameObject);
         }
 
 	public override void Init(object data) {
-		
+		Util.CallMethod(name, "Init", data);
 	}
 
         protected void Start() {

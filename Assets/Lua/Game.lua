@@ -7,6 +7,11 @@ local util = require "cjson/util"
 -- windows
 require "Window/PanelMenu"
 require "Window/PanelAlert"
+require "Window/PanelBag"
+
+
+WWW = UnityEngine.WWW
+GameObject = UnityEngine.GameObject
 
 
 -- manager
