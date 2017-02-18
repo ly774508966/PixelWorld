@@ -4,11 +4,12 @@ local json = require "cjson"
 local util = require "cjson/util"
      
 
--- windows
+-- register windows
 require "Window/PanelLogin"
 require "Window/PanelMenu"
 require "Window/PanelAlert"
 require "Window/PanelBag"
+require "Window/PanelEquip"
 
 
 WWW = UnityEngine.WWW

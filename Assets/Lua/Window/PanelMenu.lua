@@ -44,4 +44,5 @@ end
 
 function PanelMenu.OnBtnEquip(go)
 	print('OnBtnEquip')
+	guiMgr:ShowWindow('PanelEquip', go)
 end
