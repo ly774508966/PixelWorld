@@ -4,13 +4,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class PanelLogin : MonoBehaviour {
+public class PanelUpdate : MonoBehaviour {
 
 	Text text_msg;
-	GameObject btn_login;
 	void Awake() {
 		text_msg = transform.Find("Text msg").GetComponent<Text>();
-		btn_login = transform.Find("Button Login").gameObject;
 
 	}
 
@@ -19,7 +17,6 @@ public class PanelLogin : MonoBehaviour {
 
 	void Start() {
 		text_msg.text = "检查更新";
-		btn_login.SetActive(false);
 
 		UpdateManager.GetInstance().RequestVersion(delegate (WWW www){
 			
@@ -77,12 +74,8 @@ public class PanelLogin : MonoBehaviour {
 	void RefreshPanel() {
 
 		text_msg.text = "已是最新版本";
-		btn_login.SetActive(true);
 
-	}
-
-
-	public void OnBtnLogin() {
-		SceneManager.GetInstance().GotoScene(SceneID.Main);
+		// open login panel
+		GUIManager.GetInstance().ShowWindow("PanelLogin");
 	}
 }

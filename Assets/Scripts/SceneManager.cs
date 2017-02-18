@@ -6,7 +6,7 @@
 using UnityEngine;
 using System.Collections;
 
-public enum SceneID : byte {
+public enum SceneID {
 	Login,
 	Main,		
 }

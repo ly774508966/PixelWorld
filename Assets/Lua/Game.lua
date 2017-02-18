@@ -5,6 +5,7 @@ local util = require "cjson/util"
      
 
 -- windows
+require "Window/PanelLogin"
 require "Window/PanelMenu"
 require "Window/PanelAlert"
 require "Window/PanelBag"
@@ -19,6 +20,7 @@ guiMgr = GUIManager.GetInstance()
 cfgMgr = CfgManager.GetInstance()
 resMgr = ResourceManager.GetInstance()
 lanMgr = LanguageManager.GetInstance()
+sceneMgr = SceneManager.GetInstance()
 
 --管理器--
 Game = {}
