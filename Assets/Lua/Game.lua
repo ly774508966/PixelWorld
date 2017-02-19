@@ -9,6 +9,7 @@ require "Window/PanelMenu"
 require "Window/PanelAlert"
 require "Window/PanelBag"
 require "Window/PanelEquip"
+require "Window/PanelItemDetail"
 
 
 WWW = UnityEngine.WWW

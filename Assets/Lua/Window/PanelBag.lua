@@ -36,7 +36,8 @@ function PanelBag.InitPanel()
 		rt.anchorMax = Vector2.New(0.5, 1)
 		rt.anchorMin = Vector2.New(0.5, 1)
 		rt.anchoredPosition = Vector2.New((i%5)*itemHeight-200, -math.ceil(i/5)*itemHeight+itemHeight/2)
-        --window:AddClick(go, this.OnBtnItem)
+		go:AddComponent(typeof(Button))
+        window:AddClick(go, this.OnBtnItem)
 
 	    local label = go.transform:FindChild('Text')
 	    label:GetComponent('Text').text = tostring(i)
@@ -46,6 +47,7 @@ end
 
 function PanelBag.OnBtnItem(go)
 	print('OnItemClick', go.name)
+	guiMgr:ShowWindow('PanelItemDetail', go.name)
 end
 
 function PanelBag.OnBtnClose(go)
