@@ -57,25 +57,19 @@ public class PanelUpdate : MonoBehaviour {
 	}
 
 
+	// 更新检查完成
 	void OnDownloadFinish() {
 
 		ResourceManager.GetInstance().Init();
-
-		CfgManager.GetInstance().Init();
 
 		LanguageManager.GetInstance().Init();
 
 		UpdateManager.GetInstance().UpdateVersion();
 
-		RefreshPanel();
-	}
-
-
-	void RefreshPanel() {
-
-		text_msg.text = "已是最新版本";
-
-		// open login panel
-		GUIManager.GetInstance().ShowWindow("PanelLogin");
+		// 初始化lua engine
+		LuaManager luaManager = LuaManager.GetInstance();
+		luaManager.InitStart();
+		luaManager.DoFile("Game");
+		Util.CallMethod("Game", "OnInitOK");
 	}
 }

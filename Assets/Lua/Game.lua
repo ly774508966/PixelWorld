@@ -1,7 +1,6 @@
 local lpeg = require "lpeg"
 
-local json = require "cjson"
-local util = require "cjson/util"
+json = require "cjson"
      
 
 -- register windows
@@ -18,10 +17,11 @@ GameObject = UnityEngine.GameObject
 
 -- manager
 guiMgr = GUIManager.GetInstance()
-cfgMgr = CfgManager.GetInstance()
 resMgr = ResourceManager.GetInstance()
 lanMgr = LanguageManager.GetInstance()
 sceneMgr = SceneManager.GetInstance()
+
+cfgMgr = require 'CfgManager'
 
 --管理器--
 Game = {}
@@ -33,15 +33,17 @@ local gameObject
 local WWW = UnityEngine.WWW
 
 
---初始化完成，发送链接服务器信息--
+--初始化完成(自更新)
 function Game.OnInitOK()
+    print('Game Init OK ...')
     GameConfig.SocketPort = 2012
     GameConfig.SocketAddress = "127.0.0.1"
     --networkMgr:SendConnect()
 
-    print('Game InitOK--->>>')
-end
+    cfgMgr.Init()
 
+    guiMgr:ShowWindow("PanelLogin", nil)
+end
 
 --销毁--
 function Game.OnDestroy()
