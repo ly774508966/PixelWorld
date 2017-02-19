@@ -141,8 +141,9 @@ public static class CustomSettings
         _GT(typeof(Resources)),
 
 		// ugui
-		_GT(typeof(Text)),
 		_GT(typeof(RectTransform)),
+		_GT(typeof(Text)),
+		_GT(typeof(Button)),
 
 		// 自定义类导出
 		_GT(typeof(GameConfig)),

@@ -36,7 +36,7 @@ function PanelBag.InitPanel()
 		rt.anchorMax = Vector2.New(0.5, 1)
 		rt.anchorMin = Vector2.New(0.5, 1)
 		rt.anchoredPosition = Vector2.New((i%5)*itemHeight-200, -math.ceil(i/5)*itemHeight+itemHeight/2)
-		go:AddComponent(typeof(Button))
+		go:AddComponent(typeof(UnityEngine.UI.Button))
         window:AddClick(go, this.OnBtnItem)
 
 	    local label = go.transform:FindChild('Text')
