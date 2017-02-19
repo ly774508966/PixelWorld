@@ -18,10 +18,11 @@ end
 --初始化面板--
 function PanelItemDetail.InitPanel()
 	local btn_close = transform:FindChild("Button Close").gameObject
+	local btn_ok = transform:FindChild("Button OK").gameObject
 
 	window = transform:GetComponent('LuaBehaviour')
-
 	window:AddClick(btn_close, this.OnBtnClose)
+	window:AddClick(btn_ok, this.OnBtnClose)
 end
 
 
