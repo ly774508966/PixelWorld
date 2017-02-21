@@ -36,7 +36,7 @@ public class AssetBundleManager : MonoBehaviour {
 	}
 
 
-	static string m_BaseDownloadingURL = "http://192.168.1.106:8080/update/AssetBundles/";
+	static string m_BaseDownloadingURL = GameConfig.WebUrl;
 	public string BaseDownloaindURL {get {return m_BaseDownloadingURL;}}
 
 

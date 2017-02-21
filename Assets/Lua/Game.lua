@@ -1,7 +1,22 @@
+--[[
+    游戏总入口，自更新完成后加载
+    加载各个游戏模块（network, manager, 所有面板等）
+]]
 local lpeg = require "lpeg"
 
 json = require "cjson"
-     
+
+-- manager
+guiMgr = GUIManager.GetInstance()
+resMgr = ResourceManager.GetInstance()
+lanMgr = LanguageManager.GetInstance()
+sceneMgr = SceneManager.GetInstance()
+networkMgr = NetworkManager.GetInstance()
+
+cfgMgr = require 'CfgManager'
+
+require "protocol"
+require "network"
 
 -- register windows
 require "Window/PanelLogin"
@@ -16,14 +31,6 @@ WWW = UnityEngine.WWW
 GameObject = UnityEngine.GameObject
 
 
--- manager
-guiMgr = GUIManager.GetInstance()
-resMgr = ResourceManager.GetInstance()
-lanMgr = LanguageManager.GetInstance()
-sceneMgr = SceneManager.GetInstance()
-
-cfgMgr = require 'CfgManager'
-
 --管理器--
 Game = {}
 local this = Game
@@ -37,9 +44,11 @@ local WWW = UnityEngine.WWW
 --初始化完成(自更新)
 function Game.OnInitOK()
     print('Game Init OK ...')
-    GameConfig.SocketPort = 2012
+    GameConfig.SocketPort = 8001
     GameConfig.SocketAddress = "127.0.0.1"
-    --networkMgr:SendConnect()
+    
+    networkMgr:OnInit()
+    networkMgr:SendConnect()
 
     cfgMgr.Init()
 

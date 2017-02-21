@@ -22,8 +22,7 @@
 
 using System;
 
-namespace LuaFramework {
-    public class Converter {
+public class Converter {
         public static Int32 GetBigEndian(Int32 value) {
             if (BitConverter.IsLittleEndian) {
                 return swapByteOrder(value);
@@ -145,5 +144,4 @@ namespace LuaFramework {
             Array.Reverse(buffer, 0, buffer.Length);
             return BitConverter.ToDouble(buffer, 0);
         }
-    }
 }

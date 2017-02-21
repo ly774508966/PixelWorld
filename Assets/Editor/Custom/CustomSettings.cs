@@ -154,6 +154,7 @@ public static class CustomSettings
 		_GT(typeof(LuaManager)),
 		_GT(typeof(GUIManager)),
 		_GT(typeof(ResourceManager)),
+		_GT(typeof(NetworkManager)),
 		_GT(typeof(SoundManager)),
 		_GT(typeof(LanguageManager)),
 		_GT(typeof(SceneManager)),

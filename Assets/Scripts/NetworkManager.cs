@@ -4,8 +4,21 @@ using System.Collections;
 using System.Collections.Generic;
 using LuaInterface;
 
-namespace LuaFramework {
-	public class NetworkManager : MonoBehaviour {
+public class NetworkManager : MonoBehaviour {
+	private static NetworkManager instance;
+	public static NetworkManager GetInstance() {
+		GameObject main = GameObject.Find("Main");
+		if (main == null) {
+			main = new GameObject("Main");
+			DontDestroyOnLoad(main);
+		}
+	
+		if (instance == null) {
+			instance = main.AddComponent<NetworkManager>();
+		}
+		return instance;
+	}
+
         private SocketClient socket;
         static readonly object m_lockObject = new object();
         static Queue<KeyValuePair<int, ByteBuffer>> mEvents = new Queue<KeyValuePair<int, ByteBuffer>>();
@@ -34,14 +47,10 @@ namespace LuaFramework {
             CallMethod("Unload");
         }
 
-        /// <summary>
-        /// 执行Lua方法
-        /// </summary>
         public object[] CallMethod(string func, params object[] args) {
             return Util.CallMethod("Network", func, args);
         }
 
-        ///------------------------------------------------------------------------------------
         public static void AddEvent(int _event, ByteBuffer data) {
             lock (m_lockObject) {
                 mEvents.Enqueue(new KeyValuePair<int, ByteBuffer>(_event, data));
@@ -52,12 +61,23 @@ namespace LuaFramework {
         /// 交给Command，这里不想关心发给谁。
         /// </summary>
         void Update() {
-            if (mEvents.Count > 0) {
-                while (mEvents.Count > 0) {
-                    KeyValuePair<int, ByteBuffer> _event = mEvents.Dequeue();
-                    //facade.SendMessageCommand(NotiConst.DISPATCH_MESSAGE, _event);
-                }
-            }
+		if (mEvents.Count > 0) {
+			while (mEvents.Count > 0) {
+				KeyValuePair<int, ByteBuffer> _event = mEvents.Dequeue();
+				if (_event.Key >= 0) {
+					CallMethod("OnMessage", _event.Key, _event.Value);
+				} else {
+					// 连接消息
+					if (_event.Key == Protocol.Connect) {
+						CallMethod("OnConnect");
+					} else if (_event.Key == Protocol.Exception) {
+						CallMethod("OnException");
+					}else if (_event.Key == Protocol.Disconnect) {
+						CallMethod("OnDisconnect");
+					}
+				}
+			}
+		}
         }
 
         /// <summary>
@@ -77,9 +97,8 @@ namespace LuaFramework {
         /// <summary>
         /// 析构函数
         /// </summary>
-        new void OnDestroy() {
+	public void OnDestroy() {
             SocketClient.OnRemove();
             Debug.Log("~NetworkManager was destroy");
         }
-    }
 }
