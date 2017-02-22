@@ -13,6 +13,7 @@ public static class LuaBinder
 		GameConfigWrap.Register(L);
 		UtilWrap.Register(L);
 		LuaBehaviourWrap.Register(L);
+		ByteBufferWrap.Register(L);
 		GameManagerWrap.Register(L);
 		LuaManagerWrap.Register(L);
 		GUIManagerWrap.Register(L);

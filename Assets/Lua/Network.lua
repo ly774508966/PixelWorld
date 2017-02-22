@@ -21,7 +21,7 @@ end
 --异常断线--
 function Network.OnException() 
     islogging = false
-    NetManager:SendConnect()
+    networkMgr:SendConnect()
    	Util.LogError("OnException------->>>>")
 end
 
@@ -33,10 +33,25 @@ end
 
 --Socket消息--
 function Network.OnMessage(key, data)
-    print(Network.OnMessage, key)
     print(key, data)
     
-    if (key == Protocol.)
+    if key == Protocol.ACK_LOGIN then
+        local id = data:ReadInt()
+        local name = data:ReadString()
+        local f = data:ReadFloat()
+        print(id, name, f)
+        sceneMgr:GotoScene(SceneID.Main)
+    elseif key == Protocol.ACK_ENTER then
+    end
+end
+
+-- 登录
+function Network.login(name, pwd)
+    local buffer = ByteBuffer.New()
+    buffer:WriteShort(Protocol.REQ_LOGIN)
+    buffer:WriteString(name)
+    buffer:WriteString(pwd)
+    networkMgr:SendMessage(buffer)
 end
 
 --二进制登录--

@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.IO;
 using System.Text;
-using System;
+using System.Net;
 using LuaInterface;
 
 public class ByteBuffer {
@@ -40,37 +41,37 @@ public class ByteBuffer {
 	}
 
 	public void WriteInt(int v) {
-		writer.Write((int)v);
+		writer.Write(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(v)));
 	}
 
-	public void WriteShort(ushort v) {
-		writer.Write((ushort)v);
+	public void WriteShort(short v) {
+		writer.Write(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(v)));
 	}
 
 	public void WriteLong(long v) {
-		writer.Write((long)v);
+		writer.Write(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(v)));
 	}
 
 	public void WriteFloat(float v) {
 		byte[] temp = BitConverter.GetBytes(v);
-		Array.Reverse(temp);
+		if (BitConverter.IsLittleEndian)  Array.Reverse(temp);
 		writer.Write(BitConverter.ToSingle(temp, 0));
 	}
 
 	public void WriteDouble(double v) {
 		byte[] temp = BitConverter.GetBytes(v);
-		Array.Reverse(temp);
+		if (BitConverter.IsLittleEndian) Array.Reverse(temp);
 		writer.Write(BitConverter.ToDouble(temp, 0));
 	}
 
 	public void WriteString(string v) {
 		byte[] bytes = Encoding.UTF8.GetBytes(v);
-		writer.Write((ushort)bytes.Length);
+		writer.Write(BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)bytes.Length)));
 		writer.Write(bytes);
 	}
 
 	public void WriteBytes(byte[] v) {
-		writer.Write((int)v.Length);
+		writer.Write(BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)v.Length)));
 		writer.Write(v);
 	}
 
@@ -83,38 +84,42 @@ public class ByteBuffer {
 	}
 
 	public int ReadInt() {
-		return (int)reader.ReadInt32();
+		return (int)IPAddress.HostToNetworkOrder(reader.ReadInt32());
 	}
 
-	public ushort ReadShort() {
-		return (ushort)reader.ReadInt16();
+	public short ReadShort() {
+		return (short)IPAddress.HostToNetworkOrder(reader.ReadInt16());
+	}
+
+	public ushort ReadUShort() {
+		return (ushort)IPAddress.HostToNetworkOrder(reader.ReadInt16());
 	}
 
 	public long ReadLong() {
-		return (long)reader.ReadInt64();
+		return (long)IPAddress.HostToNetworkOrder(reader.ReadInt64());
 	}
 
 	public float ReadFloat() {
 		byte[] temp = BitConverter.GetBytes(reader.ReadSingle());
-		Array.Reverse(temp);
+		if(BitConverter.IsLittleEndian) Array.Reverse(temp);
 		return BitConverter.ToSingle(temp, 0);
 	}
 
 	public double ReadDouble() {
 		byte[] temp = BitConverter.GetBytes(reader.ReadDouble());
-		Array.Reverse(temp);
+		if(BitConverter.IsLittleEndian) Array.Reverse(temp);
 		return BitConverter.ToDouble(temp, 0);
 	}
 
 	public string ReadString() {
-		ushort len = ReadShort();
+		int len = ReadUShort();
 		byte[] buffer = new byte[len];
 		buffer = reader.ReadBytes(len);
 		return Encoding.UTF8.GetString(buffer);
 	}
 
 	public byte[] ReadBytes() {
-		int len = ReadInt();
+		int len = ReadUShort();
 		return reader.ReadBytes(len);
 	}
 

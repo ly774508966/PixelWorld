@@ -77,7 +77,7 @@ public class SocketClient {
 			ms.Position = 0;
 			BinaryWriter writer = new BinaryWriter(ms);
 			ushort msglen = (ushort)message.Length;
-			writer.Write(msglen);
+			writer.Write(BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)msglen)));
 			writer.Write(message);
 			writer.Flush();
 			if (client != null && client.Connected) {
@@ -122,7 +122,7 @@ public class SocketClient {
 		int protocol = dis == DisType.Exception ? Protocol.Exception : Protocol.Disconnect;
 
 		ByteBuffer buffer = new ByteBuffer();
-		buffer.WriteShort((ushort)protocol);
+		buffer.WriteShort((short)protocol);
 		NetworkManager.AddEvent(protocol, buffer);
 	}
 
@@ -154,7 +154,7 @@ public class SocketClient {
 		//Reset to beginning
 		memStream.Seek(0, SeekOrigin.Begin);
 		while (RemainingBytes() > 2) {
-		    ushort messageLen = reader.ReadUInt16();
+		    ushort messageLen = (ushort)IPAddress.HostToNetworkOrder(reader.ReadInt16());
 		    if (RemainingBytes() >= messageLen) {
 		        MemoryStream ms = new MemoryStream();
 		        BinaryWriter writer = new BinaryWriter(ms);
@@ -190,7 +190,7 @@ public class SocketClient {
 		//int msglen = message.Length;
 
 		ByteBuffer buffer = new ByteBuffer(message);
-		int mainId = buffer.ReadShort();
+		int mainId = buffer.ReadUShort();
 		NetworkManager.AddEvent(mainId, buffer);
 	}
 

@@ -14,6 +14,7 @@ public class NetworkManagerWrap
 		L.RegFunction("AddEvent", AddEvent);
 		L.RegFunction("SendConnect", SendConnect);
 		L.RegFunction("SendMessage", SendMessage);
+		L.RegFunction("OnDestroy", OnDestroy);
 		L.RegFunction("__eq", op_Equality);
 		L.RegFunction("__tostring", ToLua.op_ToString);
 		L.EndClass();
@@ -169,6 +170,22 @@ public class NetworkManagerWrap
 			{
 				return LuaDLL.luaL_throw(L, "invalid arguments to method: NetworkManager.SendMessage");
 			}
+		}
+		catch(Exception e)
+		{
+			return LuaDLL.toluaL_exception(L, e);
+		}
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int OnDestroy(IntPtr L)
+	{
+		try
+		{
+			ToLua.CheckArgsCount(L, 1);
+			NetworkManager obj = (NetworkManager)ToLua.CheckObject(L, 1, typeof(NetworkManager));
+			obj.OnDestroy();
+			return 0;
 		}
 		catch(Exception e)
 		{
