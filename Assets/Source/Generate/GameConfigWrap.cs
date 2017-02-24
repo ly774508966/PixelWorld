@@ -10,12 +10,7 @@ public class GameConfigWrap
 		L.RegFunction("New", _CreateGameConfig);
 		L.RegFunction("__tostring", ToLua.op_ToString);
 		L.RegConstant("DebugMode", 0);
-		L.RegConstant("TimerInterval", 1);
-		L.RegConstant("GameFrameRate", 30);
 		L.RegVar("WebUrl", get_WebUrl, null);
-		L.RegVar("SocketAddress", get_SocketAddress, set_SocketAddress);
-		L.RegVar("SocketPort", get_SocketPort, set_SocketPort);
-		L.RegVar("UserID", get_UserID, set_UserID);
 		L.EndClass();
 	}
 
@@ -50,93 +45,6 @@ public class GameConfigWrap
 		{
 			LuaDLL.lua_pushstring(L, GameConfig.WebUrl);
 			return 1;
-		}
-		catch(Exception e)
-		{
-			return LuaDLL.toluaL_exception(L, e);
-		}
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_SocketAddress(IntPtr L)
-	{
-		try
-		{
-			LuaDLL.lua_pushstring(L, GameConfig.SocketAddress);
-			return 1;
-		}
-		catch(Exception e)
-		{
-			return LuaDLL.toluaL_exception(L, e);
-		}
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_SocketPort(IntPtr L)
-	{
-		try
-		{
-			LuaDLL.lua_pushinteger(L, GameConfig.SocketPort);
-			return 1;
-		}
-		catch(Exception e)
-		{
-			return LuaDLL.toluaL_exception(L, e);
-		}
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_UserID(IntPtr L)
-	{
-		try
-		{
-			LuaDLL.lua_pushstring(L, GameConfig.UserID);
-			return 1;
-		}
-		catch(Exception e)
-		{
-			return LuaDLL.toluaL_exception(L, e);
-		}
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int set_SocketAddress(IntPtr L)
-	{
-		try
-		{
-			string arg0 = ToLua.CheckString(L, 2);
-			GameConfig.SocketAddress = arg0;
-			return 0;
-		}
-		catch(Exception e)
-		{
-			return LuaDLL.toluaL_exception(L, e);
-		}
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int set_SocketPort(IntPtr L)
-	{
-		try
-		{
-			int arg0 = (int)LuaDLL.luaL_checknumber(L, 2);
-			GameConfig.SocketPort = arg0;
-			return 0;
-		}
-		catch(Exception e)
-		{
-			return LuaDLL.toluaL_exception(L, e);
-		}
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int set_UserID(IntPtr L)
-	{
-		try
-		{
-			string arg0 = ToLua.CheckString(L, 2);
-			GameConfig.UserID = arg0;
-			return 0;
 		}
 		catch(Exception e)
 		{

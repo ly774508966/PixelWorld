@@ -86,8 +86,8 @@ public class NetworkManager : MonoBehaviour {
         /// <summary>
         /// ∑¢ÀÕ¡¥Ω”«Î«Û
         /// </summary>
-        public void SendConnect() {
-            SocketClient.SendConnect();
+        public void SendConnect(string ip, int port) {
+            SocketClient.SendConnect(ip, port);
         }
 
         /// <summary>

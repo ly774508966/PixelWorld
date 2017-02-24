@@ -216,8 +216,8 @@ public class SocketClient {
 	/// <summary>
 	/// 发送连接请求
 	/// </summary>
-	public void SendConnect() {
-		ConnectServer(GameConfig.SocketAddress, GameConfig.SocketPort);
+	public void SendConnect(string ip, int port) {
+		ConnectServer(ip, port);
 	}
 
 	/// <summary>

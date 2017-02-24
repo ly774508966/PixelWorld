@@ -1,9 +1,10 @@
-local gameObject
-local transform
 
 PanelBag = {}
 local this = PanelBag
 
+local GameObject = UnityEngine.GameObject
+local gameObject
+local transform
 
 --启动事件--
 function PanelBag.Awake(obj)

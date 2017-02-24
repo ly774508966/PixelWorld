@@ -2,9 +2,8 @@
     游戏总入口，自更新完成后加载
     加载各个游戏模块（network, manager, 所有面板等）
 ]]
-local lpeg = require "lpeg"
-
 json = require "cjson"
+inspect = require "core/inspect"
 
 -- manager
 guiMgr = GUIManager.GetInstance()
@@ -13,29 +12,26 @@ lanMgr = LanguageManager.GetInstance()
 sceneMgr = SceneManager.GetInstance()
 networkMgr = NetworkManager.GetInstance()
 
-cfgMgr = require 'CfgManager'
-
-require "protocol"
-require "network"
+require "config"
+require "network/network"
+require "core/fsm"
 
 -- register windows
-require "Window/PanelLogin"
-require "Window/PanelMenu"
-require "Window/PanelAlert"
-require "Window/PanelBag"
-require "Window/PanelEquip"
-require "Window/PanelItemDetail"
+require "window/PanelLogin"
+require "window/PanelMenu"
+require "window/PanelAlert"
+require "window/PanelBag"
+require "window/PanelEquip"
+require "window/PanelItemDetail"
 
 
-WWW = UnityEngine.WWW
-GameObject = UnityEngine.GameObject
-
+-- cfg
+CFG = {}
 
 --管理器--
 Game = {}
 local this = Game
 
-local game
 local transform
 local gameObject
 local WWW = UnityEngine.WWW
@@ -44,13 +40,17 @@ local WWW = UnityEngine.WWW
 --初始化完成(自更新)
 function Game.OnInitOK()
     print('Game Init OK ...')
-    GameConfig.SocketPort = 8001
-    GameConfig.SocketAddress = "127.0.0.1"
     
     networkMgr:OnInit()
-    networkMgr:SendConnect()
+    networkMgr:SendConnect(CONFIG_SOCKET_IP, CONFIG_SOCKET_PORT)
 
-    cfgMgr.Init()
+    local data = resMgr:LoadAsset('Cfg/item'):ToString()
+    this.items = json.decode(data)
+    print ('items count ', #this.items)
+
+    local data = resMgr:LoadAsset('Cfg/equip'):ToString()
+    this.equips = json.decode(data)
+    print ('equips count ', #this.equips)
 
     guiMgr:ShowWindow("PanelLogin", nil)
 end

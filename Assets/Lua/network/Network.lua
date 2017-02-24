@@ -1,6 +1,10 @@
 
-require "protocol"
+require "network/protocol"
 --Event = require 'events'
+
+-- pb
+require "proto/logic_pb"
+require "proto/main_pb"
 
 Network = {}
 local this = Network
@@ -36,10 +40,9 @@ function Network.OnMessage(key, data)
     print(key, data)
     
     if key == Protocol.ACK_LOGIN then
-        local id = data:ReadInt()
-        local name = data:ReadString()
-        local f = data:ReadFloat()
-        print(id, name, f)
+        local user = main_pb.User()
+        user:ParseFromString(data:ReadBuffer())
+        print(user.id, user.name, user.lv, user.exp, user.coin)
         sceneMgr:GotoScene(SceneID.Main)
     elseif key == Protocol.ACK_ENTER then
     end
@@ -47,29 +50,18 @@ end
 
 -- 登录
 function Network.login(name, pwd)
+    local login = logic_pb.LoginRequest()
+    login.name = name
+    login.pwd = pwd
+    
+    local msg = login:SerializeToString()
+
     local buffer = ByteBuffer.New()
     buffer:WriteShort(Protocol.REQ_LOGIN)
-    buffer:WriteString(name)
-    buffer:WriteString(pwd)
+    buffer:WriteBuffer(msg)
     networkMgr:SendMessage(buffer)
 end
 
---二进制登录--
-function Network.TestLoginBinary(buffer)
-	local protocal = buffer:ReadByte()
-	local str = buffer:ReadString()
-	log('TestLoginBinary: protocal:>'..protocal..' str:>'..str)
-end
-
---PBLUA登录--
-function Network.TestLoginPblua(buffer)
-	local protocal = buffer:ReadByte()
-	local data = buffer:ReadBuffer()
-
-    local msg = login_pb.LoginResponse()
-    msg:ParseFromString(data)
-	log('TestLoginPblua: protocal:>'..protocal..' msg:>'..msg.id)
-end
 
 --卸载网络监听--
 function Network.Unload()
