@@ -1,4 +1,4 @@
-require "framework/core/extern"
+require "core/extern"
 
 
 Model = class("Model", nil)
@@ -69,7 +69,7 @@ function View:removeObserver(notiName, context)
 end
 
 function View:registerMediator(mediator)
-	local name = mediator._mediatorName
+	local name = mediator._name
 	if self._mediatorMap[name] == nil then
 		self._mediatorMap[name] = mediator
 
@@ -164,8 +164,7 @@ end
 IMediator = class ("IMediator", nil)
 
 function IMediator:ctor(...)
-	self._mediatorName = ""
-	self._viewComponent = nil
+	self._name = ""
 end
 
 

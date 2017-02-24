@@ -15,15 +15,19 @@ networkMgr = NetworkManager.GetInstance()
 require "config"
 require "network/network"
 require "core/fsm"
+require "core/mvc"
 
 -- register windows
 require "window/PanelLogin"
 require "window/PanelMenu"
-require "window/PanelAlert"
+--require "window/PanelAlert"
 require "window/PanelBag"
 require "window/PanelEquip"
 require "window/PanelItemDetail"
 
+
+facade = Facade:getInstance()
+facade:registerMediator(require("window/PanelAlert"))
 
 -- cfg
 CFG = {}

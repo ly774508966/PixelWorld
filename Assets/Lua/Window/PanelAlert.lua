@@ -3,15 +3,35 @@ local transform
 
 PanelAlert = {}
 local this = PanelAlert
+this._name = 'PanelAlert'
 
-
---启动事件--
+-- --------------------------------------------------------------------
+--	c# callback
+-----------------------------------------------------------------------
 function PanelAlert.Awake(obj)
 	gameObject = obj
 	transform = obj.transform
 
 	this.InitPanel()
 	print("Awake--->>")
+end
+
+function PanelAlert.OnDestroy()
+	print("OnDestroy---->>>")
+end
+
+-- --------------------------------------------------------------------
+--	mvc notication
+-----------------------------------------------------------------------
+function PanelAlert:listNotificationInterests()
+	return {}
+end
+function PanelAlert:handleNotification(notification)
+	if notification._name == MSG_CHAT_RECEIVE then
+		local data = notification._body.data
+		self:addMessageToList(data)
+	end
+
 end
 
 function PanelAlert.setTitleMsg(title, msg)
@@ -36,12 +56,7 @@ function PanelAlert.InitPanel()
 	window:AddClick(this.btn_cancel, this.OnBtnCancel)
 end
 
-
 --单击事件--
-function PanelAlert.OnDestroy()
-	print("OnDestroy---->>>")
-end
-
 function PanelAlert.OnBtnOK(go)
 	print('OnBtnOK')
 	guiMgr:HideWindow(gameObject)
@@ -51,3 +66,5 @@ function PanelAlert.OnBtnCancel(go)
 	print('OnBtnCancel')
 	guiMgr:HideWindow(gameObject)
 end
+
+return PanelAlert
