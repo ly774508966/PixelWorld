@@ -1,19 +1,15 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Editor\AssetBundleBuild.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Core\NotificationCenter.cs">
     <Files>
-      <File FileName="Assets\Scripts\CfgManager.cs" Line="27" Column="1" />
-      <File FileName="Assets\Scripts\AssetBundleManager.cs" Line="125" Column="51" />
-      <File FileName="Assets\Scripts\UpdateManager.cs" Line="97" Column="1" />
-      <File FileName="Assets\Scripts\Window\PanelMenu.cs" Line="11" Column="54" />
-      <File FileName="Assets\Scripts\SceneManager.cs" Line="22" Column="63" />
-      <File FileName="Assets\Editor\AssetBundleBuild.cs" Line="84" Column="33" />
+      <File FileName="Assets\Scripts\UpdateManager.cs" Line="118" Column="11" />
+      <File FileName="Assets\Scripts\Window\LuaBehaviour.cs" Line="17" Column="39" />
+      <File FileName="Assets\Scripts\Core\NotificationCenter.cs" Line="38" Column="73" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="D:\PixelWorld\Assets\Scripts\Window\PanelMenu.cs" line="11" column="53" />
-      <Breakpoint file="D:\PixelWorld\Assets\Scripts\ResourceManager.cs" line="59" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
