@@ -45,6 +45,8 @@ function Network.OnMessage(key, data)
         print(user.id, user.name, user.lv, user.exp, user.coin)
         sceneMgr:GotoScene(SceneID.Main)
     elseif key == Protocol.ACK_ENTER then
+    elseif key == Protocol.ACK_SELL then
+        facade:sendNotification(BAG_SELL_OK, data:ReadInt())
     end
 end
 
@@ -59,6 +61,13 @@ function Network.login(name, pwd)
     local buffer = ByteBuffer.New()
     buffer:WriteShort(Protocol.REQ_LOGIN)
     buffer:WriteBuffer(msg)
+    networkMgr:SendMessage(buffer)
+end
+-- 出售
+function Network.sell(id)
+    local buffer = ByteBuffer.New()
+    buffer:WriteShort(Protocol.REQ_SELL)
+    buffer:WriteInt(id)
     networkMgr:SendMessage(buffer)
 end
 

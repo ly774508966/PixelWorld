@@ -4,14 +4,18 @@ local transform
 PanelLogin = {}
 local this = PanelLogin
 
-
---启动事件--
+-- --------------------------------------------------------------------
+--	c# callback
+-----------------------------------------------------------------------
 function PanelLogin.Awake(obj)
 	gameObject = obj
 	transform = obj.transform
 
 	this.InitPanel()
 	print("Awake--->>")
+end
+function PanelLogin.OnDestroy()
+	print("OnDestroy---->>>")
 end
 
 
@@ -25,11 +29,10 @@ function PanelLogin.InitPanel()
 end
 
 
---单击事件--
-function PanelLogin.OnDestroy()
-	print("OnDestroy---->>>")
-end
-
+-- --------------------------------------------------------------------
+--	click event
+-----------------------------------------------------------------------
+-- login
 function PanelLogin.OnBtnLogin(go)
 	print('OnBtnLogin')
 	Network.login('AdamWu', '123456')

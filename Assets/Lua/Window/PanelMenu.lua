@@ -4,13 +4,18 @@ local transform
 PanelMenu = {}
 local this = PanelMenu
 
---启动事件--
+-- --------------------------------------------------------------------
+--	c# callback
+-----------------------------------------------------------------------
 function PanelMenu.Awake(obj)
 	gameObject = obj
 	transform = obj.transform
 
 	this.InitPanel()
 	print("Awake--->>")
+end
+function PanelMenu.OnDestroy()
+	print("OnDestroy---->>>")
 end
 
 --初始化面板--
@@ -27,9 +32,6 @@ function PanelMenu.InitPanel()
 end
 
 --单击事件--
-function PanelMenu.OnDestroy()
-	print("OnDestroy---->>>")
-end
 
 function PanelMenu.OnBtnAlert(go)
 	print('OnBtnAlert')

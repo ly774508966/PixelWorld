@@ -16,6 +16,7 @@ require "config"
 require "network/network"
 require "core/fsm"
 require "core/mvc"
+require "notifyname"
 
 -- register windows
 require "window/PanelLogin"
@@ -23,11 +24,12 @@ require "window/PanelMenu"
 --require "window/PanelAlert"
 require "window/PanelBag"
 require "window/PanelEquip"
-require "window/PanelItemDetail"
+--require "window/PanelItemDetail"
 
 
 facade = Facade:getInstance()
 facade:registerMediator(require("window/PanelAlert"))
+facade:registerMediator(require("window/PanelItemDetail"))
 
 -- cfg
 CFG = {}

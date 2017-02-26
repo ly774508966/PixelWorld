@@ -6,13 +6,19 @@ local GameObject = UnityEngine.GameObject
 local gameObject
 local transform
 
---启动事件--
+-- --------------------------------------------------------------------
+--	c# callback
+-----------------------------------------------------------------------
 function PanelBag.Awake(obj)
 	gameObject = obj
 	transform = obj.transform
 
 	this.InitPanel()
 	print("Awake--->>")
+end
+
+function PanelBag.OnDestroy()
+	print("OnDestroy---->>>")
 end
 
 
@@ -57,6 +63,3 @@ function PanelBag.OnBtnClose(go)
 end
 
 --单击事件--
-function PanelBag.OnDestroy()
-	print("OnDestroy---->>>")
-end

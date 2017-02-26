@@ -56,7 +56,10 @@ function PanelAlert.InitPanel()
 	window:AddClick(this.btn_cancel, this.OnBtnCancel)
 end
 
---单击事件--
+
+-- --------------------------------------------------------------------
+--	click event
+-----------------------------------------------------------------------
 function PanelAlert.OnBtnOK(go)
 	print('OnBtnOK')
 	guiMgr:HideWindow(gameObject)

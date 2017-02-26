@@ -5,13 +5,19 @@ PanelEquip = {}
 local this = PanelEquip
 
 
---启动事件--
+-- --------------------------------------------------------------------
+--	c# callback
+-----------------------------------------------------------------------
 function PanelEquip.Awake(obj)
 	gameObject = obj
 	transform = obj.transform
 
 	this.InitPanel()
 	print("Awake--->>")
+end
+
+function PanelEquip.OnDestroy()
+	print("OnDestroy---->>>")
 end
 
 
@@ -25,11 +31,10 @@ function PanelEquip.InitPanel()
 end
 
 
---单击事件--
-function PanelEquip.OnDestroy()
-	print("OnDestroy---->>>")
-end
-
+-- --------------------------------------------------------------------
+--	click event
+-----------------------------------------------------------------------
+--单击事件
 function PanelEquip.OnBtnClose(go)
 	print('OnBtnClose')
 	guiMgr:HideWindow(gameObject)
