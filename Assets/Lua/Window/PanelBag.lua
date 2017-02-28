@@ -6,6 +6,7 @@ PanelBag = {}
 local this = PanelBag
 this._name = "PanelBag"
 
+local bagProxy = facade:retrieveProxy("BagProxy")
 
 -- --------------------------------------------------------------------
 --	c# callback
@@ -39,11 +40,20 @@ function PanelBag.InitPanel()
 
 
 	local prefab = resMgr:LoadAsset('UI/Widget/BagItem')
-	local count = 100
+	local items = bagProxy:getItems()
+	local list = {}
+	for id in pairs(items) do
+		table.insert(list, id)
+	end
+	table.sort(list)
 	local itemHeight = 100
+	local count = #list
 	for i = 0, count-1 do
+		local id = list[i+1]
+		local item = items[id]
+		local cfg = CFG.items[tostring(id)]
 		local go = GameObject.Instantiate(prefab)
-		go.name = tostring(i)
+		go.name = tostring(id)
 		go.transform:SetParent(content)
 		go.transform.localScale = Vector3.one
 		local rt = go:GetComponent('RectTransform')
@@ -53,8 +63,10 @@ function PanelBag.InitPanel()
 		go:AddComponent(typeof(UnityEngine.UI.Button))
         window:AddClick(go, this.OnBtnItem)
 
+        local face = go.transform:GetComponent("Image")
+        face.sprite = resMgr:LoadSprite('Sprite/Public/item_q_'..tostring(cfg.quality))
 	    local label = go.transform:FindChild('Text')
-	    label:GetComponent('Text').text = tostring(i)
+	    label:GetComponent('Text').text = tostring(item.num)
 	end
 	content:GetComponent('RectTransform').sizeDelta = Vector2.New(0, math.floor(count/5)*100)
 end

@@ -142,6 +142,7 @@ public static class CustomSettings
 
 		// ugui
 		_GT(typeof(RectTransform)),
+		_GT(typeof(Image)),
 		_GT(typeof(Text)),
 		_GT(typeof(Button)),
 

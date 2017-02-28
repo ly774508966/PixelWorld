@@ -34,14 +34,23 @@ end
 
 --初始化面板--
 function PanelItemDetail.InitPanel()
-	local btn_close = transform:FindChild("Button Close").gameObject
-	local btn_ok = transform:FindChild("Button OK").gameObject
-	local btn_sell = transform:FindChild("Button Sell").gameObject
+	local btn_close = transform:Find("Button Close").gameObject
+	local btn_ok = transform:Find("Button OK").gameObject
+	local btn_sell = transform:Find("Button Sell").gameObject
 
 	window = transform:GetComponent('LuaBehaviour')
 	window:AddClick(btn_close, this.OnBtnClose)
 	window:AddClick(btn_ok, this.OnBtnClose)
 	window:AddClick(btn_sell, this.OnBtnSell)
+
+	local cfg = CFG.items[tostring(this.itemid)]
+
+	local img_q = transform:Find("Image Quality"):GetComponent("Image")
+	local text_title = transform:Find("Text Title"):GetComponent("Text")
+	local text_desc = transform:Find("Text Msg"):GetComponent("Text")
+	img_q.sprite = resMgr:LoadSprite('Sprite/Public/item_q_'..tostring(cfg.quality))
+	text_title.text = cfg.name
+	text_desc.text = cfg.desc
 end
 
 function PanelItemDetail.OnSellOK(id)

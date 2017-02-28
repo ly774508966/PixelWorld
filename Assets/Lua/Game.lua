@@ -20,6 +20,7 @@ require "notifyname"
 
 -- register windows
 facade = Facade:getInstance()
+facade:registerProxy(require("model/bag_proxy").new())
 facade:registerMediator(require("window/PanelLogin"))
 facade:registerMediator(require("window/PanelMenu"))
 facade:registerMediator(require("window/PanelBag"))
@@ -47,12 +48,13 @@ function Game.OnInitOK()
     networkMgr:SendConnect(CONFIG_SOCKET_IP, CONFIG_SOCKET_PORT)
 
     local data = resMgr:LoadAsset('Cfg/item'):ToString()
-    this.items = json.decode(data)
-    print ('items count ', #this.items)
+    CFG.items = json.decode(data)
+    print ('items count ', #CFG.items)
+    print (inspect(CFG.items))
 
     local data = resMgr:LoadAsset('Cfg/equip'):ToString()
-    this.equips = json.decode(data)
-    print ('equips count ', #this.equips)
+    CFG.equips = json.decode(data)
+    print ('equips count ', #CFG.equips)
 
     guiMgr:ShowWindow("PanelLogin", nil)
 end

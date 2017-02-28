@@ -32,7 +32,6 @@ function PanelAlert.setTitleMsg(title, msg, callback)
 	this.title = title
 	this.msg = msg
 	this.callback = callback
-	print("setTitleMsg", this.callback)
 end
 
 

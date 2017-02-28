@@ -63,6 +63,15 @@ public class ResourceManager : MonoBehaviour {
 			return Resources.Load(assetName);
 		}
 	}
+	public Sprite LoadSprite(string assetName) {
+		AssetBundle assetBundle = GetAssetBundleFormName(assetName);
+		if (assetBundle != null) {
+			int pos = assetName.IndexOf("/");
+			return assetBundle.LoadAsset<GameObject>(assetName.Substring(pos+1)).GetComponent<SpriteRenderer>().sprite;
+		} else {
+			return Resources.Load<GameObject>(assetName).GetComponent<SpriteRenderer>().sprite;;
+		}
+	}
 
 	public long GetFileSize(string filename) {
 		if (!File.Exists(filename)) {
