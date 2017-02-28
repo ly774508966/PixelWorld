@@ -3,6 +3,7 @@ local transform
 
 PanelEquip = {}
 local this = PanelEquip
+this._name = "PanelEquip"
 
 
 -- --------------------------------------------------------------------
@@ -13,13 +14,19 @@ function PanelEquip.Awake(obj)
 	transform = obj.transform
 
 	this.InitPanel()
-	print("Awake--->>")
 end
 
 function PanelEquip.OnDestroy()
-	print("OnDestroy---->>>")
 end
 
+-- --------------------------------------------------------------------
+--	mvc notication
+-----------------------------------------------------------------------
+function PanelEquip:listNotificationInterests()
+	return {}
+end
+function PanelEquip:handleNotification(notification)
+end
 
 --初始化面板--
 function PanelEquip.InitPanel()
@@ -39,3 +46,5 @@ function PanelEquip.OnBtnClose(go)
 	print('OnBtnClose')
 	guiMgr:HideWindow(gameObject)
 end
+
+return PanelEquip

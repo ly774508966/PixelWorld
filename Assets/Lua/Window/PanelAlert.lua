@@ -13,11 +13,9 @@ function PanelAlert.Awake(obj)
 	transform = obj.transform
 
 	this.InitPanel()
-	print("Awake--->>")
 end
 
 function PanelAlert.OnDestroy()
-	print("OnDestroy---->>>")
 end
 
 -- --------------------------------------------------------------------
@@ -27,17 +25,16 @@ function PanelAlert:listNotificationInterests()
 	return {}
 end
 function PanelAlert:handleNotification(notification)
-	if notification._name == MSG_CHAT_RECEIVE then
-		local data = notification._body.data
-		self:addMessageToList(data)
-	end
-
 end
 
-function PanelAlert.setTitleMsg(title, msg)
+
+function PanelAlert.setTitleMsg(title, msg, callback)
 	this.title = title
 	this.msg = msg
+	this.callback = callback
+	print("setTitleMsg", this.callback)
 end
+
 
 --初始化面板--
 function PanelAlert.InitPanel()
@@ -63,11 +60,19 @@ end
 function PanelAlert.OnBtnOK(go)
 	print('OnBtnOK')
 	guiMgr:HideWindow(gameObject)
+
+	print("setTitleMsg", this.callback)
+	if this.callback then
+		this.callback(1)
+	end
 end
 
 function PanelAlert.OnBtnCancel(go)
 	print('OnBtnCancel')
-	guiMgr:HideWindow(gameObject)
+	guiMgr:HideWindow(gameObject)	
+	if this.callback then
+		this.callback(0)
+	end
 end
 
 return PanelAlert

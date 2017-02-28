@@ -1,5 +1,6 @@
 --[[
 	network protocol
+	buildin: [0, 100)
 ]]
 
 Protocol = {

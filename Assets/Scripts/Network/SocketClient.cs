@@ -25,6 +25,10 @@ public class SocketClient {
 	public SocketClient() {
 	}
 
+	public bool Connnected {
+		get {return client.Connected;}
+	}
+
 	/// <summary>
 	/// 注册代理
 	/// </summary>
@@ -52,7 +56,7 @@ public class SocketClient {
 		client.ReceiveTimeout = 1000;
 		client.NoDelay = true;
 		try {
-			client.BeginConnect(host, port, new AsyncCallback(OnConnect), null);
+			client.BeginConnect(host, port, new AsyncCallback(ConnectCallback), client);
 		} catch (Exception e) {
 			Close(); 
 			Debug.LogError(e.Message);
@@ -62,7 +66,12 @@ public class SocketClient {
 	/// <summary>
 	/// 连接上服务器
 	/// </summary>
-	void OnConnect(IAsyncResult asr) {
+	void ConnectCallback(IAsyncResult asr) {
+		TcpClient socket = (TcpClient)asr.AsyncState;
+		if (socket.Connected == false) {
+			NetworkManager.AddEvent(Protocol.Refused, new ByteBuffer());
+			return;
+		}
 		outStream = client.GetStream();
 		client.GetStream().BeginRead(byteBuffer, 0, MAX_READ, new AsyncCallback(OnRead), null);
 		NetworkManager.AddEvent(Protocol.Connect, new ByteBuffer());
@@ -85,7 +94,7 @@ public class SocketClient {
 				byte[] payload = ms.ToArray();
 				outStream.BeginWrite(payload, 0, payload.Length, new AsyncCallback(OnWrite), null);
 			} else {
-				Debug.LogError("client.connected----->>false");
+				OnDisconnected(DisType.Disconnect, "");
 			}
 		}
 	}

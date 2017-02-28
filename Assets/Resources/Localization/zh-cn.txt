@@ -7,6 +7,7 @@ SYSTEM_ERROR						= 系统出错！
 
 # network
 NETWORK								= 网络连接
+NETWORK_FAIL						= 网络连接失败！
 NETWORK_ERROR						= 网络连接异常！
 NETWORK_TIMEOUT						= 请求超时！
 

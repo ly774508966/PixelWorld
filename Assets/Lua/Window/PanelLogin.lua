@@ -3,6 +3,7 @@ local transform
 
 PanelLogin = {}
 local this = PanelLogin
+this._name = "PanelLogin"
 
 -- --------------------------------------------------------------------
 --	c# callback
@@ -12,10 +13,17 @@ function PanelLogin.Awake(obj)
 	transform = obj.transform
 
 	this.InitPanel()
-	print("Awake--->>")
 end
 function PanelLogin.OnDestroy()
-	print("OnDestroy---->>>")
+end
+
+-- --------------------------------------------------------------------
+--	mvc notication
+-----------------------------------------------------------------------
+function PanelLogin:listNotificationInterests()
+	return {}
+end
+function PanelLogin:handleNotification(notification)
 end
 
 
@@ -37,3 +45,5 @@ function PanelLogin.OnBtnLogin(go)
 	print('OnBtnLogin')
 	Network.login('AdamWu', '123456')
 end
+
+return PanelLogin

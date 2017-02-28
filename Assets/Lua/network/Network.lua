@@ -14,30 +14,43 @@ local gameObject
 local islogging = false
 
 function Network.Start() 
-    print("Network.Start!")
+    print("Network.Start")
+end
+
+function Network.Reconnect()
+    print("Network.Reconnect")
+    -- 可多次尝试
+    networkMgr:SendConnect(CONFIG_SOCKET_IP, CONFIG_SOCKET_PORT)
 end
 
 --当连接建立时--
-function Network.OnConnect() 
-    Util.LogWarning("Network.OnConnect!")
+function Network.OnConnect()
+    islogging = true
+end
+
+--当连接失败时--
+function Network.OnRefuse()
+    PanelAlert.setTitleMsg(lanMgr:GetValue('NETWORK'), lanMgr:GetValue('NETWORK_FAIL'), this.Reconnect)    
+    guiMgr:ShowWindow('PanelAlert', nil)
 end
 
 --异常断线--
 function Network.OnException() 
     islogging = false
-    networkMgr:SendConnect()
-   	Util.LogError("OnException------->>>>")
+    PanelAlert.setTitleMsg(lanMgr:GetValue('NETWORK'), lanMgr:GetValue('NETWORK_FAIL'), this.Reconnect)
+    guiMgr:ShowWindow('PanelAlert', nil)
 end
 
 --连接中断，或者被踢掉--
-function Network.OnDisconnect() 
+function Network.OnDisconnect()
     islogging = false
-    Util.LogError("OnDisconnect------->>>>")
+    PanelAlert.setTitleMsg(lanMgr:GetValue('NETWORK'), lanMgr:GetValue('NETWORK_FAIL'), this.Reconnect)    
+    guiMgr:ShowWindow('PanelAlert', nil)
 end
 
 --Socket消息--
 function Network.OnMessage(key, data)
-    print(key, data)
+    --print(key, data)
     
     if key == Protocol.ACK_LOGIN then
         local user = main_pb.User()

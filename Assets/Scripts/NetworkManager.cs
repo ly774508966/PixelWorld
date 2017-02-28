@@ -31,6 +31,10 @@ public class NetworkManager : MonoBehaviour {
             }
         }
 
+        public bool Connected() {
+        	return socket.Connnected;
+        }
+
         void Awake() {
 		Init();
 
@@ -67,11 +71,13 @@ public class NetworkManager : MonoBehaviour {
 		if (mEvents.Count > 0) {
 			while (mEvents.Count > 0) {
 				KeyValuePair<int, ByteBuffer> _event = mEvents.Dequeue();
-				if (_event.Key >= 0) {
+				if (_event.Key >= 100) {
 					CallMethod("OnMessage", _event.Key, _event.Value);
 				} else {
 					// 连接消息
-					if (_event.Key == Protocol.Connect) {
+					if (_event.Key == Protocol.Refused) {
+						CallMethod("OnDisconnect");
+					} else if (_event.Key == Protocol.Connect) {
 						CallMethod("OnConnect");
 					} else if (_event.Key == Protocol.Exception) {
 						CallMethod("OnException");

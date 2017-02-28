@@ -3,6 +3,7 @@ local transform
 
 PanelMenu = {}
 local this = PanelMenu
+this._name = "PanelMenu"
 
 -- --------------------------------------------------------------------
 --	c# callback
@@ -12,10 +13,17 @@ function PanelMenu.Awake(obj)
 	transform = obj.transform
 
 	this.InitPanel()
-	print("Awake--->>")
 end
 function PanelMenu.OnDestroy()
-	print("OnDestroy---->>>")
+end
+
+-- --------------------------------------------------------------------
+--	mvc notication
+-----------------------------------------------------------------------
+function PanelMenu:listNotificationInterests()
+	return {}
+end
+function PanelMenu:handleNotification(notification)
 end
 
 --初始化面板--
@@ -40,7 +48,7 @@ function PanelMenu.OnBtnAlert(go)
 end
 
 function PanelMenu.OnBtnBag(go)
-	print('OnBtnAlert')
+	print('OnBtnBag')
 	guiMgr:ShowWindow('PanelBag', go)
 end
 
@@ -48,3 +56,5 @@ function PanelMenu.OnBtnEquip(go)
 	print('OnBtnEquip')
 	guiMgr:ShowWindow('PanelEquip', go)
 end
+
+return PanelMenu

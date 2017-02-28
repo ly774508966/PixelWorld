@@ -5,6 +5,7 @@ PanelItemDetail = {}
 local this = PanelItemDetail
 this._name = 'PanelItemDetail'
 
+this.itemid = -1
 
 -- --------------------------------------------------------------------
 --	c# callback
@@ -14,10 +15,8 @@ function PanelItemDetail.Awake(obj)
 	transform = obj.transform
 
 	this.InitPanel()
-	print("Awake--->>")
 end
 function PanelItemDetail.OnDestroy()
-	print("OnDestroy---->>>")
 end
 
 -- --------------------------------------------------------------------
@@ -29,11 +28,9 @@ end
 function PanelItemDetail:handleNotification(notification)
 	if notification._name == BAG_SELL_OK then
 		local data = notification._body
-		print (data)
-		self:OnSellOK(data)
+		this.OnSellOK(data)
 	end
 end
-
 
 --初始化面板--
 function PanelItemDetail.InitPanel()
@@ -47,7 +44,7 @@ function PanelItemDetail.InitPanel()
 	window:AddClick(btn_sell, this.OnBtnSell)
 end
 
-function PanelItemDetail:OnSellOK(id)
+function PanelItemDetail.OnSellOK(id)
 	print("OnSellOK", id)
 
 	guiMgr:HideWindow(gameObject)
@@ -58,13 +55,12 @@ end
 -----------------------------------------------------------------------
 -- close
 function PanelItemDetail.OnBtnClose(go)
-	print('OnBtnClose')
 	guiMgr:HideWindow(gameObject)
 end
 -- sell
 function PanelItemDetail.OnBtnSell(go)
-	print('OnBtnSell')
-	Network.sell(1)
+	print('OnBtnSell', this.itemid)
+	Network.sell(this.itemid)
 end
 
 return PanelItemDetail

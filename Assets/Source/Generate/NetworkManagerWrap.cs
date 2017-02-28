@@ -8,6 +8,7 @@ public class NetworkManagerWrap
 	{
 		L.BeginClass(typeof(NetworkManager), typeof(UnityEngine.MonoBehaviour));
 		L.RegFunction("GetInstance", GetInstance);
+		L.RegFunction("Connected", Connected);
 		L.RegFunction("OnInit", OnInit);
 		L.RegFunction("Unload", Unload);
 		L.RegFunction("CallMethod", CallMethod);
@@ -28,6 +29,23 @@ public class NetworkManagerWrap
 			ToLua.CheckArgsCount(L, 0);
 			NetworkManager o = NetworkManager.GetInstance();
 			ToLua.Push(L, o);
+			return 1;
+		}
+		catch(Exception e)
+		{
+			return LuaDLL.toluaL_exception(L, e);
+		}
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int Connected(IntPtr L)
+	{
+		try
+		{
+			ToLua.CheckArgsCount(L, 1);
+			NetworkManager obj = (NetworkManager)ToLua.CheckObject(L, 1, typeof(NetworkManager));
+			bool o = obj.Connected();
+			LuaDLL.lua_pushboolean(L, o);
 			return 1;
 		}
 		catch(Exception e)

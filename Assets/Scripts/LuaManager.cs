@@ -5,7 +5,7 @@ using LuaInterface;
 public class LuaManager : MonoBehaviour {
 
 	private static LuaManager _instance;
-	public static LuaManager GetInstance(bool bCreate=true) {
+	public static LuaManager GetInstance(bool bCreate=false) {
 		if (bCreate == false) return _instance;
 
 		GameObject main = GameObject.Find("Main");
@@ -23,13 +23,14 @@ public class LuaManager : MonoBehaviour {
         private LuaLooper loop = null;
 
         // Use this for initialization
-        void Awake() {
-            lua = new LuaState();
-            this.OpenLibs();
-            lua.LuaSetTop(0);
+	void Awake() {
+		new LuaResLoader();
+		lua = new LuaState();
+		this.OpenLibs();
+		lua.LuaSetTop(0);
 
-            LuaBinder.Bind(lua);
-            LuaCoroutine.Register(lua, this);
+		LuaBinder.Bind(lua);
+		LuaCoroutine.Register(lua, this);
         }
 
         public void InitStart() {

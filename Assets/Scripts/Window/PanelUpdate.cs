@@ -67,7 +67,7 @@ public class PanelUpdate : MonoBehaviour {
 		UpdateManager.GetInstance().UpdateVersion();
 
 		// 初始化lua engine
-		LuaManager luaManager = LuaManager.GetInstance();
+		LuaManager luaManager = LuaManager.GetInstance(true);
 		luaManager.InitStart();
 		luaManager.DoFile("Game");
 		Util.CallMethod("Game", "OnInitOK");

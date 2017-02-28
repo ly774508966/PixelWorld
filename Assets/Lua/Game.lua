@@ -19,15 +19,11 @@ require "core/mvc"
 require "notifyname"
 
 -- register windows
-require "window/PanelLogin"
-require "window/PanelMenu"
---require "window/PanelAlert"
-require "window/PanelBag"
-require "window/PanelEquip"
---require "window/PanelItemDetail"
-
-
 facade = Facade:getInstance()
+facade:registerMediator(require("window/PanelLogin"))
+facade:registerMediator(require("window/PanelMenu"))
+facade:registerMediator(require("window/PanelBag"))
+facade:registerMediator(require("window/PanelEquip"))
 facade:registerMediator(require("window/PanelAlert"))
 facade:registerMediator(require("window/PanelItemDetail"))
 
