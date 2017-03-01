@@ -8,7 +8,7 @@ end
 
 -- 解析
 function BagProxy:parse(data)
-	print(TAG, "parseData")
+	print(TAG, "parse")
 
 	self._items = {}
 	

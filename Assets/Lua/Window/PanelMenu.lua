@@ -13,6 +13,9 @@ function PanelMenu.Awake(obj)
 	transform = obj.transform
 
 	this.InitPanel()
+
+
+    --facade:sendNotification(WAIT, {name="show"})
 end
 function PanelMenu.OnDestroy()
 end
@@ -43,18 +46,17 @@ end
 
 function PanelMenu.OnBtnAlert(go)
 	print('OnBtnAlert')
-	PanelAlert.setTitleMsg(lanMgr:GetValue('TITLE_TIP'), lanMgr:GetValue('NETWORK_TIMEOUT'))
-	guiMgr:ShowWindow('PanelAlert', go)
+    facade:sendNotification(WAIT, {name="show"})
 end
 
 function PanelMenu.OnBtnBag(go)
 	print('OnBtnBag')
-	guiMgr:ShowWindow('PanelBag', go)
+    facade:sendNotification(OPEN_WINDOW, {name="PanelBag"})
 end
 
 function PanelMenu.OnBtnEquip(go)
 	print('OnBtnEquip')
-	guiMgr:ShowWindow('PanelEquip', go)
+    facade:sendNotification(OPEN_WINDOW, {name="PanelEquip"})
 end
 
 return PanelMenu

@@ -50,13 +50,7 @@ public class UpdateManager : MonoBehaviour {
 
 		yield return www;
 
-		if (www.error != null) {
-			Debug.LogError("downloading error! " + www.error);
-		} else {
-			if (www.isDone) {
-				handler(www);
-			}
-		}
+		handler(www);
 
 		www.Dispose();
 	}

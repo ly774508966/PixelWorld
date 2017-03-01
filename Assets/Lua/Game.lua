@@ -20,6 +20,8 @@ require "notifyname"
 
 -- register windows
 facade = Facade:getInstance()
+facade:registerCommand(OPEN_WINDOW, require("controller/open_win_cmd").new())
+facade:registerCommand(WAIT, require("controller/wait_cmd").new())
 facade:registerProxy(require("model/bag_proxy").new())
 facade:registerMediator(require("window/PanelLogin"))
 facade:registerMediator(require("window/PanelMenu"))
@@ -27,6 +29,7 @@ facade:registerMediator(require("window/PanelBag"))
 facade:registerMediator(require("window/PanelEquip"))
 facade:registerMediator(require("window/PanelAlert"))
 facade:registerMediator(require("window/PanelItemDetail"))
+facade:registerMediator(require("window/PanelWait"))
 
 -- cfg
 CFG = {}
@@ -49,17 +52,13 @@ function Game.OnInitOK()
 
     local data = resMgr:LoadAsset('Cfg/item'):ToString()
     CFG.items = json.decode(data)
-    print ('items count ', #CFG.items)
-    print (inspect(CFG.items))
 
     local data = resMgr:LoadAsset('Cfg/equip'):ToString()
     CFG.equips = json.decode(data)
-    print ('equips count ', #CFG.equips)
 
-    guiMgr:ShowWindow("PanelLogin", nil)
+    facade:sendNotification(OPEN_WINDOW, {name="PanelLogin"})
 end
 
 --销毁--
 function Game.OnDestroy()
-	print('OnDestroy--->>>')
 end

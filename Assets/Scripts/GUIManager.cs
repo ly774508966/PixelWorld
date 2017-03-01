@@ -92,18 +92,24 @@ public class GUIManager : MonoBehaviour {
 				}
 			}
 			if (idx == m_Stack.Count) {
-				m_Stack.Add(view);
 				view.rt.SetAsLastSibling();
+				m_Stack.Add(view);
 			} else {
-				m_Stack.Insert(idx, view);
+				int siblingIndex = m_Stack[idx].rt.GetSiblingIndex();
+				for (int i = m_Stack.Count -1; i >= idx; i --) {
+					m_Stack[idx].rt.SetSiblingIndex(m_Stack[idx].rt.GetSiblingIndex() + 1);
+				}
+				view.rt.SetSiblingIndex(siblingIndex);
 				//if (idx == 0)
-					view.rt.SetSiblingIndex(m_Stack[idx].rt.GetSiblingIndex()-1);
+					//view.rt.SetSiblingIndex(m_Stack[idx].rt.GetSiblingIndex()-1);
 				//else 
 				//	view.rt.SetSiblingIndex(m_Stack[idx-1].rt.GetSiblingIndex());
+
+				m_Stack.Insert(idx, view);
 			}
 		} else {
-			m_Stack.Add(view);
 			view.rt.SetSiblingIndex(Root.childCount-1);
+			m_Stack.Add(view);
 		}
 
 		return view.rt;
@@ -133,11 +139,7 @@ public class GUIManager : MonoBehaviour {
 		return m_Stack.Exists(x => x.name==window);
 	}
 
-	public Sprite LoadSprite(string spriteName) {
-		return Resources.Load<GameObject>("UI/" + spriteName).GetComponent<SpriteRenderer>().sprite;
+	public void Clear() {
+		m_Stack.Clear();
 	}
-
-
-
-
 }

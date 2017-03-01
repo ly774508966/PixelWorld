@@ -12,7 +12,7 @@ public class GUIManagerWrap
 		L.RegFunction("ShowWindow", ShowWindow);
 		L.RegFunction("HideWindow", HideWindow);
 		L.RegFunction("IsWindowOpen", IsWindowOpen);
-		L.RegFunction("LoadSprite", LoadSprite);
+		L.RegFunction("Clear", Clear);
 		L.RegFunction("__eq", op_Equality);
 		L.RegFunction("__tostring", ToLua.op_ToString);
 		L.RegVar("Root", get_Root, null);
@@ -129,16 +129,14 @@ public class GUIManagerWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int LoadSprite(IntPtr L)
+	static int Clear(IntPtr L)
 	{
 		try
 		{
-			ToLua.CheckArgsCount(L, 2);
+			ToLua.CheckArgsCount(L, 1);
 			GUIManager obj = (GUIManager)ToLua.CheckObject(L, 1, typeof(GUIManager));
-			string arg0 = ToLua.CheckString(L, 2);
-			UnityEngine.Sprite o = obj.LoadSprite(arg0);
-			ToLua.Push(L, o);
-			return 1;
+			obj.Clear();
+			return 0;
 		}
 		catch(Exception e)
 		{

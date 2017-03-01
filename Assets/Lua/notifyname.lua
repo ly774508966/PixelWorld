@@ -3,20 +3,14 @@ OPEN_WINDOW = "open_window"
 -- 网络异常
 NETWORK_INVALID = "network_invalid"
 
--- 飘字
-SHOW_TIP = "show_tip"
-
--- 顶部奖励提示
-SHOW_AWARD_TIP = "show_award_tip"
-
--- 提示框
-SHOW_ALERT = "show_alert"
-
 -- wait
-SHOW_WAIT = "show_wait"
+WAIT = "wait"
+
+-- 飘字
+TIP = "tip"
 
 
-SHOW_DIALOG = "show_dialog"
+DIALOG = "dialog"
 
 -- 注册登录
 REGISTER_SUCCESS = "register_success"

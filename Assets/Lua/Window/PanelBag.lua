@@ -77,8 +77,8 @@ end
 -----------------------------------------------------------------------
 function PanelBag.OnBtnItem(go)
 	print('OnItemClick', go.name)
-	PanelItemDetail.itemid = tonumber(go.name)
-	guiMgr:ShowWindow('PanelItemDetail', nil)
+	local itemid = tonumber(go.name)
+    facade:sendNotification(OPEN_WINDOW, {name="PanelItemDetail", data={itemid}})
 end
 
 function PanelBag.OnBtnClose(go)

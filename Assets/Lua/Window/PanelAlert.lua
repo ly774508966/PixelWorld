@@ -11,8 +11,6 @@ this._name = 'PanelAlert'
 function PanelAlert.Awake(obj)
 	gameObject = obj
 	transform = obj.transform
-
-	this.InitPanel()
 end
 
 function PanelAlert.OnDestroy()
@@ -26,12 +24,12 @@ function PanelAlert:listNotificationInterests()
 end
 function PanelAlert:handleNotification(notification)
 end
+function PanelAlert:init(...)
+	this.title, this.msg, this.callback = ...
 
+	print ("init", this.title, self.msg, self.callback)
 
-function PanelAlert.setTitleMsg(title, msg, callback)
-	this.title = title
-	this.msg = msg
-	this.callback = callback
+	this.InitPanel()
 end
 
 
@@ -59,8 +57,6 @@ end
 function PanelAlert.OnBtnOK(go)
 	print('OnBtnOK')
 	guiMgr:HideWindow(gameObject)
-
-	print("setTitleMsg", this.callback)
 	if this.callback then
 		this.callback(1)
 	end

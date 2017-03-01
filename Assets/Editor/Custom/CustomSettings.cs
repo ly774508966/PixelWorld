@@ -35,7 +35,8 @@ public static class CustomSettings
         _DT(typeof(UnityEngine.Events.UnityAction)),
         _DT(typeof(System.Predicate<int>)),
         _DT(typeof(System.Action<int>)),
-        _DT(typeof(System.Comparison<int>)),
+	_DT(typeof(System.Comparison<int>)),
+	_DT(typeof(DG.Tweening.TweenCallback)),
     };
 
     //在这里添加你要导出注册到lua的类型列表
@@ -61,7 +62,7 @@ public static class CustomSettings
         _GT(typeof(DG.Tweening.LoopType)),
         _GT(typeof(DG.Tweening.PathMode)),
         _GT(typeof(DG.Tweening.PathType)),
-        _GT(typeof(DG.Tweening.RotateMode)),
+	_GT(typeof(DG.Tweening.RotateMode)),
         _GT(typeof(Component)).AddExtendType(typeof(DG.Tweening.ShortcutExtensions)),
         _GT(typeof(Transform)).AddExtendType(typeof(DG.Tweening.ShortcutExtensions)),
         _GT(typeof(Light)).AddExtendType(typeof(DG.Tweening.ShortcutExtensions)),

@@ -4,14 +4,18 @@
 ]]
 
 Protocol = {
-	REQ_LOGIN = 1000,
-	ACK_LOGIN = 1001,
+	-- common
+	ACK_MESSAGE 	= 100,
+	ACK_NOTICE		= 101,
 
-	REQ_ENTER = 1002,
-	ACK_ENTER = 1003,
+	-- login
+	REQ_LOGIN 		= 1000,
+	ACK_LOGIN 		= 1001,
+	REQ_ENTER 		= 1002,
+	ACK_ENTER		= 1003,
 
 	-- bag
-	REQ_SELL = 1100,
-	ACK_SELL = 1101,
+	REQ_SELL		= 1100,
+	ACK_SELL 		= 1101,
 	
 }

@@ -34,6 +34,9 @@ public class SceneManager {
 			break;
 		}
 
+		// 切换场景时，清楚gui缓存
+		GUIManager.GetInstance().Clear();
+
 		_CurrentSceneID = id;
 	}
 }

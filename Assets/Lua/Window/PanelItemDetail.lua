@@ -5,16 +5,12 @@ PanelItemDetail = {}
 local this = PanelItemDetail
 this._name = 'PanelItemDetail'
 
-this.itemid = -1
-
 -- --------------------------------------------------------------------
 --	c# callback
 -----------------------------------------------------------------------
 function PanelItemDetail.Awake(obj)
 	gameObject = obj
 	transform = obj.transform
-
-	this.InitPanel()
 end
 function PanelItemDetail.OnDestroy()
 end
@@ -30,6 +26,11 @@ function PanelItemDetail:handleNotification(notification)
 		local data = notification._body
 		this.OnSellOK(data)
 	end
+end
+function PanelItemDetail:init( ... )
+	self.itemid = ...
+
+	this.InitPanel()
 end
 
 --初始化面板--

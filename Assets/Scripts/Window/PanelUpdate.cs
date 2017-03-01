@@ -6,20 +6,33 @@ using System.Collections.Generic;
 
 public class PanelUpdate : MonoBehaviour {
 
+	GameObject panel_alert;
 	Text text_msg;
 	void Awake() {
 		text_msg = transform.Find("Text msg").GetComponent<Text>();
-
+		panel_alert = transform.Find("PanelAlert").gameObject;
+		panel_alert.SetActive(false);
 	}
 
 
 	bool bDownloading = false;
 
 	void Start() {
-		text_msg.text = "检查更新";
 
+		RequestVersion();
+	}
+
+	public void RequestVersion() {
+		panel_alert.SetActive(false);
+		text_msg.text = "检查更新";
 		UpdateManager.GetInstance().RequestVersion(delegate (WWW www){
-			
+			if (www.error != null) {
+				Debug.LogError("downloading error! " + www.error);
+				panel_alert.SetActive(true);
+				text_msg.text = "更新失败";
+				return;
+			}
+
 			bool bNeedUpdate = UpdateManager.GetInstance().CompareVersion(www.text);
 
 			// download resources
