@@ -56,7 +56,7 @@ end
 
 function PanelMenu.OnBtnEquip(go)
 	print('OnBtnEquip')
-    facade:sendNotification(OPEN_WINDOW, {name="PanelEquip"})
+    facade:sendNotification(TIP, {data={lanMgr:GetValue('ITEM_COMPOSE_SUCCESS')}})
 end
 
 return PanelMenu

@@ -141,10 +141,14 @@ public static class CustomSettings
         _GT(typeof(RenderTexture)),
         _GT(typeof(Resources)),
 
+		_GT(typeof(Font)),
+
 		// ugui
 		_GT(typeof(RectTransform)),
+		//_GT(typeof(Graphic)).AddExtendType(typeof(DG.Tweening.ShortcutExtensions)),
 		_GT(typeof(Image)),
 		_GT(typeof(Text)),
+		_GT(typeof(TextAnchor)),
 		_GT(typeof(Button)),
 
 		// 自定义类导出

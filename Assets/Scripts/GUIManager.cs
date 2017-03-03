@@ -23,6 +23,7 @@ public class GUIManager : MonoBehaviour {
 	enum LayerPriority {
 		Normal=0,
 		Top,
+		Tip,
 	}
 
 	private class UIView {
@@ -49,6 +50,7 @@ public class GUIManager : MonoBehaviour {
 
 		m_PanelLayerMap.Add("PanelAlert", LayerPriority.Top);
 		m_PanelLayerMap.Add("PanelWait", LayerPriority.Top);
+		m_PanelLayerMap.Add("PanelTip", LayerPriority.Tip);
 	
 	}
 
@@ -96,14 +98,10 @@ public class GUIManager : MonoBehaviour {
 				m_Stack.Add(view);
 			} else {
 				int siblingIndex = m_Stack[idx].rt.GetSiblingIndex();
-				for (int i = m_Stack.Count -1; i >= idx; i --) {
-					m_Stack[idx].rt.SetSiblingIndex(m_Stack[idx].rt.GetSiblingIndex() + 1);
+				for (int i = m_Stack.Count -1; i >= idx; i --) {// move back
+					m_Stack[i].rt.SetSiblingIndex(m_Stack[i].rt.GetSiblingIndex() + 1);
 				}
 				view.rt.SetSiblingIndex(siblingIndex);
-				//if (idx == 0)
-					//view.rt.SetSiblingIndex(m_Stack[idx].rt.GetSiblingIndex()-1);
-				//else 
-				//	view.rt.SetSiblingIndex(m_Stack[idx-1].rt.GetSiblingIndex());
 
 				m_Stack.Insert(idx, view);
 			}

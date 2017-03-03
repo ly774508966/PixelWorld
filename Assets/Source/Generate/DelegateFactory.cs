@@ -58,6 +58,8 @@ public static class DelegateFactory
 		dict.Add(typeof(UnityEngine.Application.AdvertisingIdentifierCallback), UnityEngine_Application_AdvertisingIdentifierCallback);
 		dict.Add(typeof(UnityEngine.AudioClip.PCMReaderCallback), UnityEngine_AudioClip_PCMReaderCallback);
 		dict.Add(typeof(UnityEngine.AudioClip.PCMSetPositionCallback), UnityEngine_AudioClip_PCMSetPositionCallback);
+		dict.Add(typeof(UnityEngine.Font.FontTextureRebuildCallback), UnityEngine_Font_FontTextureRebuildCallback);
+		dict.Add(typeof(System.Action<UnityEngine.Font>), System_Action_UnityEngine_Font);
 		dict.Add(typeof(UnityEngine.RectTransform.ReapplyDrivenProperties), UnityEngine_RectTransform_ReapplyDrivenProperties);
 	}
 
@@ -2132,6 +2134,96 @@ public static class DelegateFactory
 		{
 			UnityEngine_AudioClip_PCMSetPositionCallback_Event target = new UnityEngine_AudioClip_PCMSetPositionCallback_Event(func, self);
 			UnityEngine.AudioClip.PCMSetPositionCallback d = target.CallWithSelf;
+			target.method = d.Method;
+			return d;
+		}
+	}
+
+	class UnityEngine_Font_FontTextureRebuildCallback_Event : LuaDelegate
+	{
+		public UnityEngine_Font_FontTextureRebuildCallback_Event(LuaFunction func) : base(func) { }
+		public UnityEngine_Font_FontTextureRebuildCallback_Event(LuaFunction func, LuaTable self) : base(func, self) { }
+
+		public void Call()
+		{
+			func.Call();
+		}
+
+		public void CallWithSelf()
+		{
+			func.BeginPCall();
+			func.Push(self);
+			func.PCall();
+			func.EndPCall();
+		}
+	}
+
+	public static Delegate UnityEngine_Font_FontTextureRebuildCallback(LuaFunction func, LuaTable self, bool flag)
+	{
+		if (func == null)
+		{
+			UnityEngine.Font.FontTextureRebuildCallback fn = delegate() { };
+			return fn;
+		}
+
+		if(!flag)
+		{
+			UnityEngine_Font_FontTextureRebuildCallback_Event target = new UnityEngine_Font_FontTextureRebuildCallback_Event(func);
+			UnityEngine.Font.FontTextureRebuildCallback d = target.Call;
+			target.method = d.Method;
+			return d;
+		}
+		else
+		{
+			UnityEngine_Font_FontTextureRebuildCallback_Event target = new UnityEngine_Font_FontTextureRebuildCallback_Event(func, self);
+			UnityEngine.Font.FontTextureRebuildCallback d = target.CallWithSelf;
+			target.method = d.Method;
+			return d;
+		}
+	}
+
+	class System_Action_UnityEngine_Font_Event : LuaDelegate
+	{
+		public System_Action_UnityEngine_Font_Event(LuaFunction func) : base(func) { }
+		public System_Action_UnityEngine_Font_Event(LuaFunction func, LuaTable self) : base(func, self) { }
+
+		public void Call(UnityEngine.Font param0)
+		{
+			func.BeginPCall();
+			func.Push(param0);
+			func.PCall();
+			func.EndPCall();
+		}
+
+		public void CallWithSelf(UnityEngine.Font param0)
+		{
+			func.BeginPCall();
+			func.Push(self);
+			func.Push(param0);
+			func.PCall();
+			func.EndPCall();
+		}
+	}
+
+	public static Delegate System_Action_UnityEngine_Font(LuaFunction func, LuaTable self, bool flag)
+	{
+		if (func == null)
+		{
+			System.Action<UnityEngine.Font> fn = delegate(UnityEngine.Font param0) { };
+			return fn;
+		}
+
+		if(!flag)
+		{
+			System_Action_UnityEngine_Font_Event target = new System_Action_UnityEngine_Font_Event(func);
+			System.Action<UnityEngine.Font> d = target.Call;
+			target.method = d.Method;
+			return d;
+		}
+		else
+		{
+			System_Action_UnityEngine_Font_Event target = new System_Action_UnityEngine_Font_Event(func, self);
+			System.Action<UnityEngine.Font> d = target.CallWithSelf;
 			target.method = d.Method;
 			return d;
 		}

@@ -18,10 +18,14 @@ require "core/fsm"
 require "core/mvc"
 require "notifyname"
 
+-- scene
+require "scene/SceneMain"
+
 -- register windows
 facade = Facade:getInstance()
 facade:registerCommand(OPEN_WINDOW, require("controller/open_win_cmd").new())
 facade:registerCommand(WAIT, require("controller/wait_cmd").new())
+facade:registerCommand(TIP, require("controller/tip_cmd").new())
 facade:registerProxy(require("model/bag_proxy").new())
 facade:registerMediator(require("window/PanelLogin"))
 facade:registerMediator(require("window/PanelMenu"))
@@ -30,6 +34,7 @@ facade:registerMediator(require("window/PanelEquip"))
 facade:registerMediator(require("window/PanelAlert"))
 facade:registerMediator(require("window/PanelItemDetail"))
 facade:registerMediator(require("window/PanelWait"))
+facade:registerMediator(require("window/PanelTip"))
 
 -- cfg
 CFG = {}
@@ -42,6 +47,8 @@ local transform
 local gameObject
 local WWW = UnityEngine.WWW
 
+
+fontArial = UnityEngine.Font.CreateDynamicFontFromOSFont("Arial", 1);
 
 --初始化完成(自更新)
 function Game.OnInitOK()
