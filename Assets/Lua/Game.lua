@@ -20,6 +20,8 @@ require "notifyname"
 
 -- scene
 require "scene/SceneMain"
+require "scene/SceneLoading"
+require "scene/SceneBattle"
 
 -- register windows
 facade = Facade:getInstance()
@@ -35,6 +37,8 @@ facade:registerMediator(require("window/PanelAlert"))
 facade:registerMediator(require("window/PanelItemDetail"))
 facade:registerMediator(require("window/PanelWait"))
 facade:registerMediator(require("window/PanelTip"))
+facade:registerMediator(require("window/PanelMain"))
+facade:registerMediator(require("window/PanelBattle"))
 
 -- cfg
 CFG = {}

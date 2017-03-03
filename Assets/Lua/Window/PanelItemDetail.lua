@@ -46,10 +46,12 @@ function PanelItemDetail.InitPanel()
 
 	local cfg = CFG.items[tostring(this.itemid)]
 
+	local img_face = transform:Find("Image Face"):GetComponent("Image")
 	local img_q = transform:Find("Image Quality"):GetComponent("Image")
 	local text_title = transform:Find("Text Title"):GetComponent("Text")
 	local text_desc = transform:Find("Text Msg"):GetComponent("Text")
-	img_q.sprite = resMgr:LoadSprite('Sprite/Public/item_q_'..tostring(cfg.quality))
+    img_face.sprite = resMgr:LoadSprite('Icon/'..tostring(cfg.icon))
+	img_q.sprite = resMgr:LoadPackSprite('Sprite/Public/item_q_'..tostring(cfg.quality))
 	text_title.text = cfg.name
 	text_desc.text = cfg.desc
 end

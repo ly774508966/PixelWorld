@@ -9,6 +9,7 @@ function OpenWindowCommand:execute(notification)
 	if mediator ~= nil then
 		guiMgr:ShowWindow(name, nil)
 		if mediator.init then
+			if notification._body.data == nil then notification._body.data = {} end
 			mediator:init(unpack(notification._body.data))
 		end
 	else

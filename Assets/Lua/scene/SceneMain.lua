@@ -10,6 +10,7 @@ local TAG = "SceneMain"
 -----------------------------------------------------------------------
 function SceneMain.Awake(obj)
 	print(TAG, 'Awake')
+    facade:sendNotification(OPEN_WINDOW, {name="PanelMain"})
     facade:sendNotification(OPEN_WINDOW, {name="PanelMenu"})
 end
 

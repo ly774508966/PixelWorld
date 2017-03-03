@@ -67,6 +67,15 @@ public class ResourceManager : MonoBehaviour {
 		AssetBundle assetBundle = GetAssetBundleFormName(assetName);
 		if (assetBundle != null) {
 			int pos = assetName.IndexOf("/");
+			return assetBundle.LoadAsset<Sprite>(assetName.Substring(pos+1));
+		} else {
+			return Resources.Load<Sprite>(assetName);
+		}
+	}
+	public Sprite LoadPackSprite(string assetName) {
+		AssetBundle assetBundle = GetAssetBundleFormName(assetName);
+		if (assetBundle != null) {
+			int pos = assetName.IndexOf("/");
 			return assetBundle.LoadAsset<GameObject>(assetName.Substring(pos+1)).GetComponent<SpriteRenderer>().sprite;
 		} else {
 			return Resources.Load<GameObject>(assetName).GetComponent<SpriteRenderer>().sprite;;

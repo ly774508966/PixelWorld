@@ -23,6 +23,9 @@ INPUT_NONE							= 输入不能为空！
 # item
 ITEM_COMPOSE_SUCCESS				= 合成成功！
 
+# battle
+BATTLE_EXIT							= 确认退出战斗？
+
 # shop
 SHOP_BUY_SUCCESS					= 购买成功！
 SHOP_BUY_FAIL						= 购买失败！

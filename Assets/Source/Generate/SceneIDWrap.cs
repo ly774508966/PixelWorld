@@ -9,6 +9,8 @@ public class SceneIDWrap
 		L.BeginEnum(typeof(SceneID));
 		L.RegVar("Login", get_Login, null);
 		L.RegVar("Main", get_Main, null);
+		L.RegVar("Loading", get_Loading, null);
+		L.RegVar("Battle", get_Battle, null);
 		L.RegFunction("IntToEnum", IntToEnum);
 		L.EndEnum();
 	}
@@ -24,6 +26,20 @@ public class SceneIDWrap
 	static int get_Main(IntPtr L)
 	{
 		ToLua.Push(L, SceneID.Main);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_Loading(IntPtr L)
+	{
+		ToLua.Push(L, SceneID.Loading);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_Battle(IntPtr L)
+	{
+		ToLua.Push(L, SceneID.Battle);
 		return 1;
 	}
 

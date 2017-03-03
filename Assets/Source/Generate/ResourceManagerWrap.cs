@@ -12,6 +12,7 @@ public class ResourceManagerWrap
 		L.RegFunction("GetAssetBundleFormName", GetAssetBundleFormName);
 		L.RegFunction("LoadAsset", LoadAsset);
 		L.RegFunction("LoadSprite", LoadSprite);
+		L.RegFunction("LoadPackSprite", LoadPackSprite);
 		L.RegFunction("GetFileSize", GetFileSize);
 		L.RegFunction("__eq", op_Equality);
 		L.RegFunction("__tostring", ToLua.op_ToString);
@@ -95,6 +96,24 @@ public class ResourceManagerWrap
 			ResourceManager obj = (ResourceManager)ToLua.CheckObject(L, 1, typeof(ResourceManager));
 			string arg0 = ToLua.CheckString(L, 2);
 			UnityEngine.Sprite o = obj.LoadSprite(arg0);
+			ToLua.Push(L, o);
+			return 1;
+		}
+		catch(Exception e)
+		{
+			return LuaDLL.toluaL_exception(L, e);
+		}
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int LoadPackSprite(IntPtr L)
+	{
+		try
+		{
+			ToLua.CheckArgsCount(L, 2);
+			ResourceManager obj = (ResourceManager)ToLua.CheckObject(L, 1, typeof(ResourceManager));
+			string arg0 = ToLua.CheckString(L, 2);
+			UnityEngine.Sprite o = obj.LoadPackSprite(arg0);
 			ToLua.Push(L, o);
 			return 1;
 		}

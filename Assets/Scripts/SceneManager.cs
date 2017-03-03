@@ -8,7 +8,9 @@ using System.Collections;
 
 public enum SceneID {
 	Login,
-	Main,		
+	Main,
+	Loading,
+	Battle,	
 }
 
 public class SceneManager {
@@ -28,6 +30,12 @@ public class SceneManager {
 			break;
 		case SceneID.Main:
 			UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+			break;
+		case SceneID.Loading:
+			UnityEngine.SceneManagement.SceneManager.LoadScene(2);
+			break;
+		case SceneID.Battle:
+			UnityEngine.SceneManagement.SceneManager.LoadScene(3);
 			break;
 		default:
 			Debug.LogError("error sceneid");
