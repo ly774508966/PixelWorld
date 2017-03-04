@@ -4,6 +4,7 @@ local transform
 PanelAlert = {}
 local this = PanelAlert
 this._name = 'PanelAlert'
+local TAG = 'PanelAlert'
 
 -- --------------------------------------------------------------------
 --	c# callback
@@ -14,6 +15,8 @@ function PanelAlert.Awake(obj)
 end
 
 function PanelAlert.OnDestroy()
+	gameObject = nil
+	this.bInit = false
 end
 
 -- --------------------------------------------------------------------
@@ -27,14 +30,16 @@ end
 function PanelAlert:init(...)
 	this.title, this.msg, this.callback = ...
 
-	print ("init", this.title, self.msg, self.callback)
+	print (TAG, "init", this.title, this.msg, this.callback)
 
 	this.InitPanel()
 end
 
 
 --初始化面板--
+this.bInit = false
 function PanelAlert.InitPanel()
+	print(TAG, 'InitPanel', this.bInit)
 	this.btn_ok = transform:FindChild("Button OK").gameObject
 	this.btn_cancel = transform:FindChild("Button Cancel").gameObject
 
@@ -43,11 +48,12 @@ function PanelAlert.InitPanel()
 	text_title.text = this.title
 	text_msg.text = this.msg
 
-
-	window = transform:GetComponent('LuaBehaviour')
-
-	window:AddClick(this.btn_ok, this.OnBtnOK)
-	window:AddClick(this.btn_cancel, this.OnBtnCancel)
+	if this.bInit == false then
+		window = transform:GetComponent('LuaBehaviour')
+		window:AddClick(this.btn_ok, this.OnBtnOK)
+		window:AddClick(this.btn_cancel, this.OnBtnCancel)
+	end
+	this.bInit = true
 end
 
 

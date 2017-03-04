@@ -8,6 +8,7 @@ require "proto/main_pb"
 
 Network = {}
 local this = Network
+local TAG = 'Network'
 
 local transform
 local gameObject
@@ -18,7 +19,7 @@ function Network.Start()
 end
 
 function Network.Reconnect()
-    print("Network.Reconnect")
+    print(TAG, "Reconnect")
     -- 可多次尝试
     networkMgr:SendConnect(CONFIG_SOCKET_IP, CONFIG_SOCKET_PORT)
     facade:sendNotification(WAIT, {name="show"})
@@ -26,20 +27,25 @@ end
 
 --当连接建立时--
 function Network.OnConnect()
+    print(TAG, "OnConnect")
     facade:sendNotification(WAIT, {name="hide"})
     islogging = true
 end
 
 --当连接失败时--
 function Network.OnRefuse()
+    print(TAG, "OnRefuse")
     facade:sendNotification(WAIT, {name="hide"})
 
     local data = {lanMgr:GetValue('NETWORK'), lanMgr:GetValue('NETWORK_FAIL'), function (ret) if ret == 1 then this.Reconnect() end end}
     facade:sendNotification(OPEN_WINDOW, {name="PanelAlert", data=data})
+    
+    facade:sendNotification(OPEN_WINDOW, {name="PanelAlert", data={lanMgr:GetValue('TITLE_TIP'), lanMgr:GetValue('NETWORK_TIMEOUT')}})
 end
 
 --异常断线--
 function Network.OnException() 
+    print(TAG, "OnException")
     facade:sendNotification(WAIT, {name="hide"})
     islogging = false
     local data = {lanMgr:GetValue('NETWORK'), lanMgr:GetValue('NETWORK_FAIL'), function (ret) if ret == 1 then this.Reconnect() end end}
@@ -48,6 +54,7 @@ end
 
 --连接中断，或者被踢掉--
 function Network.OnDisconnect()
+    print(TAG, "OnDisconnect")
     facade:sendNotification(WAIT, {name="hide"})
     islogging = false
     local data = {lanMgr:GetValue('NETWORK'), lanMgr:GetValue('NETWORK_FAIL'), function (ret) if ret == 1 then this.Reconnect() end end}

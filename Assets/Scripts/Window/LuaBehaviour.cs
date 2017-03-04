@@ -5,17 +5,13 @@ using System.Collections.Generic;
 using System;
 using UnityEngine.UI;
 
-public class LuaBehaviour : BaseWindow {
-        private string data = null;
-        private Dictionary<string, LuaFunction> buttons = new Dictionary<string, LuaFunction>();
+public class LuaBehaviour : MonoBehaviour {
+       
+		private Dictionary<string, LuaFunction> buttons = new Dictionary<string, LuaFunction>();
 
         protected void Awake() {
         	Util.CallMethod(name, "Awake", gameObject);
         }
-
-	public override void Init(object data) {
-		Util.CallMethod(name, "Init", data);
-	}
 
         protected void Start() {
             Util.CallMethod(name, "Start");
@@ -70,12 +66,12 @@ public class LuaBehaviour : BaseWindow {
 
         //-----------------------------------------------------------------
         protected void OnDestroy() {
-		ClearClick();
+			ClearClick();
 
-		Util.CallMethod(name, "OnDestroy");
+			Util.CallMethod(name, "OnDestroy");
 
-		Util.ClearMemory();
-		Debug.Log("~" + name + " was destroy!");
+			Util.ClearMemory();
+			Debug.Log("~" + name + " was destroy!");
 
         }
 }
