@@ -23,7 +23,6 @@ public static class LuaBinder
 		LanguageManagerWrap.Register(L);
 		SceneManagerWrap.Register(L);
 		SceneIDWrap.Register(L);
-		BaseWindowWrap.Register(L);
 		L.BeginModule("DG");
 		L.BeginModule("Tweening");
 		DG_Tweening_DOTweenWrap.Register(L);
@@ -112,6 +111,11 @@ public static class LuaBinder
 		UnityEngine_FontWrap.Register(L);
 		UnityEngine_RectTransformWrap.Register(L);
 		UnityEngine_TextAnchorWrap.Register(L);
+		L.BeginModule("Experimental");
+		L.BeginModule("Director");
+		UnityEngine_Experimental_Director_DirectorPlayerWrap.Register(L);
+		L.EndModule();
+		L.EndModule();
 		L.BeginModule("UI");
 		UnityEngine_UI_ImageWrap.Register(L);
 		UnityEngine_UI_TextWrap.Register(L);
@@ -119,11 +123,6 @@ public static class LuaBinder
 		UnityEngine_UI_MaskableGraphicWrap.Register(L);
 		UnityEngine_UI_GraphicWrap.Register(L);
 		UnityEngine_UI_SelectableWrap.Register(L);
-		L.EndModule();
-		L.BeginModule("Experimental");
-		L.BeginModule("Director");
-		UnityEngine_Experimental_Director_DirectorPlayerWrap.Register(L);
-		L.EndModule();
 		L.EndModule();
 		L.BeginModule("EventSystems");
 		UnityEngine_EventSystems_UIBehaviourWrap.Register(L);
