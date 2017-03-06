@@ -2,18 +2,6 @@ using UnityEngine;
 using System.Collections;
 using UnityStandardAssets.CrossPlatformInput;
 
-public enum CharaterState {
-	IDLE=0,
-	IDLE2,
-	RUN,
-	JUMP,
-	ATTACK1_1,
-	ATTACK1_2,
-	ATTACK1_3,
-	ATTACK2,
-	DEATH,
-}
-
 public class PlayerController : MonoBehaviour {
  
 	//移动速度
@@ -24,23 +12,25 @@ public class PlayerController : MonoBehaviour {
 	public float RotateSpeed=30;
 	//重力
 	public float Gravity=20;
-	//动画组件
-	private Animation mAnim;
 	//速度
 	private float mSpeed;
 
-	// state
-	private CharaterState mCharaterState;
+	//
+	private float yMove = 0;	// 垂直速度
+	private Vector3 move = Vector3.zero; 
+
 
 	//角色控制器
-	private CharacterController mController;
-	 
+	private CharacterController m_Controller;
+
+	private Player m_Player;
+
 	void Start ()
 	{
 		//获取角色控制器
-		mController=GetComponent<CharacterController>();
-		//获取动画组件
-		mAnim=GetComponentInChildren<Animation>();
+		m_Controller=GetComponent<CharacterController>();
+		//
+		m_Player=GetComponentInChildren<Player>();
 	}
 	 
 	void Update ()
@@ -80,28 +70,39 @@ public class PlayerController : MonoBehaviour {
 			isMoving = false;
 		}
 
-		if (mController.isGrounded) {
-			if (bJump) {
-				mDir.y = 20;
-				// 水平
-				mAnim.Play ("jump");
+		if (m_Controller.isGrounded) {
+
+			if (m_Player.CharcterState == CharaterState.IDLE || m_Player.CharcterState == CharaterState.RUN) {
+				move = mDir * RunSpeed;
+			} else {
+				// no move 
+				isMoving = false;
+			}
+			if (bAttack) {
+				move.x = 0;
+				move.z = 0;
+				m_Player.ActAttack1();
+			} else if (bJump) {
+				move.y = 6;		// 向上初速度
+				m_Player.ActJump();
 			} else if (isMoving) {
 				transform.forward = mDir;
-				mDir = mDir * RunSpeed;
-				mAnim.Play ("run");
+				if (m_Player.CharcterState != CharaterState.RUN) {
+					m_Player.ActRun();
+				}
 			} else {
-				mAnim.Play ("idle");
+				move.x = 0;
+				move.z = 0;
+				// 移动停止 or 跳跃着地
+				if (m_Player.CharcterState == CharaterState.RUN || m_Player.CharcterState == CharaterState.JUMP) m_Player.ActIdle();
 			}
 		} else {
-			mDir.x = 0;
-			mDir.z = 0;
+			// in air
 		}
 
-		//考虑重力因素
-		//mDir=transform.TransformDirection(mDir);
-		float y = mDir.y-Gravity *Time.fixedDeltaTime;
-		mDir=new Vector3(mDir.x,y,mDir.z);
-		mController.Move(mDir * Time.fixedDeltaTime);
+		// 重力下降
+		move.y -= Gravity *Time.fixedDeltaTime;
+		m_Controller.Move(move * Time.fixedDeltaTime);
 	}
  
 }
