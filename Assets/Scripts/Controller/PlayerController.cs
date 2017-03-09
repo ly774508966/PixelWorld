@@ -7,11 +7,9 @@ public class PlayerController : MonoBehaviour {
 	//移动速度
 	public float MoveSpeed=1.5F;
 	//奔跑速度
-	public float RunSpeed=4.5F;
-	//旋转速度
-	public float RotateSpeed=30;
+	public float RunSpeed=2.5F;
 	//重力
-	public float Gravity=20;
+	public float Gravity=10;
 	//速度
 	private float mSpeed;
 
@@ -23,18 +21,21 @@ public class PlayerController : MonoBehaviour {
 	//角色控制器
 	private CharacterController m_Controller;
 
+	//角色控制器
+	private Animator m_Animator;
+
 	private Player m_Player;
 
 	void Start ()
 	{
 		//获取角色控制器
 		m_Controller=GetComponent<CharacterController>();
+		m_Animator = GetComponentInChildren<Animator>();
 		//
 		m_Player=GetComponentInChildren<Player>();
 	}
-	 
-	void Update ()
-	{
+
+	void Update () {
 		//只有处于正常状态时玩家可以行动
 		MoveManager ();
 
@@ -52,7 +53,9 @@ public class PlayerController : MonoBehaviour {
 
 		bool bJump = CrossPlatformInputManager.GetButtonDown ("Jump");
 		bool bAttack = CrossPlatformInputManager.GetButtonDown ("Fire1");
-
+		if (bJump) {
+			Debug.LogFormat("bJump {0}", bJump);
+		}
 		bool isMoving = false;
 
 		if (Mathf.Abs (horizontal) > 0.01f || Mathf.Abs (vertical) > 0.01f) {
@@ -70,6 +73,47 @@ public class PlayerController : MonoBehaviour {
 			isMoving = false;
 		}
 
+		if (m_Controller.isGrounded == false) {
+			bJump = false;
+			bAttack = false;
+		}
+
+		if (bJump) {
+			yMove = 6;
+			Debug.LogFormat("bJump {0}", bJump);
+		}
+
+		m_Animator.SetBool("isMoving", isMoving);
+		m_Animator.SetBool("isGrounded", m_Controller.isGrounded);
+
+		AnimatorStateInfo cur = m_Animator.GetCurrentAnimatorStateInfo(0);
+		if (m_Animator.IsInTransition(0)) {
+			// 融合时
+			AnimatorStateInfo next = m_Animator.GetNextAnimatorStateInfo(0);
+		} else {
+			// 不融合时
+			if (cur.IsName("run") && isMoving) {
+				transform.forward = mDir;
+				move = mDir * RunSpeed;
+				m_Animator.SetBool("bJump", bJump);
+				//m_Animator.SetBool("bAttack", bAttack);
+				Debug.Log("run " + m_Controller.isGrounded);
+			} else if (cur.IsName("idle")) {
+				move.x = 0;
+				move.z = 0;
+				m_Animator.SetBool("bJump", bJump);
+				//m_Animator.SetBool("bAttack", bAttack);
+				Debug.Log("idle " + m_Controller.isGrounded);
+			} else if (cur.IsName("jump")) {
+				if (yMove > 0 && cur.normalizedTime < 0.5f) {	// 开始jump
+					move.y = yMove;		// 向上初速度
+					yMove = 0;
+				}
+				Debug.Log("jump " + cur.normalizedTime);
+			}
+		}
+
+		/*
 		if (m_Controller.isGrounded) {
 
 			if (m_Player.CharcterState == CharaterState.IDLE || m_Player.CharcterState == CharaterState.RUN) {
@@ -83,7 +127,7 @@ public class PlayerController : MonoBehaviour {
 				move.z = 0;
 				m_Player.ActAttack1();
 			} else if (bJump) {
-				move.y = 6;		// 向上初速度
+				move.y = 4;		// 向上初速度
 				m_Player.ActJump();
 			} else if (isMoving) {
 				transform.forward = mDir;
@@ -99,10 +143,16 @@ public class PlayerController : MonoBehaviour {
 		} else {
 			// in air
 		}
+		*/
 
-		// 重力下降
-		move.y -= Gravity *Time.fixedDeltaTime;
-		m_Controller.Move(move * Time.fixedDeltaTime);
+		//if (!m_Controller.isGrounded) {
+			// 重力下降
+			move.y -= Gravity *Time.fixedDeltaTime;
+		//}
+
+		CollisionFlags flags = m_Controller.Move(move * Time.fixedDeltaTime);
+
+		//Debug.Log(m_Controller.isGrounded);
 	}
  
 }

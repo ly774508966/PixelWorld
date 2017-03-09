@@ -13,33 +13,16 @@ public class Player : Character {
 
 		m_Controller=GetComponent<CharacterController>();
 
-		AnimationClip clip = m_Animation.GetClip("attack1_1");
-		AnimationEvent evt = new AnimationEvent();
-		evt.functionName = "OnAnimationComplete";
-		evt.time = clip.length;
-		clip.AddEvent(evt);
-
-		clip = m_Animation.GetClip("attack1_2");
-		evt = new AnimationEvent();
-		evt.functionName = "OnAnimationComplete";
-		evt.time = clip.length;
-		clip.AddEvent(evt);
-
-		clip = m_Animation.GetClip("attack1_3");
-		evt = new AnimationEvent();
-		evt.functionName = "OnAnimationComplete";
-		evt.time = clip.length;
-		clip.AddEvent(evt);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
 	}
 
 	public virtual void ActJump() {
+		Debug.Log("ActJump");
 		m_CharacterState = CharaterState.JUMP;
-		m_Animation.Play ("jump");
+		m_Animator.CrossFade("jump", 0);
 	}
 
 	public virtual void ActAttack1() {
@@ -57,31 +40,28 @@ public class Player : Character {
 		default:
 			m_AttackIdx = 1;
 			m_CharacterState = CharaterState.ATTACK1_1;
-			m_Animation["attack1_1"].speed = 1.5f;
-			m_Animation.Play ("attack1_1");
+			m_Animator.CrossFade("attack1_1", 0);
 			break;
 		}
 	}
 
 	private void ActAttack1_2() {
 		m_CharacterState = CharaterState.ATTACK1_2;
-		m_Animation["attack1_2"].speed = 1.5f;
-		m_Animation.Play ("attack1_2");
+		m_Animator.CrossFade ("attack1_2", 0);
 	}
 	private void ActAttack1_3() {
 		m_CharacterState = CharaterState.ATTACK1_3;
-		m_Animation["attack1_3"].speed = 1.5f;
-		m_Animation.Play ("attack1_3");
+		m_Animator.CrossFade ("attack1_3", 0);
 	}
 
 	public void OnAnimationComplete() {
 		Debug.LogFormat("amation state:{0} complete", m_CharacterState);
 
 		if (m_CharacterState == CharaterState.ATTACK1_1 && m_AttackIdx > 1) {
-			m_Controller.Move(transform.forward*0.8f);
+			m_Controller.Move(transform.forward*0.5f);
 			ActAttack1_2();
 		} else if (m_CharacterState == CharaterState.ATTACK1_2 && m_AttackIdx > 2) {
-			m_Controller.Move(transform.forward*0.8f);
+			m_Controller.Move(transform.forward*0.5f);
 			ActAttack1_3();
 		} else {
 			ActIdle();
