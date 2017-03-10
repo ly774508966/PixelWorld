@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour {
 	private float yMove = 0;	// 垂直速度
 	private Vector3 move = Vector3.zero; 
 
+	private int m_AttackIdx = 0;
 
 	//角色控制器
 	private CharacterController m_Controller;
@@ -79,7 +80,7 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		if (bJump) {
-			yMove = 6;
+			yMove = 5;
 			Debug.LogFormat("bJump {0}", bJump);
 		}
 
@@ -94,22 +95,47 @@ public class PlayerController : MonoBehaviour {
 			// 不融合时
 			if (cur.IsName("run") && isMoving) {
 				transform.forward = mDir;
-				move = mDir * RunSpeed;
+				move.x = mDir.x * RunSpeed;
+				move.z = mDir.z * RunSpeed;
+				m_AttackIdx = 0;
 				m_Animator.SetBool("bJump", bJump);
-				//m_Animator.SetBool("bAttack", bAttack);
-				Debug.Log("run " + m_Controller.isGrounded);
+				if (bAttack) {
+					m_AttackIdx = 1;
+				}
+				m_Animator.SetInteger("AttackIdx", m_AttackIdx);
+				//Debug.Log("run");
 			} else if (cur.IsName("idle")) {
 				move.x = 0;
 				move.z = 0;
 				m_Animator.SetBool("bJump", bJump);
-				//m_Animator.SetBool("bAttack", bAttack);
-				Debug.Log("idle " + m_Controller.isGrounded);
+				m_AttackIdx = 0;
+				if (bAttack) {
+					m_AttackIdx = 1;
+				}
+				m_Animator.SetInteger("AttackIdx", m_AttackIdx);
+				//Debug.Log("idle");
 			} else if (cur.IsName("jump")) {
 				if (yMove > 0 && cur.normalizedTime < 0.5f) {	// 开始jump
 					move.y = yMove;		// 向上初速度
 					yMove = 0;
 				}
 				Debug.Log("jump " + cur.normalizedTime);
+			} else if (cur.IsName("attack1_1")) {
+				move.x = 0;
+				move.z = 0;
+				if (bAttack && m_AttackIdx == 1) {
+					m_AttackIdx ++;
+					m_Animator.SetInteger("AttackIdx", m_AttackIdx);
+				}
+			} else if (cur.IsName("attack1_2")) {
+				move.x = 0;
+				move.z = 0;
+				if (bAttack && m_AttackIdx == 2) {
+					m_AttackIdx ++;
+					m_Animator.SetInteger("AttackIdx", m_AttackIdx);
+				}
+			} else if (cur.IsName("attack1_3")) {
+				move = Vector3.zero;
 			}
 		}
 
@@ -147,10 +173,10 @@ public class PlayerController : MonoBehaviour {
 
 		//if (!m_Controller.isGrounded) {
 			// 重力下降
-			move.y -= Gravity *Time.fixedDeltaTime;
+			move.y -= Gravity *Time.deltaTime;
 		//}
 
-		CollisionFlags flags = m_Controller.Move(move * Time.fixedDeltaTime);
+		CollisionFlags flags = m_Controller.Move(move * Time.deltaTime);
 
 		//Debug.Log(m_Controller.isGrounded);
 	}
