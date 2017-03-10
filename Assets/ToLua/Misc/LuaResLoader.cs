@@ -36,19 +36,6 @@ public class LuaResLoader : LuaFileUtils
 
     public override byte[] ReadFile(string fileName)
     {
-#if !UNITY_EDITOR
-        byte[] buffer = ReadDownLoadFile(fileName);
-
-        if (buffer == null)
-        {
-            buffer = ReadResourceFile(fileName);
-        }        
-        
-        if (buffer == null)
-        {
-            buffer = base.ReadFile(fileName);
-        }        
-#else
         byte[] buffer = base.ReadFile(fileName);
 
         if (buffer == null)
@@ -60,7 +47,6 @@ public class LuaResLoader : LuaFileUtils
         {
             buffer = ReadDownLoadFile(fileName);
         }
-#endif
 
         return buffer;
     }

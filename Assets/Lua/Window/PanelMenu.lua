@@ -39,6 +39,7 @@ function PanelMenu.InitPanel()
 	window:AddClick(btnEquip, this.OnBtnEquip)
 	window:AddClick(btnBattle, this.OnBtnBattle)
 	window:AddClick(btnShop, this.OnBtnShop)
+	
 end
 
 --单击事件--

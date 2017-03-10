@@ -1101,7 +1101,7 @@ public static class ToLuaMenu
 
         AssetDatabase.SaveAssets();        
         string output = string.Format("{0}/{1}", Application.streamingAssetsPath, GetOS());        
-        BuildPipeline.BuildAssetBundles(output, BuildAssetBundleOptions.DeterministicAssetBundle, EditorUserBuildSettings.activeBuildTarget);
+       // BuildPipeline.BuildAssetBundles(output, BuildAssetBundleOptions.DeterministicAssetBundle, EditorUserBuildSettings.activeBuildTarget);
 
         //Directory.Delete(Application.dataPath + "/temp/", true);
 #else

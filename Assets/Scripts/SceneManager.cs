@@ -11,6 +11,7 @@ public enum SceneID {
 	Main,
 	Loading,
 	Battle,	
+	Magic,	
 }
 
 public class SceneManager {
@@ -36,6 +37,9 @@ public class SceneManager {
 			break;
 		case SceneID.Battle:
 			UnityEngine.SceneManagement.SceneManager.LoadScene(3);
+			break;
+		case SceneID.Magic:
+			UnityEngine.SceneManagement.SceneManager.LoadScene(4);
 			break;
 		default:
 			Debug.LogError("error sceneid");

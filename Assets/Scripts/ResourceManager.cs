@@ -28,6 +28,9 @@ public class ResourceManager : MonoBehaviour {
 
 	public void Init() {
 		Debug.Log("ResourceManager:Init");
+
+		if ( GameConfig.EnableUpdate == false) return;
+
 		Dictionary<string, AssetBundle> assetBundles = AssetBundleManager.GetInstance().LoadedAssetBundles;
 
 		foreach(AssetBundle assetBundle in assetBundles.Values) {
