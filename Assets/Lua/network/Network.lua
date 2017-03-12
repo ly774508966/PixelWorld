@@ -19,7 +19,7 @@ function Network.Start()
 end
 
 function Network.Reconnect()
-    print(TAG, "Reconnect")
+    print(TAG, "Reconnect", CONFIG_SOCKET_IP, CONFIG_SOCKET_PORT)
     -- 可多次尝试
     networkMgr:SendConnect(CONFIG_SOCKET_IP, CONFIG_SOCKET_PORT)
     facade:sendNotification(WAIT, {name="show"})

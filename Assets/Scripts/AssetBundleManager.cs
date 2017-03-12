@@ -11,6 +11,18 @@ public delegate void HandleDownloadCallback();
 
 public class AssetBundleManager : MonoBehaviour {
 
+	private class LoadedAssetBundle {
+		public AssetBundle assetBundle;
+		public int refCount;
+		public LoadedAssetBundle(AssetBundle assetBundle) {
+			this.assetBundle = assetBundle;
+			refCount = 1;
+		}
+		public void Unload() {
+			assetBundle.Unload (false);
+		}
+	}
+
 	private static AssetBundleManager instance;
 	public static AssetBundleManager GetInstance() {
 		GameObject main = GameObject.Find("Main");
@@ -23,28 +35,30 @@ public class AssetBundleManager : MonoBehaviour {
 			instance = main.AddComponent<AssetBundleManager>();
 
 			// download path for platforms
-			m_BaseDownloadingURL +=
+			s_BaseDownloadingURL +=
 #if UNITY_EDITOR
 			GetPlatformFolderForAssetBundles(EditorUserBuildSettings.activeBuildTarget);
 #else
 			GetPlatformFolderForAssetBundles(Application.platform);
 #endif
-			m_BaseDownloadingURL += "/";
-			Debug.Log("AssetBundleManager baseURL " + m_BaseDownloadingURL);
+			s_BaseDownloadingURL += "/";
+			Debug.Log("AssetBundleManager baseURL " + s_BaseDownloadingURL);
 		}
 		return instance;
 	}
 
 
-	static string m_BaseDownloadingURL = GameConfig.WebUrl;
-	public string BaseDownloaindURL {get {return m_BaseDownloadingURL;}}
+	static string s_BaseDownloadingURL = GameConfig.WebUrl;
+	public string BaseDownloaindURL {get {return s_BaseDownloadingURL;}}
 
 
-	static Queue<string> m_ToLoadAssetBundles = new Queue<string>();
-	static Dictionary<string, WWW> m_DownloadingWWWs = new Dictionary<string, WWW>();
-	static Dictionary<string, AssetBundle> m_LoadedAssetBundles = new Dictionary<string, AssetBundle>();
+	static Queue<string> s_ToDownloadAssetBundles = new Queue<string>();
+	static Dictionary<string, WWW> s_DownloadingWWWs = new Dictionary<string, WWW>();
 
-	public Dictionary<string, AssetBundle> LoadedAssetBundles {get {return m_LoadedAssetBundles;}}
+	// assetbundles
+	static Dictionary<string, string[]> s_AssetBundleDependencies = new Dictionary<string, string[]>();
+	static Dictionary<string, LoadedAssetBundle> s_LoadedAssetBundles = new Dictionary<string, LoadedAssetBundle>();
+
 
 	static HandleDownloadCallback m_callback;
 
@@ -72,7 +86,7 @@ public class AssetBundleManager : MonoBehaviour {
 	}
 #endif
 
-	static string GetPlatformFolderForAssetBundles(RuntimePlatform platform)
+	public static string GetPlatformFolderForAssetBundles(RuntimePlatform platform)
 	{
 		switch(platform) {
 		case RuntimePlatform.Android:
@@ -91,28 +105,108 @@ public class AssetBundleManager : MonoBehaviour {
 		}
 	}
 
-	public int GetToLoadAssetBundleNum() {
-		return m_ToLoadAssetBundles.Count;
+	public static string GetPlatformFolderForAssetBundles() {
+#if UNITY_EDITOR
+		return GetPlatformFolderForAssetBundles(EditorUserBuildSettings.activeBuildTarget);
+#else
+		return GetPlatformFolderForAssetBundles(Application.platform);
+#endif
 	}
 
-	public int GetDownloadingWWWNum() {
-		return m_DownloadingWWWs.Count;
+	public static int GetToDownloadAssetBundleNum() {
+		return s_ToDownloadAssetBundles.Count;
+	}
+	public static void AddDownloadAssetBundle(string assetBundleName) {
+		s_ToDownloadAssetBundles.Enqueue(assetBundleName);
 	}
 
+	public static int GetDownloadingWWWNum() {
+		return s_DownloadingWWWs.Count;
+	}
 
-	public AssetBundle GetLoadedAssetBundle(string assetBundleName) {
-		if (m_LoadedAssetBundles.ContainsKey(assetBundleName) == false) {
-			Debug.Log("not loaded for " + assetBundleName);
-			return null;
+	public static void InitDependenceInfo() {
+		Debug.Log ("InitDependenceInfo");
+
+		string filename = Path.Combine(Application.persistentDataPath, AssetBundleManager.GetPlatformFolderForAssetBundles());
+		if (File.Exists (filename)) {
+			AssetBundle assetBundle = AssetBundle.LoadFromFile (filename);
+			AssetBundleManifest manifest = assetBundle.LoadAsset ("assetbundlemanifest") as AssetBundleManifest;
+			string[] assetBundleNames = manifest.GetAllAssetBundles ();
+			foreach (string assetBundleName in assetBundleNames) {
+				Debug.Log("assetBundleName " + assetBundleName);
+				string[] dependencies = manifest.GetAllDependencies(assetBundleName);
+				s_AssetBundleDependencies.Add (assetBundleName, dependencies);
+			}
+			assetBundle.Unload (true);
+
+		} else {
+			Debug.LogWarning ("cannot find Manifest file");
+		}
+	}
+
+	// load assetbuddle 
+	// ref++
+	public static AssetBundle GetAssetBundle(string assetBundleName) {
+		if (s_AssetBundleDependencies.ContainsKey(assetBundleName)) {
+			string[] dependencies = s_AssetBundleDependencies [assetBundleName];
+			foreach (string dependency in dependencies) {
+				if (s_LoadedAssetBundles.ContainsKey (dependency)) {
+					s_LoadedAssetBundles [dependency].refCount++;
+				} else {
+					// 加载
+					string filename = Path.Combine(Application.persistentDataPath, dependency);
+					AssetBundle ab = AssetBundle.LoadFromFile(filename);
+					if (ab) {
+						LoadedAssetBundle loadedAssetBundle = new LoadedAssetBundle (ab);
+						s_LoadedAssetBundles.Add (dependency, loadedAssetBundle);
+					}
+				}
+			}
 		}
 
-		return m_LoadedAssetBundles[assetBundleName];
-	}
+		if (s_LoadedAssetBundles.ContainsKey (assetBundleName)) {
 
-	public void AddLoadAssetBundle(string assetBundleName) {
-		m_ToLoadAssetBundles.Enqueue(assetBundleName);
-	}
+			s_LoadedAssetBundles [assetBundleName].refCount++;
 
+			return s_LoadedAssetBundles [assetBundleName].assetBundle;
+		} else {
+			// 加载
+			string filename = Path.Combine(Application.persistentDataPath, assetBundleName);
+			AssetBundle ab = AssetBundle.LoadFromFile(filename);
+			if (ab) {
+				LoadedAssetBundle loadedAssetBundle = new LoadedAssetBundle (ab);
+				s_LoadedAssetBundles.Add (assetBundleName, loadedAssetBundle);
+				return s_LoadedAssetBundles [assetBundleName].assetBundle;
+			} else {
+				return null;
+			}
+		}
+	}
+	public static void UnloadAssetBundle(string assetBundleName) {
+		if (s_AssetBundleDependencies.ContainsKey(assetBundleName)) {
+			string[] dependencies = s_AssetBundleDependencies [assetBundleName];
+			foreach (string dependency in dependencies) {
+				if (s_LoadedAssetBundles.ContainsKey (dependency)) {
+					s_LoadedAssetBundles [dependency].refCount--;
+					if (s_LoadedAssetBundles [dependency].refCount == 0) {
+						s_LoadedAssetBundles [dependency].Unload ();
+						s_LoadedAssetBundles.Remove (dependency);
+					}
+				}
+			}
+		}
+
+		if (s_LoadedAssetBundles.ContainsKey (assetBundleName)) {
+
+			s_LoadedAssetBundles [assetBundleName].refCount--;
+
+			if (s_LoadedAssetBundles [assetBundleName].refCount == 0) {
+				s_LoadedAssetBundles [assetBundleName].Unload ();
+				s_LoadedAssetBundles.Remove (assetBundleName);
+			}
+		}
+	}
+		
 	public void SetDownloadCallback(HandleDownloadCallback callback) {
 		m_callback = callback;
 	}
@@ -122,7 +216,7 @@ public class AssetBundleManager : MonoBehaviour {
 
 		StartCoroutine( DownloadAssetBundle(Path.Combine("file:///"+Application.persistentDataPath, assetBundleName), assetBundleName, delegate (WWW www){
 
-			m_LoadedAssetBundles.Add(assetBundleName, www.assetBundle);
+			//m_LoadedAssetBundles.Add(assetBundleName, www.assetBundle);
 
 		}
 		));
@@ -130,9 +224,7 @@ public class AssetBundleManager : MonoBehaviour {
 
 	private void LoadAssetBundle(string assetBundleName) {
 		Debug.Log("LoadAssetBundle " + assetBundleName);
-		StartCoroutine( DownloadAssetBundle(m_BaseDownloadingURL+assetBundleName, assetBundleName, delegate (WWW www){
-
-			m_LoadedAssetBundles.Add(assetBundleName, www.assetBundle);
+		StartCoroutine( DownloadAssetBundle(s_BaseDownloadingURL+assetBundleName, assetBundleName, delegate (WWW www){
 
 			// write to local 
 			WriteToLocal(assetBundleName, www.bytes);	
@@ -146,7 +238,7 @@ public class AssetBundleManager : MonoBehaviour {
 		Debug.Log("start downloading " + url);
 
 		WWW www = new WWW(url);
-		m_DownloadingWWWs.Add(assetBundleName, www);
+		s_DownloadingWWWs.Add(assetBundleName, www);
 
 		yield return www;
 
@@ -161,14 +253,14 @@ public class AssetBundleManager : MonoBehaviour {
 		}
 
 		// destroy
-		m_DownloadingWWWs.Remove(assetBundleName);
+		s_DownloadingWWWs.Remove(assetBundleName);
 		www.Dispose();
 	}
 
 	void Update() {
-		if (m_DownloadingWWWs.Count < 5) {
-			if (m_ToLoadAssetBundles.Count > 0) {
-				string assetBundleName = m_ToLoadAssetBundles.Dequeue();
+		if (s_DownloadingWWWs.Count < 5) {
+			if (s_ToDownloadAssetBundles.Count > 0) {
+				string assetBundleName = s_ToDownloadAssetBundles.Dequeue();
 				LoadAssetBundle(assetBundleName);
 
 				if (m_callback != null) m_callback();

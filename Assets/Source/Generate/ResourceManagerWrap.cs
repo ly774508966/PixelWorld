@@ -9,11 +9,12 @@ public class ResourceManagerWrap
 		L.BeginClass(typeof(ResourceManager), typeof(UnityEngine.MonoBehaviour));
 		L.RegFunction("GetInstance", GetInstance);
 		L.RegFunction("Init", Init);
-		L.RegFunction("GetAssetBundleFormName", GetAssetBundleFormName);
 		L.RegFunction("LoadAsset", LoadAsset);
 		L.RegFunction("LoadSprite", LoadSprite);
 		L.RegFunction("LoadPackSprite", LoadPackSprite);
 		L.RegFunction("GetFileSize", GetFileSize);
+		L.RegFunction("GetFileHash", GetFileHash);
+		L.RegFunction("GetFileMD5", GetFileMD5);
 		L.RegFunction("__eq", op_Equality);
 		L.RegFunction("__tostring", ToLua.op_ToString);
 		L.EndClass();
@@ -44,24 +45,6 @@ public class ResourceManagerWrap
 			ResourceManager obj = (ResourceManager)ToLua.CheckObject(L, 1, typeof(ResourceManager));
 			obj.Init();
 			return 0;
-		}
-		catch(Exception e)
-		{
-			return LuaDLL.toluaL_exception(L, e);
-		}
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int GetAssetBundleFormName(IntPtr L)
-	{
-		try
-		{
-			ToLua.CheckArgsCount(L, 2);
-			ResourceManager obj = (ResourceManager)ToLua.CheckObject(L, 1, typeof(ResourceManager));
-			string arg0 = ToLua.CheckString(L, 2);
-			UnityEngine.AssetBundle o = obj.GetAssetBundleFormName(arg0);
-			ToLua.Push(L, o);
-			return 1;
 		}
 		catch(Exception e)
 		{
@@ -128,11 +111,44 @@ public class ResourceManagerWrap
 	{
 		try
 		{
-			ToLua.CheckArgsCount(L, 2);
-			ResourceManager obj = (ResourceManager)ToLua.CheckObject(L, 1, typeof(ResourceManager));
-			string arg0 = ToLua.CheckString(L, 2);
-			long o = obj.GetFileSize(arg0);
+			ToLua.CheckArgsCount(L, 1);
+			string arg0 = ToLua.CheckString(L, 1);
+			long o = ResourceManager.GetFileSize(arg0);
 			LuaDLL.tolua_pushint64(L, o);
+			return 1;
+		}
+		catch(Exception e)
+		{
+			return LuaDLL.toluaL_exception(L, e);
+		}
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetFileHash(IntPtr L)
+	{
+		try
+		{
+			ToLua.CheckArgsCount(L, 1);
+			string arg0 = ToLua.CheckString(L, 1);
+			string o = ResourceManager.GetFileHash(arg0);
+			LuaDLL.lua_pushstring(L, o);
+			return 1;
+		}
+		catch(Exception e)
+		{
+			return LuaDLL.toluaL_exception(L, e);
+		}
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetFileMD5(IntPtr L)
+	{
+		try
+		{
+			ToLua.CheckArgsCount(L, 1);
+			string arg0 = ToLua.CheckString(L, 1);
+			string o = ResourceManager.GetFileMD5(arg0);
+			LuaDLL.lua_pushstring(L, o);
 			return 1;
 		}
 		catch(Exception e)

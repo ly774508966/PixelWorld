@@ -107,10 +107,10 @@ public class UpdateManager : MonoBehaviour {
 			}
 		}
 
-		if (m_LocalVersion.CompareTo(m_ServerVersion) != 0) {
+		if (m_LocalVersion.CompareTo(m_ServerVersion) != 0 || m_UpdateFiles.Count > 0) {
 			return true;
 		} else {
-			return m_UpdateFiles.Count > 0;
+			return false;
 		}
 	}
 

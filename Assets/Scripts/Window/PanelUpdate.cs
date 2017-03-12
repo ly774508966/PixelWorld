@@ -43,7 +43,7 @@ public class PanelUpdate : MonoBehaviour {
 					text_msg.text = string.Format("更新资源({0}/{1})", count++, files.Length);
 				});
 				for(int i = 0; i < files.Length; i ++) {
-					AssetBundleManager.GetInstance().AddLoadAssetBundle(files[i]);
+					AssetBundleManager.AddDownloadAssetBundle(files[i]);
 				}
 				bDownloading = true;
 			} else {
@@ -61,8 +61,8 @@ public class PanelUpdate : MonoBehaviour {
 	void Update() {
 		
 		if (bDownloading) {
-			if (AssetBundleManager.GetInstance().GetDownloadingWWWNum() == 0 && 
-			AssetBundleManager.GetInstance().GetToLoadAssetBundleNum() == 0 ) {
+			if (AssetBundleManager.GetDownloadingWWWNum() == 0 && 
+				AssetBundleManager.GetToDownloadAssetBundleNum() == 0 ) {
 				OnDownloadFinish();
 				bDownloading = false;
 			}
@@ -73,11 +73,13 @@ public class PanelUpdate : MonoBehaviour {
 	// 更新检查完成
 	void OnDownloadFinish() {
 
+		AssetBundleManager.InitDependenceInfo ();
+
+		UpdateManager.GetInstance().UpdateVersion();
+
 		ResourceManager.GetInstance().Init();
 
 		LanguageManager.GetInstance().Init();
-
-		UpdateManager.GetInstance().UpdateVersion();
 
 		// 初始化lua engine
 		LuaManager luaManager = LuaManager.GetInstance(true);

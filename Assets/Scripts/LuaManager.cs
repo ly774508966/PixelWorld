@@ -31,11 +31,13 @@ public class LuaManager : MonoBehaviour {
 		loader.beZip = GameConfig.EnableUpdate;	// 是否读取assetbundle lua文件
 
 		//add lua assetbundle
+		/*
 		Dictionary<string, AssetBundle> assetBundles = AssetBundleManager.GetInstance().LoadedAssetBundles;
 		foreach(string assetBundleName in assetBundles.Keys) {
 			string name = Path.GetFileNameWithoutExtension(assetBundleName);
 			LuaFileUtils.Instance.AddSearchBundle(name, assetBundles[assetBundleName]);
 		}
+		*/
 
 		lua = new LuaState();
 		this.OpenLibs();

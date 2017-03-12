@@ -5,6 +5,7 @@ using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
 
 
 public class ResourceManager : MonoBehaviour {
@@ -23,69 +24,43 @@ public class ResourceManager : MonoBehaviour {
 		return instance;
 	}
 
-
-	static Dictionary<string, AssetBundle> m_AssetMapAssetBundle = new Dictionary<string, AssetBundle>();
-
 	public void Init() {
 		Debug.Log("ResourceManager:Init");
 
-		if ( GameConfig.EnableUpdate == false) return;
-
-		Dictionary<string, AssetBundle> assetBundles = AssetBundleManager.GetInstance().LoadedAssetBundles;
-
-		foreach(AssetBundle assetBundle in assetBundles.Values) {
-			string[] assets = assetBundle.GetAllAssetNames();
-			for(int i = 0; i < assets.Length; i ++) {
-				//Debug.Log("asset " + assets[i]);
-
-				int pos = assets[i].IndexOf("assets/resources/");
-				if (pos != -1) {
-					pos = assets[i].LastIndexOf(".");
-					string assetName = assets[i].Substring(17, pos-17);
-					m_AssetMapAssetBundle.Add(assetName.ToLower(), assetBundle);
-				}
-			}
-		}
 	}
 
-
-	public AssetBundle GetAssetBundleFormName(string assetName) {
-		string name = assetName.ToLower();
-		if (!m_AssetMapAssetBundle.ContainsKey(name))
-			return null;
-
-		return m_AssetMapAssetBundle[name];
-	}
 
 	public Object LoadAsset(string assetName) {
-		AssetBundle assetBundle = GetAssetBundleFormName(assetName);
+		AssetBundle assetBundle = AssetBundleManager.GetAssetBundle(assetName);
 		if (assetBundle != null) {
-			int pos = assetName.IndexOf("/");
-			return assetBundle.LoadAsset(assetName.Substring(pos+1));
+			int pos = assetName.LastIndexOf("/");
+			string name = assetName.Substring (pos + 1); 
+			Object asset = assetBundle.LoadAsset(name);
+			return asset;
 		} else {
 			return Resources.Load(assetName);
 		}
 	}
 	public Sprite LoadSprite(string assetName) {
-		AssetBundle assetBundle = GetAssetBundleFormName(assetName);
+		AssetBundle assetBundle = AssetBundleManager.GetAssetBundle(assetName);
 		if (assetBundle != null) {
-			int pos = assetName.IndexOf("/");
+			int pos = assetName.LastIndexOf("/");
 			return assetBundle.LoadAsset<Sprite>(assetName.Substring(pos+1));
 		} else {
 			return Resources.Load<Sprite>(assetName);
 		}
 	}
 	public Sprite LoadPackSprite(string assetName) {
-		AssetBundle assetBundle = GetAssetBundleFormName(assetName);
+		AssetBundle assetBundle = AssetBundleManager.GetAssetBundle(assetName);
 		if (assetBundle != null) {
-			int pos = assetName.IndexOf("/");
+			int pos = assetName.LastIndexOf("/");
 			return assetBundle.LoadAsset<GameObject>(assetName.Substring(pos+1)).GetComponent<SpriteRenderer>().sprite;
 		} else {
 			return Resources.Load<GameObject>(assetName).GetComponent<SpriteRenderer>().sprite;;
 		}
 	}
 
-	public long GetFileSize(string filename) {
+	public static long GetFileSize(string filename) {
 		if (!File.Exists(filename)) {
 			Debug.LogFormat("GetFileSize: {0} not Exist!", filename);
 			return 0;
@@ -95,5 +70,36 @@ public class ResourceManager : MonoBehaviour {
 		long length = fs.Length;
 		fs.Close();
 		return length;
+	}
+	public static string GetFileHash(string filename) {
+		if (!File.Exists(filename)) {
+			Debug.LogFormat("GetFileHash: {0} not Exist!", filename);
+			return null;
+		}
+
+		FileStream fs = new FileStream(filename, FileMode.Open);
+		byte[] data = new byte[fs.Length];
+		fs.Read (data, 0, (int)fs.Length);
+		Hash128 hash = Hash128.Parse (data.ToString ());
+		fs.Close();
+		return hash.ToString();
+	}
+	public static string GetFileMD5(string filename) {
+		if (!File.Exists(filename)) {
+			Debug.LogFormat("GetFileMD5: {0} not Exist!", filename);
+			return null;
+		}
+
+		FileStream fs = new FileStream(filename, FileMode.Open);
+		byte[] data = new byte[fs.Length];
+		fs.Read (data, 0, (int)fs.Length);
+		fs.Close();
+		MD5 md5 = new MD5CryptoServiceProvider ();
+		byte[] result = md5.ComputeHash (data);
+		string filemd5 = "";
+		foreach (byte b in result) {
+			filemd5 += System.Convert.ToString (b, 16);
+		}
+		return filemd5;
 	}
 }

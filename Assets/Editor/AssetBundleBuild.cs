@@ -11,8 +11,8 @@ public class AssetBundleBuild : Editor
 {
 	const string kAssetBundlesOutputPath = "Update/AssetBundles";
 
-	[MenuItem("AssetBundle/Generate Name")]
-	private static void GenerateName()
+	[MenuItem("AssetBundle/Generate Bundle Names")]
+	private static void GenerateNames()
 	{
 		string filename = Path.Combine("Update", "AssetBundleRule.txt");
 		if (!File.Exists(filename)) {
@@ -30,6 +30,7 @@ public class AssetBundleBuild : Editor
 		fs.Close();
 
 		// check files
+
 		Stack<string> dirs = new Stack<string>();
 		dirs.Push("Assets/Resources/");
 		while(dirs.Count > 0) {
@@ -37,12 +38,83 @@ public class AssetBundleBuild : Editor
 			// files
 			foreach( string file in Directory.GetFiles(dir)) {
 				if (Path.GetExtension(file) != ".meta") {
-					string name = file.Split('.')[0].Substring(17);
+					string name = file.Split ('.') [0];	// 去除后缀
+					string bundleName = name.Split('/')[2];
 
-					if (name=="version") continue;
+					if (bundleName == "version") continue;	// 版本文件
 
-					Debug.Log(name);
-					AssetImporter.GetAtPath(file).assetBundleName = name;
+					Debug.Log(bundleName);
+
+					AssetImporter importer = AssetImporter.GetAtPath(file);
+					if (importer)
+					{
+						importer.assetBundleName = bundleName;
+						importer.assetBundleVariant = null;                
+					}
+				}
+			}
+			// child dirs
+			foreach( string path in Directory.GetDirectories(dir)){
+				string relativePath = path.Split('/')[2];
+
+				if (relativePath.ToLower() == "lua") continue;	// lua单独处理
+
+				dirs.Push(path);
+			}
+		}
+
+		// lua
+		string luaRoot = "Assets/Resources/Lua";
+		List<string> dirs2 = new List<string>();
+		GetAllDirs(luaRoot, dirs2);
+ 
+		for (int i = 0; i < dirs2.Count; i++) {
+			string str = dirs2[i].Remove(0, luaRoot.Length);
+			BuildLuaBundle(str.Replace('\\', '/'), luaRoot);
+		}
+		BuildLuaBundle(null, luaRoot);
+
+		// save
+		AssetDatabase.SaveAssets();
+	}
+	static void GetAllDirs(string dir, List<string> list)
+	{
+		string[] dirs = Directory.GetDirectories(dir);
+		list.AddRange(dirs);
+
+		for (int i = 0; i < dirs.Length; i++) {
+			GetAllDirs(dirs[i], list);
+		}
+	}
+	static void BuildLuaBundle(string subDir, string sourceDir)
+	{
+		string[] files = Directory.GetFiles(sourceDir + subDir, "*.bytes");
+		string bundleName = subDir == null ? "lua.unity3d" : "lua" + subDir.Replace('/', '_') + ".unity3d";
+		bundleName = bundleName.ToLower();
+      
+		for (int i = 0; i < files.Length; i++) {
+			AssetImporter importer = AssetImporter.GetAtPath(files[i]);
+			if (importer) {
+				importer.assetBundleName = bundleName;
+				importer.assetBundleVariant = null;                
+			}
+		}       
+	}
+
+	[MenuItem("AssetBundle/Clear Bundle Names")]
+	private static void ClearNames()
+	{
+		Stack<string> dirs = new Stack<string>();
+		dirs.Push("Assets/Resources/");
+		while(dirs.Count > 0) {
+			string dir = dirs.Pop();
+			// files
+			foreach( string file in Directory.GetFiles(dir)) {
+				
+				AssetImporter importer = AssetImporter.GetAtPath(file);
+				if (importer)
+				{
+					importer.assetBundleName = null;              
 				}
 			}
 			// child dirs
@@ -52,18 +124,21 @@ public class AssetBundleBuild : Editor
 		}
 	}
 
-	[MenuItem("AssetBundle/Build Base")]
+	[MenuItem("AssetBundle/Build All (Base)")]
 	private static void BuildBase()
 	{
-		string path = Path.Combine(kAssetBundlesOutputPath, AssetBundleManager.GetPlatformFolderForAssetBundles(EditorUserBuildSettings.activeBuildTarget));
+		string PlatformFolder = AssetBundleManager.GetPlatformFolderForAssetBundles (EditorUserBuildSettings.activeBuildTarget);
+		string path = Path.Combine(kAssetBundlesOutputPath, PlatformFolder);
 
 		if (!Directory.Exists(path)) {
 			Directory.CreateDirectory(path);
 		}
 
 		AssetBundleManifest manifest =  BuildPipeline.BuildAssetBundles(path, 0, EditorUserBuildSettings.activeBuildTarget);
-
-		string[] files = manifest.GetAllAssetBundles();
+		if (manifest == null) {
+			EditorUtility.DisplayDialog ("警告", "没有需要打包的assetbundle，请先设置assetbundle的名字！", "确定");
+			return;
+		}
 
 		// generate resourcelist
 		string filename = Path.Combine(path, "base.txt");
@@ -72,41 +147,25 @@ public class AssetBundleBuild : Editor
 		writer.WriteLine(string.Format("version 1.0.0"));
 		writer.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 
-		HashSet<string> hashSet = new HashSet<string>();
-		Stack<string> stack = new Stack<string>();
-		for(int i = 0; i < files.Length; i ++) stack.Push(files[i]);
-		while(stack.Count > 0) {
-			string asset = stack.Peek();
-			if (hashSet.Contains(asset)) {
-				stack.Pop();
-				continue;
-			}
+		// write manifest
+		writer.WriteLine(string.Format("{0} {1} {2}",
+			PlatformFolder,
+			ResourceManager.GetFileMD5(Path.Combine(path, PlatformFolder)), 
+			ResourceManager.GetFileSize(Path.Combine(path, PlatformFolder))));
 
-			// check depends first
-			string[] depends = manifest.GetAllDependencies(asset);
-			if (depends.Length > 0) {
-				bool bHas = false;
-				for (int i = 0 ; i < depends.Length; i ++) {
-					if (!hashSet.Contains(depends[i])) {
-						stack.Push(depends[i]);
-						bHas = true;
-					}
-				}
-				if (bHas) continue;
-			} 
-
-			// no depends or depends add already
-			stack.Pop();
-			// no depends , write
+		// write assetbundles
+		string[] assets = manifest.GetAllAssetBundles();
+		foreach (string asset in assets) {
+			// assetbundle 
 			Hash128 hash = manifest.GetAssetBundleHash(asset);
-			long size = ResourceManager.GetInstance().GetFileSize(Path.Combine(path, asset));
+			long size = ResourceManager.GetFileSize(Path.Combine(path, asset));
 			writer.WriteLine(string.Format("{0} {1} {2}", asset, hash.ToString(), size));
-			hashSet.Add(asset);
 		}
 
 		writer.Close();
 		fs.Close();
 
+		/*
 		// delete generated files
 		foreach( string file in Directory.GetFiles(path)) {
 			if (file != filename) {
@@ -117,13 +176,15 @@ public class AssetBundleBuild : Editor
 		foreach( string dir in Directory.GetDirectories(path)){
 			FileUtil.DeleteFileOrDirectory(dir);
 		}
+		*/
 	}
 
-	[MenuItem("AssetBundle/Build Inc")]
+	[MenuItem("AssetBundle/Build All (Inc)")]
 	private static void BuildInc()
 	{
 
-		string path = Path.Combine(kAssetBundlesOutputPath, AssetBundleManager.GetPlatformFolderForAssetBundles(EditorUserBuildSettings.activeBuildTarget));
+		string PlatformFolder = AssetBundleManager.GetPlatformFolderForAssetBundles (EditorUserBuildSettings.activeBuildTarget);
+		string path = Path.Combine(kAssetBundlesOutputPath, PlatformFolder);
 
 		string filename = Path.Combine(path, "base.txt");
 		if (!File.Exists(filename)) {
@@ -152,7 +213,6 @@ public class AssetBundleBuild : Editor
 		// new assetbundle
 		AssetBundleManifest manifest =  BuildPipeline.BuildAssetBundles(path, 0, EditorUserBuildSettings.activeBuildTarget);
 
-		string[] files = manifest.GetAllAssetBundles();
 
 		// generate resourcelist
 		filename = Path.Combine(path, "resourcelist.txt");
@@ -162,36 +222,21 @@ public class AssetBundleBuild : Editor
 		writer.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 
 		List<string> files_diff = new List<string>();
-		HashSet<string> hashSet = new HashSet<string>();
-		Stack<string> stack = new Stack<string>();
-		for(int i = 0; i < files.Length; i ++) stack.Push(files[i]);
-		while(stack.Count > 0) {
-			string asset = stack.Peek();
-			if (hashSet.Contains(asset)) {
-				stack.Pop();
-				continue;
-			}
 
-			// check depends first
-			string[] depends = manifest.GetAllDependencies(asset);
-			if (depends.Length > 0) {
-				bool bHas = false;
-				for (int i = 0 ; i < depends.Length; i ++) {
-					if (!hashSet.Contains(depends[i])) {
-						stack.Push(depends[i]);
-						bHas = true;
-					}
-				}
-				if (bHas) continue;
-			} 
 
-			// no depends or depends add already
-			stack.Pop();
-			hashSet.Add(asset);
+		// compare manifest
+		writer.WriteLine(string.Format("{0} {1} {2}",
+			PlatformFolder,
+			ResourceManager.GetFileMD5(Path.Combine(path, PlatformFolder)), 
+			ResourceManager.GetFileSize(Path.Combine(path, PlatformFolder))));
 
-			// no depends , write
+		// compare assetbundles
+		string[] assets = manifest.GetAllAssetBundles();
+		foreach (string asset in assets) {
+			// assetbundle 
+
 			Hash128 hash = manifest.GetAssetBundleHash(asset);
-			long size = ResourceManager.GetInstance().GetFileSize(Path.Combine(path, asset));
+			long size = ResourceManager.GetFileSize(Path.Combine(path, asset));
 
 			if (files_base.ContainsKey(asset)) {
 				if (files_base[asset].CompareTo(hash.ToString()) == 0) {
@@ -205,6 +250,7 @@ public class AssetBundleBuild : Editor
 		writer.Close();
 		fs.Close();
 
+
 		// remove useless files
 		Stack<string> dirs = new Stack<string>();
 		dirs.Push(path);
@@ -212,11 +258,7 @@ public class AssetBundleBuild : Editor
 			string dir = dirs.Pop();
 			// files
 			foreach( string file in Directory.GetFiles(dir)) {
-				if (file == Path.Combine(path, "base.txt") || file == Path.Combine(path, "resourcelist.txt")) {
-					continue;
-				}
-				if (Path.GetExtension(file) == ".manifest") {
-					FileUtil.DeleteFileOrDirectory(file);
+				if (file == Path.Combine(path, "base.txt") || file == Path.Combine(path, "resourcelist.txt") || file == Path.Combine(path, PlatformFolder)) {
 					continue;
 				}
 

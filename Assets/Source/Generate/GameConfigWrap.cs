@@ -10,6 +10,7 @@ public class GameConfigWrap
 		L.RegFunction("New", _CreateGameConfig);
 		L.RegFunction("__tostring", ToLua.op_ToString);
 		L.RegConstant("DebugMode", 0);
+		L.RegConstant("EnableUpdate", 1);
 		L.RegVar("WebUrl", get_WebUrl, null);
 		L.EndClass();
 	}
