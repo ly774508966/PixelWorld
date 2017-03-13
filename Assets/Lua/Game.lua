@@ -39,6 +39,7 @@ facade:registerMediator(require("window/PanelWait"))
 facade:registerMediator(require("window/PanelTip"))
 facade:registerMediator(require("window/PanelMain"))
 facade:registerMediator(require("window/PanelBattle"))
+facade:registerMediator(require("window/PanelGift"))
 
 -- cfg
 CFG = {}

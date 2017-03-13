@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 8e235736cfcc46f4ebf6f96f73fb6858
-timeCreated: 1488527120
+guid: dbd6164123f788542ac10e499ffbe05e
+timeCreated: 1489396469
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName: {}
@@ -53,5 +53,5 @@ TextureImporter:
     outline: []
   spritePackingTag: 
   userData: 
-  assetBundleName: 
+  assetBundleName: icon/116028
   assetBundleVariant: 

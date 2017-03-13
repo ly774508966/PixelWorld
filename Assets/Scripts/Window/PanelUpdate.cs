@@ -21,7 +21,11 @@ public class PanelUpdate : MonoBehaviour {
 
 	void Start() {
 
-		RequestVersion();
+		if (GameConfig.EnableUpdate) {
+			RequestVersion();
+		} else {
+			OnDownloadFinish();
+		}
 	}
 
 	public void RequestVersion() {
@@ -49,13 +53,8 @@ public class PanelUpdate : MonoBehaviour {
 				}
 				bDownloading = true;
 			} else {
-				// load local assetbundle
-				Dictionary<string, string> localfiles = UpdateManager.GetInstance().LocalFiles;
-				foreach(string file in localfiles.Keys) {
-					AssetBundleManager.GetInstance().LoadAssetBundleLocal(file);
-				}
-
-				bDownloading = true;
+				// use local
+				OnDownloadFinish();
 			}
 		});
 	}

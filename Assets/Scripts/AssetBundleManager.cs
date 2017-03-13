@@ -133,7 +133,6 @@ public class AssetBundleManager : MonoBehaviour {
 			AssetBundleManifest manifest = assetBundle.LoadAsset ("assetbundlemanifest") as AssetBundleManifest;
 			string[] assetBundleNames = manifest.GetAllAssetBundles ();
 			foreach (string assetBundleName in assetBundleNames) {
-				Debug.Log("assetBundleName " + assetBundleName);
 				string[] dependencies = manifest.GetAllDependencies(assetBundleName);
 				s_AssetBundleDependencies.Add (assetBundleName, dependencies);
 			}
@@ -158,13 +157,14 @@ public class AssetBundleManager : MonoBehaviour {
 					if (File.Exists(filename)) {
 						AssetBundle ab = AssetBundle.LoadFromFile(filename);
 						if (ab) {
+							Debug.LogFormat("AssetBundle(Dependency) loaded : {0}", dependency);
 							LoadedAssetBundle loadedAssetBundle = new LoadedAssetBundle (ab);
 							s_LoadedAssetBundles.Add (dependency, loadedAssetBundle);
 							continue;
 						}
 					}
 					// ab not found
-					Debug.LogErrorFormat("Dependency ab not found : {0}", dependency);
+					Debug.LogErrorFormat("AssetBundle(Dependency) not found : {0}", dependency);
 				}
 			}
 		}
@@ -180,15 +180,13 @@ public class AssetBundleManager : MonoBehaviour {
 			if (File.Exists(filename)) {
 				AssetBundle ab = AssetBundle.LoadFromFile(filename);
 				if (ab) {
+					Debug.LogFormat("AssetBundle loaded : {0}", assetBundleName);
 					LoadedAssetBundle loadedAssetBundle = new LoadedAssetBundle (ab);
 					s_LoadedAssetBundles.Add (assetBundleName, loadedAssetBundle);
 					return s_LoadedAssetBundles [assetBundleName].assetBundle;
 				}
 			}
-
-			// ab not found
-			Debug.LogErrorFormat("ab not found : {0}", assetBundleName);
-
+		
 			return null;
 		}
 	}

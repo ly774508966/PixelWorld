@@ -32,6 +32,7 @@ function PanelMenu.InitPanel()
 	local btnEquip = transform:FindChild("Button Equip").gameObject
 	local btnBattle = transform:FindChild("Button Battle").gameObject
 	local btnShop = transform:FindChild("Button Shop").gameObject
+	local btnGift = transform:FindChild("Button Gift").gameObject
 
 	window = transform:GetComponent('LuaBehaviour')
 
@@ -39,6 +40,7 @@ function PanelMenu.InitPanel()
 	window:AddClick(btnEquip, this.OnBtnEquip)
 	window:AddClick(btnBattle, this.OnBtnBattle)
 	window:AddClick(btnShop, this.OnBtnShop)
+	window:AddClick(btnGift, this.OnBtnGift)
 	
 end
 
@@ -61,6 +63,11 @@ end
 function PanelMenu.OnBtnShop(go)
 	print('OnBtnShop')
     facade:sendNotification(WAIT, {name="show"})
+end
+
+function PanelMenu.OnBtnGift(go)
+	print('OnBtnGift')
+    facade:sendNotification(OPEN_WINDOW, {name="PanelGift"})
 end
 
 return PanelMenu

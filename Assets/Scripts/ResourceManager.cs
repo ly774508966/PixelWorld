@@ -29,10 +29,17 @@ public class ResourceManager : MonoBehaviour {
 
 	}
 
+	private AssetBundle GetAssetBundle(string assetBundleName) {
+		if (UpdateManager.GetInstance().LocalFiles.ContainsKey(assetBundleName)) {
+			return AssetBundleManager.GetAssetBundle(assetBundleName);
+		}
+		return null;
+	}
+
 
 	public Object LoadAsset(string assetName) {
 		string assetBundleName = assetName.ToLower();
-		AssetBundle assetBundle = AssetBundleManager.GetAssetBundle(assetBundleName);
+		AssetBundle assetBundle = GetAssetBundle(assetBundleName);
 		if (assetBundle != null) {
 			int pos = assetBundleName.LastIndexOf("/");
 			string name = assetBundleName.Substring (pos + 1); 
@@ -44,7 +51,7 @@ public class ResourceManager : MonoBehaviour {
 	}
 	public Sprite LoadSprite(string assetName) {
 		string assetBundleName = assetName.ToLower();
-		AssetBundle assetBundle = AssetBundleManager.GetAssetBundle(assetBundleName);
+		AssetBundle assetBundle = GetAssetBundle(assetBundleName);
 		if (assetBundle != null) {
 			int pos = assetBundleName.LastIndexOf("/");
 			return assetBundle.LoadAsset<Sprite>(assetBundleName.Substring(pos+1));
@@ -54,7 +61,7 @@ public class ResourceManager : MonoBehaviour {
 	}
 	public Sprite LoadPackSprite(string assetName) {
 		string assetBundleName = assetName.ToLower();
-		AssetBundle assetBundle = AssetBundleManager.GetAssetBundle(assetBundleName);
+		AssetBundle assetBundle = GetAssetBundle(assetBundleName);
 		if (assetBundle != null) {
 			int pos = assetBundleName.LastIndexOf("/");
 			return assetBundle.LoadAsset<GameObject>(assetBundleName.Substring(pos+1)).GetComponent<SpriteRenderer>().sprite;

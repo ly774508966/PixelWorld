@@ -75,28 +75,33 @@ public class UpdateManager : MonoBehaviour {
 		}
 
 		// local version files
+		bool bExist = false;
 		string filename = Path.Combine(Application.persistentDataPath, "resourcelist.txt");
-		if (!File.Exists(filename)) {
-			TextAsset asset = Resources.Load("version", typeof(TextAsset)) as TextAsset;
-			lines = asset.text.Split(new char[]{'\r', '\n'}, System.StringSplitOptions.RemoveEmptyEntries);
-			m_LocalVersion = lines[0];
-			m_LocalVersion = m_LocalVersion.Split(' ')[1];
-		} else {
+		if (File.Exists(filename)) {
 			FileStream fs = new FileStream(filename, FileMode.Open);
 			StreamReader reader = new StreamReader(fs);
-			m_LocalVersion = reader.ReadLine();
-			m_LocalVersion = m_LocalVersion.Split(' ')[1];
-			string line;
-			while((line = reader.ReadLine()) != null) {
-				string[] strs = line.Split(' ');
-				if (strs.Length != 3) {
-					Debug.Log("error format!");
-				} else {
-					m_LocalFiles.Add(strs[0], strs[1]);
+			if (fs.Length > 0) {
+				bExist = true;
+				m_LocalVersion = reader.ReadLine();
+				m_LocalVersion = m_LocalVersion.Split(' ')[1];
+				string line;
+				while((line = reader.ReadLine()) != null) {
+					string[] strs = line.Split(' ');
+					if (strs.Length != 3) {
+						Debug.Log("error format!");
+					} else {
+						m_LocalFiles.Add(strs[0], strs[1]);
+					}
 				}
 			}
 			reader.Close();
 			fs.Close();
+		}
+		if (!bExist) {	// use local file
+			TextAsset asset = Resources.Load("version", typeof(TextAsset)) as TextAsset;
+			lines = asset.text.Split(new char[]{'\r', '\n'}, System.StringSplitOptions.RemoveEmptyEntries);
+			m_LocalVersion = lines[0];
+			m_LocalVersion = m_LocalVersion.Split(' ')[1];
 		}
 
 		// compare
@@ -116,6 +121,9 @@ public class UpdateManager : MonoBehaviour {
 
 
 	public void UpdateVersion() {
+
+		if (m_ServerVersionFile == null) return;
+		
 		string filename = Path.Combine(Application.persistentDataPath, "resourcelist.txt");
 		FileStream fs = new FileStream(filename, FileMode.Create);
 		StreamWriter writer = new StreamWriter(fs);
