@@ -155,11 +155,16 @@ public class AssetBundleManager : MonoBehaviour {
 				} else {
 					// 加载
 					string filename = Path.Combine(Application.persistentDataPath, dependency);
-					AssetBundle ab = AssetBundle.LoadFromFile(filename);
-					if (ab) {
-						LoadedAssetBundle loadedAssetBundle = new LoadedAssetBundle (ab);
-						s_LoadedAssetBundles.Add (dependency, loadedAssetBundle);
+					if (File.Exists(filename)) {
+						AssetBundle ab = AssetBundle.LoadFromFile(filename);
+						if (ab) {
+							LoadedAssetBundle loadedAssetBundle = new LoadedAssetBundle (ab);
+							s_LoadedAssetBundles.Add (dependency, loadedAssetBundle);
+							continue;
+						}
 					}
+					// ab not found
+					Debug.LogErrorFormat("Dependency ab not found : {0}", dependency);
 				}
 			}
 		}
@@ -172,14 +177,19 @@ public class AssetBundleManager : MonoBehaviour {
 		} else {
 			// 加载
 			string filename = Path.Combine(Application.persistentDataPath, assetBundleName);
-			AssetBundle ab = AssetBundle.LoadFromFile(filename);
-			if (ab) {
-				LoadedAssetBundle loadedAssetBundle = new LoadedAssetBundle (ab);
-				s_LoadedAssetBundles.Add (assetBundleName, loadedAssetBundle);
-				return s_LoadedAssetBundles [assetBundleName].assetBundle;
-			} else {
-				return null;
+			if (File.Exists(filename)) {
+				AssetBundle ab = AssetBundle.LoadFromFile(filename);
+				if (ab) {
+					LoadedAssetBundle loadedAssetBundle = new LoadedAssetBundle (ab);
+					s_LoadedAssetBundles.Add (assetBundleName, loadedAssetBundle);
+					return s_LoadedAssetBundles [assetBundleName].assetBundle;
+				}
 			}
+
+			// ab not found
+			Debug.LogErrorFormat("ab not found : {0}", assetBundleName);
+
+			return null;
 		}
 	}
 	public static void UnloadAssetBundle(string assetBundleName) {

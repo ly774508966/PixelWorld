@@ -31,32 +31,35 @@ public class ResourceManager : MonoBehaviour {
 
 
 	public Object LoadAsset(string assetName) {
-		AssetBundle assetBundle = AssetBundleManager.GetAssetBundle(assetName);
+		string assetBundleName = assetName.ToLower();
+		AssetBundle assetBundle = AssetBundleManager.GetAssetBundle(assetBundleName);
 		if (assetBundle != null) {
-			int pos = assetName.LastIndexOf("/");
-			string name = assetName.Substring (pos + 1); 
+			int pos = assetBundleName.LastIndexOf("/");
+			string name = assetBundleName.Substring (pos + 1); 
 			Object asset = assetBundle.LoadAsset(name);
 			return asset;
 		} else {
-			return Resources.Load(assetName);
+			return Resources.Load(assetBundleName);
 		}
 	}
 	public Sprite LoadSprite(string assetName) {
-		AssetBundle assetBundle = AssetBundleManager.GetAssetBundle(assetName);
+		string assetBundleName = assetName.ToLower();
+		AssetBundle assetBundle = AssetBundleManager.GetAssetBundle(assetBundleName);
 		if (assetBundle != null) {
-			int pos = assetName.LastIndexOf("/");
-			return assetBundle.LoadAsset<Sprite>(assetName.Substring(pos+1));
+			int pos = assetBundleName.LastIndexOf("/");
+			return assetBundle.LoadAsset<Sprite>(assetBundleName.Substring(pos+1));
 		} else {
 			return Resources.Load<Sprite>(assetName);
 		}
 	}
 	public Sprite LoadPackSprite(string assetName) {
-		AssetBundle assetBundle = AssetBundleManager.GetAssetBundle(assetName);
+		string assetBundleName = assetName.ToLower();
+		AssetBundle assetBundle = AssetBundleManager.GetAssetBundle(assetBundleName);
 		if (assetBundle != null) {
-			int pos = assetName.LastIndexOf("/");
-			return assetBundle.LoadAsset<GameObject>(assetName.Substring(pos+1)).GetComponent<SpriteRenderer>().sprite;
+			int pos = assetBundleName.LastIndexOf("/");
+			return assetBundle.LoadAsset<GameObject>(assetBundleName.Substring(pos+1)).GetComponent<SpriteRenderer>().sprite;
 		} else {
-			return Resources.Load<GameObject>(assetName).GetComponent<SpriteRenderer>().sprite;;
+			return Resources.Load<GameObject>(assetName).GetComponent<SpriteRenderer>().sprite;
 		}
 	}
 

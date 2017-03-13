@@ -124,6 +124,8 @@ public class UpdateManager : MonoBehaviour {
 		fs.Flush();
 		writer.Close();
 		fs.Close();
+
+		m_LocalFiles = m_ServerFiles;
 	}
 
 }

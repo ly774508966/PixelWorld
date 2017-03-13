@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using LuaInterface;
 
 public class PanelUpdate : MonoBehaviour {
 
@@ -73,15 +75,33 @@ public class PanelUpdate : MonoBehaviour {
 	// 更新检查完成
 	void OnDownloadFinish() {
 
-		AssetBundleManager.InitDependenceInfo ();
-
 		UpdateManager.GetInstance().UpdateVersion();
+
+		AssetBundleManager.InitDependenceInfo ();
 
 		ResourceManager.GetInstance().Init();
 
 		LanguageManager.GetInstance().Init();
 
 		// 初始化lua engine
+		LuaFileUtils loader = new LuaResLoader();
+		loader.beZip = GameConfig.EnableUpdate;	// 是否读取assetbundle lua文件
+		Dictionary<string, string> localfiles = UpdateManager.GetInstance().LocalFiles;
+		foreach(string file in localfiles.Keys) {
+			if (file.Substring(0,3) == "lua") {
+				AssetBundle assetBundle = AssetBundleManager.GetAssetBundle(file);
+				string name = Path.GetFileNameWithoutExtension(file);
+				LuaFileUtils.Instance.AddSearchBundle(name, assetBundle);
+			}
+		}
+		//add lua assetbundle
+		/*
+		Dictionary<string, AssetBundle> assetBundles = AssetBundleManager.GetInstance().LoadedAssetBundles;
+		foreach(string assetBundleName in assetBundles.Keys) {
+			string name = Path.GetFileNameWithoutExtension(assetBundleName);
+			LuaFileUtils.Instance.AddSearchBundle(name, assetBundles[assetBundleName]);
+		}
+		*/
 		LuaManager luaManager = LuaManager.GetInstance(true);
 		luaManager.InitStart();
 		luaManager.DoFile("Game");

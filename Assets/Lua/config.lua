@@ -19,10 +19,10 @@ CONFIG_DELTA_TIME = 1 / CONFIG_FPS
 --	Network Config
 -----------------------------------------------------------------------
 -- http
-CONFIG_HTTP_IP = "192.168.1.103:8080/"
+CONFIG_HTTP_IP = "192.168.1.106:8080/"
 
 -- socket
-CONFIG_SOCKET_IP = "192.168.1.103"
+CONFIG_SOCKET_IP = "192.168.1.106"
 CONFIG_SOCKET_PORT = 8001
 
 

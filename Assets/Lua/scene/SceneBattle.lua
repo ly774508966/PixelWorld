@@ -23,7 +23,7 @@ function SceneBattle.Awake(obj)
 
     --	new prefab in scene	
 	local prefab = resMgr:LoadAsset('Prefabs/Scene/Barrel1')
-	for i = 0, 10 do
+	for i = 0, 20 do
 	    local go = GameObject.Instantiate(prefab)
 		go.transform:SetParent(transform)
 		go.transform.localScale = Vector3.one
