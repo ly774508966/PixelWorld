@@ -32,6 +32,13 @@ public class ResourceManager : MonoBehaviour {
 	private AssetBundle GetAssetBundle(string assetBundleName) {
 		if (UpdateManager.GetInstance().LocalFiles.ContainsKey(assetBundleName)) {
 			return AssetBundleManager.GetAssetBundle(assetBundleName);
+		} else {
+			// parent
+			string parent = assetBundleName.Substring(0, assetBundleName.LastIndexOf('/'));
+
+			if (UpdateManager.GetInstance().LocalFiles.ContainsKey(parent)) {
+				return AssetBundleManager.GetAssetBundle(parent);
+			}
 		}
 		return null;
 	}
