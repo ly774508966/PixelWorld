@@ -1,6 +1,6 @@
 # PixelWorld
 
-##Introduction
+## Introduction
 GamePlay is a simple framework for game develop with Unity3D. It is written in c# and lua. It includes many usefull modules for game development, such as mvc, game managers, Assetbundle&lua update.
 some plugins using in this project：
 
@@ -33,5 +33,5 @@ our version-file format are like this:
 we will download files which has different hashcode comparing to version-file from server.
 game server ref:[pyGameServer](https://github.com/AdamWu/pyGameServer)
 
-##Blog
+## Blog
 [AdamWu's Blog](http://blog.csdn.net/adamwu1988)
