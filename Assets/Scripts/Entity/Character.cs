@@ -17,6 +17,9 @@ public enum CharaterState {
 }
 
 public class Character : MonoBehaviour {
+
+	public float Speed {get; set;}
+
 	//动画组件
 	protected Animator m_Animator;
 
