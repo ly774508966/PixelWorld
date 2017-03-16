@@ -4,10 +4,6 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public class PlayerController : MonoBehaviour {
  
-	//移动速度
-	public float MoveSpeed=1.5F;
-	//奔跑速度
-	public float RunSpeed=2.5F;
 	//重力
 	public float Gravity=10;
 	//速度
@@ -95,8 +91,8 @@ public class PlayerController : MonoBehaviour {
 			// 不融合时
 			if (cur.IsName("run") && isMoving) {
 				transform.forward = mDir;
-				move.x = mDir.x * RunSpeed;
-				move.z = mDir.z * RunSpeed;
+				move.x = mDir.x * m_Player.Speed;
+				move.z = mDir.z * m_Player.Speed;
 				m_AttackIdx = 0;
 				m_Animator.SetBool("bJump", bJump);
 				if (bAttack) {

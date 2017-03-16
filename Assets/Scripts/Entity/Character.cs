@@ -18,7 +18,11 @@ public enum CharaterState {
 
 public class Character : MonoBehaviour {
 
-	public float Speed {get; set;}
+	public float Speed = 4.0f;			// 移动速度
+
+
+	public float DisSight = 10.0f;		// 可视范围
+	public float DisAttack = 1.0f; 		// 攻击范围
 
 	//动画组件
 	protected Animator m_Animator;

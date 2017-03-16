@@ -3,6 +3,9 @@ using System.Collections;
 
 public class Monster : Character {
 
+	void Awake() {
+	}
+
 	// Use this for initialization
 	void Start () {
 	

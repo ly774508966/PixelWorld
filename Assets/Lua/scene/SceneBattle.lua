@@ -37,6 +37,15 @@ function SceneBattle.Awake(obj)
 		go.transform.localScale = Vector3.one
 		go.transform.localPosition = Vector3.New(math.random(-5, 5), 0, math.random(-5, 5))
 	end
+
+	local prefab = resMgr:LoadAsset('Prefabs/Monster/1001')
+	for i = 0, 2 do
+	    local go = GameObject.Instantiate(prefab)
+		go.transform:SetParent(transform)
+		go.transform.localScale = Vector3.one
+		go.transform.localPosition = Vector3.New(math.random(-5, 5), 0, math.random(-5, 5))
+	end
+
 end
 
 function SceneBattle.OnDestroy()
