@@ -18,9 +18,11 @@ public enum CharaterState {
 
 public class Character : MonoBehaviour {
 
+	public int ID {get; set;}			// uid
+	public int ModelID {get; set;}		// model id
+	public string Name {get; set;}		// name
+	
 	public float Speed = 4.0f;			// 移动速度
-
-
 	public float DisSight = 10.0f;		// 可视范围
 	public float DisAttack = 1.0f; 		// 攻击范围
 
@@ -56,5 +58,10 @@ public class Character : MonoBehaviour {
 	public virtual void ActAttack() {
 		m_CharacterState = CharaterState.ATTACK;
 		m_Animator.CrossFade ("attack", 0);
+	}
+
+	public virtual void ActHit() {
+		m_CharacterState = CharaterState.HIT;
+		m_Animator.SetTrigger("bHit");
 	}
 }

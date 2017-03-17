@@ -23,6 +23,10 @@ public static class LuaBinder
 		LanguageManagerWrap.Register(L);
 		SceneManagerWrap.Register(L);
 		SceneIDWrap.Register(L);
+		CharacterWrap.Register(L);
+		PlayerWrap.Register(L);
+		MonsterWrap.Register(L);
+		FollowWrap.Register(L);
 		L.BeginModule("DG");
 		L.BeginModule("Tweening");
 		DG_Tweening_DOTweenWrap.Register(L);

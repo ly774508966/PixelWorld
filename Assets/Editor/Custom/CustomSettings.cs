@@ -166,6 +166,11 @@ public static class CustomSettings
 		_GT(typeof(LanguageManager)),
 		_GT(typeof(SceneManager)),
 		_GT(typeof(SceneID)),
+
+		_GT(typeof(Character)),
+		_GT(typeof(Player)),
+		_GT(typeof(Monster)),
+		_GT(typeof(Follow)),
     };
 
     public static List<Type> dynamicList = new List<Type>()

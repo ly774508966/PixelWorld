@@ -47,7 +47,7 @@ function PanelWait:show()
 	sequence:AppendCallback(DG.Tweening.TweenCallback(function ()
 		this.hide()
 		
-    	facade:sendNotification(OPEN_WINDOW, {name="PanelAlert", data={lanMgr:GetValue('TITLE_TIP'), lanMgr:GetValue('NETWORK_TIMEOUT')}})
+    	--facade:sendNotification(OPEN_WINDOW, {name="PanelAlert", data={lanMgr:GetValue('TITLE_TIP'), lanMgr:GetValue('NETWORK_TIMEOUT')}})
 	end))
 	sequence:Play()
 end

@@ -66,12 +66,12 @@ public class LuaBehaviour : MonoBehaviour {
 
         //-----------------------------------------------------------------
         protected void OnDestroy() {
-			ClearClick();
+		ClearClick();
 
-			Util.CallMethod(name, "OnDestroy");
+		Util.CallMethod(name, "OnDestroy");
 
-			Util.ClearMemory();
-			Debug.Log("~" + name + " was destroy!");
+		Util.ClearMemory();
+		Debug.Log("~" + name + " was destroy!");
 
         }
 }

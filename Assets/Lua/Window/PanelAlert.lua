@@ -10,13 +10,13 @@ local TAG = 'PanelAlert'
 --	c# callback
 -----------------------------------------------------------------------
 function PanelAlert.Awake(obj)
+	print(TAG, "Awake'")
 	gameObject = obj
 	transform = obj.transform
 end
 
 function PanelAlert.OnDestroy()
-	gameObject = nil
-	this.bInit = false
+	print(TAG, "OnDestroy'")
 end
 
 -- --------------------------------------------------------------------
@@ -48,12 +48,11 @@ function PanelAlert.InitPanel()
 	text_title.text = this.title
 	text_msg.text = this.msg
 
-	if this.bInit == false then
-		window = transform:GetComponent('LuaBehaviour')
-		window:AddClick(this.btn_ok, this.OnBtnOK)
-		window:AddClick(this.btn_cancel, this.OnBtnCancel)
-	end
-	this.bInit = true
+	window = transform:GetComponent('LuaBehaviour')
+	window:ClearClick()
+	window:AddClick(this.btn_ok, this.OnBtnOK)
+	window:AddClick(this.btn_cancel, this.OnBtnCancel)
+
 end
 
 
@@ -62,18 +61,18 @@ end
 -----------------------------------------------------------------------
 function PanelAlert.OnBtnOK(go)
 	print('OnBtnOK')
-	guiMgr:HideWindow(gameObject)
 	if this.callback then
 		this.callback(1)
 	end
+	guiMgr:HideWindow(gameObject)
 end
 
 function PanelAlert.OnBtnCancel(go)
 	print('OnBtnCancel')
-	guiMgr:HideWindow(gameObject)	
 	if this.callback then
 		this.callback(0)
 	end
+	guiMgr:HideWindow(gameObject)	
 end
 
 return PanelAlert

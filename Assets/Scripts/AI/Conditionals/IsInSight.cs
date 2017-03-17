@@ -9,8 +9,6 @@ namespace AI {
 	{
 		public SharedString tag;
 	        [RequiredField]
-		public SharedGameObject targetGameObject;
-	        [RequiredField]
 		public SharedFloat distance;
 	        [RequiredField]
 		public SharedVector3 direction;
@@ -30,7 +28,6 @@ namespace AI {
            		if (go == null) {
            			return TaskStatus.Failure;
            		}
-			targetGameObject.Value = go;
 
            		Vector3 offset = go.transform.position - transform.position;
            		distance.Value = offset.magnitude;

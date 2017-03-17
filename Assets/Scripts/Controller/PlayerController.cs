@@ -99,6 +99,7 @@ public class PlayerController : MonoBehaviour {
 					m_AttackIdx = 1;
 				}
 				m_Animator.SetInteger("AttackIdx", m_AttackIdx);
+				m_Animator.SetBool("bHit", false);
 				//Debug.Log("run");
 			} else if (cur.IsName("idle")) {
 				move.x = 0;
@@ -132,6 +133,9 @@ public class PlayerController : MonoBehaviour {
 				}
 			} else if (cur.IsName("attack1_3")) {
 				move = Vector3.zero;
+			} else if (cur.IsName("hit")) {
+				move = Vector3.zero;
+				m_Animator.SetBool("bHit", false);
 			}
 		}
 
