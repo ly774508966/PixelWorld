@@ -171,6 +171,7 @@ public static class CustomSettings
 		_GT(typeof(Player)),
 		_GT(typeof(Monster)),
 		_GT(typeof(Follow)),
+		_GT(typeof(LockViewCameraController)),
     };
 
     public static List<Type> dynamicList = new List<Type>()

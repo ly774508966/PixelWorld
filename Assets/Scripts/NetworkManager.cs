@@ -36,10 +36,10 @@ public class NetworkManager : MonoBehaviour {
         }
 
         void Awake() {
-		Init();
+			Init();
 
-		// 网络字节顺序(必须大端模式)
-		Debug.LogFormat("LittleEndian {0}", BitConverter.IsLittleEndian);
+			// 网络字节顺序(必须大端模式)
+			Debug.LogFormat("LittleEndian {0}", BitConverter.IsLittleEndian);
         }
 
         void Init() {

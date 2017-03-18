@@ -28,10 +28,17 @@ namespace AISystem
 			transform.forward = direction.Value;
 
 			animator.SetBool("bMoving", false);
+
 			animator.SetBool("bAttack", true);
+			StartCoroutine(ResetValue());
 
 			return TaskStatus.Success;
 		}
 
+		public IEnumerator ResetValue()
+		{
+			yield return null;
+			animator.SetBool("bAttack", false);
+		}
 	}
 }

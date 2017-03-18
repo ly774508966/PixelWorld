@@ -32,9 +32,14 @@ public class Character : MonoBehaviour {
 	protected CharaterState m_CharacterState;
 	public CharaterState CharcterState {get{return m_CharacterState;}}
 
+
+	private GameObject AttackBox;
+
 	void Awake() {
 		m_Animator = GetComponentInChildren<Animator>();
 
+		AttackBox = transform.Find("AttackBox").gameObject;
+		AttackBox.SetActive(false);
 	}
 
 	// Use this for initialization
@@ -62,6 +67,24 @@ public class Character : MonoBehaviour {
 
 	public virtual void ActHit() {
 		m_CharacterState = CharaterState.HIT;
-		m_Animator.SetTrigger("bHit");
+		m_Animator.SetBool("bHit", true);
+		StartCoroutine(ResetValue("bHit"));
+	}
+
+
+	public IEnumerator ResetValue(string name)
+	{
+		yield return null;
+		m_Animator.SetBool(name, false);
+	}
+
+
+	public void OnEventAttack(string param) {
+		//Debug.LogFormat("OnEventAttack {0} {1}", ID, param);
+		if (param == "start") {
+			AttackBox.SetActive(true);
+		} else {
+			AttackBox.SetActive(false);
+		}
 	}
 }

@@ -8,6 +8,10 @@ public class LockViewCameraController : MonoBehaviour {
 	[SerializeField] private Vector3 m_Offset = new Vector3(0, 5, -10);                // offset
         [SerializeField] private bool m_IgnoreY = true;                // ignore y move
 
+	public void SetTarget(Transform target) {
+		m_Target = target;
+	}
+
 	// Use this for initialization
 	void Start () {
 	

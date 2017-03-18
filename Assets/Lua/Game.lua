@@ -18,6 +18,8 @@ require "core/fsm"
 require "core/mvc"
 require "notifyname"
 
+require "battle/battle"
+
 -- scene
 require "scene/SceneMain"
 require "scene/SceneLoading"

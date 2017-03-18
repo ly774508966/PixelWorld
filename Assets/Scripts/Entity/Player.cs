@@ -69,20 +69,16 @@ public class Player : Character {
 	}
 
 
-	// attack event 
-	public void OnEventAttack(string param) {
-		Debug.Log("OnEventAttack "  + ID);
-	}
-
 	void OnTriggerEnter(Collider collider)   { 
 		Debug.Log("OnTriggerEnter");  
 		if (collider.gameObject.layer == LayerMask.NameToLayer("Monster")) {
 			Monster monster = collider.transform.parent.GetComponent<Monster>();
 			Debug.Log("mosnter " + monster.ID);
 			ActHit();
+			BattleManager.GetInstance ().Hit (ID, monster.ID);
 		}
 	}  
 	void OnTriggerExit(Collider collider)  {  
-		Debug.Log("OnTriggerExit");  
+		//Debug.Log("OnTriggerExit");  
 	}
 }
