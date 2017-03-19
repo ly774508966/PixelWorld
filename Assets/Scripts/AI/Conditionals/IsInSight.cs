@@ -23,14 +23,24 @@ namespace AI {
 
 		public override TaskStatus OnUpdate ()
 		{
+			if (_owner.HP <= 0) {
+				return TaskStatus.Failure;
+			}
 
-           		GameObject go = GameObject.FindWithTag(tag.Value);
-           		if (go == null) {
-           			return TaskStatus.Failure;
-           		}
+       		GameObject go = GameObject.FindWithTag(tag.Value);
+       		if (go == null) {
+       			return TaskStatus.Failure;
+       		}
 
-           		Vector3 offset = go.transform.position - transform.position;
-           		distance.Value = offset.magnitude;
+			Player player = go.GetComponent<Player> ();
+			if (player.HP <= 0) {
+				return TaskStatus.Failure;
+			}
+
+
+
+       		Vector3 offset = go.transform.position - transform.position;
+       		distance.Value = offset.magnitude;
 
 			if (distance.Value <= _owner.DisSight) {
 				// calculate dir

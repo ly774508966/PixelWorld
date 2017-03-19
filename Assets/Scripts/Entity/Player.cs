@@ -71,11 +71,11 @@ public class Player : Character {
 
 	void OnTriggerEnter(Collider collider)   { 
 		Debug.Log("OnTriggerEnter");  
-		if (collider.gameObject.layer == LayerMask.NameToLayer("Monster")) {
+		if (collider.gameObject.layer == LayerMask.NameToLayer("Enemy")) {
 			Monster monster = collider.transform.parent.GetComponent<Monster>();
-			Debug.Log("mosnter " + monster.ID);
+			Debug.Log("Enemy " + monster.ID);
 			ActHit();
-			BattleManager.GetInstance ().Hit (ID, monster.ID);
+			BattleManager.GetInstance ().PlayerHit (ID, monster.ID);
 		}
 	}  
 	void OnTriggerExit(Collider collider)  {  

@@ -22,7 +22,11 @@ public class BattleManager : MonoBehaviour {
 		return Util.CallMethod("battle", func, args);
 	}
 
-	public void Hit(int id, int attackid){
-		CallMethod("hit", id, attackid);
+	public void PlayerHit(int id, int attackid){
+		CallMethod("player_hit", id, attackid);
+	}
+
+	public void EnemyHit(int id, int attackid){
+		CallMethod("enemy_hit", id, attackid);
 	}
 }

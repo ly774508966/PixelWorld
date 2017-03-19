@@ -21,6 +21,10 @@ public class Character : MonoBehaviour {
 	public int ID {get; set;}			// uid
 	public int ModelID {get; set;}		// model id
 	public string Name {get; set;}		// name
+
+	// attrs
+	public int HP = 100;				// hp
+	public int MP = 100;				// mp
 	
 	public float Speed = 4.0f;			// 移动速度
 	public float DisSight = 10.0f;		// 可视范围
@@ -69,6 +73,10 @@ public class Character : MonoBehaviour {
 		m_CharacterState = CharaterState.HIT;
 		m_Animator.SetBool("bHit", true);
 		StartCoroutine(ResetValue("bHit"));
+	}
+	public virtual void ActDie() {
+		m_CharacterState = CharaterState.DEATH;
+		m_Animator.SetBool("bDie", true);
 	}
 
 

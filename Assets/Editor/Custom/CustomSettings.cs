@@ -150,6 +150,7 @@ public static class CustomSettings
 		_GT(typeof(Text)),
 		_GT(typeof(TextAnchor)),
 		_GT(typeof(Button)),
+		_GT(typeof(Slider)),
 
 		// 自定义类导出
 		_GT(typeof(GameConfig)),

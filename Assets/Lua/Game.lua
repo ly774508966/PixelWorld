@@ -42,6 +42,7 @@ facade:registerMediator(require("window/PanelTip"))
 facade:registerMediator(require("window/PanelMain"))
 facade:registerMediator(require("window/PanelBattle"))
 facade:registerMediator(require("window/PanelGift"))
+facade:registerMediator(require("window/PanelBattleBalance"))
 
 -- cfg
 CFG = {}
@@ -60,6 +61,8 @@ fontArial = UnityEngine.Font.CreateDynamicFontFromOSFont("Arial", 1);
 --初始化完成(自更新)
 function Game.OnInitOK()
     print('Game Init OK ...')
+
+    math.randomseed(os.time())
     
     networkMgr:OnInit()
     networkMgr:SendConnect(CONFIG_SOCKET_IP, CONFIG_SOCKET_PORT)

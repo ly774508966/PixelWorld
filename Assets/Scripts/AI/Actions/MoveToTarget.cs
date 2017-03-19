@@ -27,8 +27,8 @@ namespace AISystem
 			transform.position += _owner.Speed * direction.Value * Time.deltaTime;
             		//targetTransform.Translate(translation.Value, relativeTo);
 
-			animator.SetBool("bMoving", true);
 			animator.SetBool("bAttack", false);
+			animator.SetBool("bMoving", true);
 
 			return TaskStatus.Success;
 		}

@@ -32,7 +32,7 @@ function effect_mgr.create_hit(wpos, num)
 	-- move
 	local rt = go:GetComponent('RectTransform')
 	local sequence = DOTween.Sequence()
-	move = rt:DOMoveY(200, 2, false)
+	move = rt:DOMoveY(pos.y+50, 1, false)
 	sequence:Append(move)
 	sequence:AppendCallback(DG.Tweening.TweenCallback(function ()
 		-- remove
@@ -41,7 +41,7 @@ function effect_mgr.create_hit(wpos, num)
 	sequence:Play()
 
 	-- alpha
-	text:CrossFadeAlpha(0, 2, true)
+	text:CrossFadeAlpha(0, 1, true)
 end
 
 function effect_mgr.create(id)

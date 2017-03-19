@@ -20,7 +20,7 @@ public class Monster : Character {
 			Player player = collider.transform.parent.GetComponent<Player>();
 			Debug.Log("player " + player.ID);
 			ActHit();
-			BattleManager.GetInstance ().Hit (ID, player.ID);
+			BattleManager.GetInstance ().EnemyHit (ID, player.ID);
 		}  
 	}
 	void OnTriggerExit(Collider collider)  {  

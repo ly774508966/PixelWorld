@@ -1,13 +1,14 @@
 --[[
 	战斗管理器
 --]]
+require "battle/enemy_mgr"
 require "battle/effect_mgr"
 
 local GameObject = UnityEngine.GameObject
 
 battle = {}
 local TAG = "battle"
-this = battle
+local this = battle
 
 local gameObject
 local transform
@@ -15,7 +16,6 @@ local transform
 function battle.init(obj)
 	gameObject = obj
 	transform = obj.transform
-
 
 	this.canvas = GameObject.Find("Canvas Battle").transform
 	this.canvas_top = GameObject.Find("Canvas Battle Top").transform
@@ -25,13 +25,15 @@ function battle.init(obj)
 
 	this.UID = 0
 	this.player = nil
-	this.characters = {}
+	this.player_tf = nil
 
 	this.init_scene()
 	this.init_player()
-	this.init_monsters()
 
-	lockview:SetTarget(this.player)
+	lockview:SetTarget(this.player_tf)
+
+	-- enemy
+	enemy_mgr.init()
 end
 
 function battle.init_scene()
@@ -59,46 +61,56 @@ function battle.init_player()
     local go = GameObject.Instantiate(prefab)
 	go.transform.localScale = Vector3.one
 	go.transform.localPosition = Vector3.New(0, 0, 0)
-	player = go:GetComponent("Player")
-	player.ID = this.UID
+
+	this.player = go:GetComponent("Player")
+	this.player.ID = this.UID
 	this.UID = this.UID + 1
 
-	this.player = go.transform
-
-	this.characters[player.ID] = {go, player}
+	this.player_tf = go.transform
 end
 
-function battle.init_monsters() 
+function battle.player_hit(id, attackid)
+	print("player_hit", id, attackid)
 
-	local prefab = resMgr:LoadAsset('Prefabs/Monster/1001')
-	local prefab_bar = resMgr:LoadAsset('UI/Widget/HealthBar')
-	for i = 0, 0 do
-	    local go = GameObject.Instantiate(prefab)
-		go.transform.localScale = Vector3.one
-		go.transform.localPosition = Vector3.New(math.random(-5, 5), 0, math.random(-5, 5))
-		monster = go:GetComponent("Monster")
-		monster.ID = this.UID
-		this.UID = this.UID + 1
+	if this.player.HP == 0 then return end
 
-		local bar = GameObject.Instantiate(prefab_bar)
-		bar.transform:SetParent(this.canvas)
-		bar.transform.localScale = Vector3.one
-		follow = bar:GetComponent('Follow')
-		follow.target = go.transform
-		follow.offset = Vector3.New(0, 1, 0)
+	-- calculate attack
+	local attack = math.random(1, 10)
+	local hp = math.max(0, this.player.HP - attack)
+	this.player.HP = hp
 
-		this.characters[monster.ID] = {go, monster, bar}
+	if hp == 0 then 
+		-- die, balance
+		this.player:ActDie()
+
+		local function balance( ... )
+			facade:sendNotification(OPEN_WINDOW, {name="PanelBattleBalance"})
+		end
+		local timer = Timer.New(balance, 2, 0, true)
+		timer:Start()
 	end
+
+    facade:sendNotification(BATTLE_HP_CHANGE, {hp=hp})
+
+	-- effect
+	local pos = this.player_tf.position + Vector3.New(0, 1, 0)
+	effect_mgr.create_hit(pos, -attack)
+	
 end
 
+function battle.enemy_hit(id, attackid)
+	print("enemy_hit", id, attackid)
 
+	-- calculate attack
+	local attack = math.random(10, 30)
 
-function battle.hit(id, attackid)
-	print("hit", id, attackid)
-	local character = this.characters[id]
-	print(character)
-	local pos = character[1].transform.position
-	effect_mgr.create_hit(pos, math.random(-100, -10))
+	local enemy = enemy_mgr.enemy_hit(id, attack)
+	if enemy then
+		-- effect
+		local pos = enemy[3].position + Vector3.New(0, 1, 0)
+		effect_mgr.create_hit(pos, -attack)
+	end
+
 end
 
 function battle.destroy()
