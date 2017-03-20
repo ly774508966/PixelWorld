@@ -89,15 +89,13 @@ function enemy_mgr.enemy_die(id)
 	if enemy == nil then return end
 
 
-	enemy[1]:ActDie()
+	enemy[1]:ActDie()		
+	
+	-- remove bar
+	GameObject.Destroy(enemy[4])
 
 	local sequence = DOTween.Sequence()
-	sequence:AppendInterval(1)	
-	sequence:AppendCallback(DG.Tweening.TweenCallback(function ()
-		-- remove
-		GameObject.Destroy(enemy[4])
-	end))
-	sequence:AppendInterval(1)
+	sequence:AppendInterval(2)
 	sequence:AppendCallback(DG.Tweening.TweenCallback(function ()
 		-- remove
 		GameObject.Destroy(enemy[2])
