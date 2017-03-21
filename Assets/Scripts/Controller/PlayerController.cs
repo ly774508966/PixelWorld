@@ -171,10 +171,10 @@ public class PlayerController : MonoBehaviour {
 		}
 		*/
 
-		//if (!m_Controller.isGrounded) {
+		if (!m_Controller.isGrounded) {
 			// ÷ÿ¡¶œ¬Ωµ
 			move.y -= Gravity *Time.deltaTime;
-		//}
+		}
 
 		CollisionFlags flags = m_Controller.Move(move * Time.deltaTime);
 

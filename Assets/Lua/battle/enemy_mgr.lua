@@ -29,7 +29,7 @@ function enemy_mgr.create(id)
 	
     local go = GameObject.Instantiate(prefab)
 	go.transform.localScale = Vector3.one
-	go.transform.localPosition = Vector3.New(math.random(-20, 20), 0, math.random(-5, 5))
+	go.transform.localPosition = Vector3.New(math.random(2, 40), 0, math.random(2, 10))
 	local monster = go:GetComponent("Monster")
 	monster.ID = this.UID
 	this.UID = this.UID + 1

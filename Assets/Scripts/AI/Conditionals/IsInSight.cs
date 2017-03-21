@@ -9,6 +9,8 @@ namespace AI {
 	{
 		public SharedString tag;
 	        [RequiredField]
+		public SharedVector3 target;
+	        [RequiredField]
 		public SharedFloat distance;
 	        [RequiredField]
 		public SharedVector3 direction;
@@ -27,20 +29,20 @@ namespace AI {
 				return TaskStatus.Failure;
 			}
 
-       		GameObject go = GameObject.FindWithTag(tag.Value);
-       		if (go == null) {
-       			return TaskStatus.Failure;
-       		}
+	       		GameObject go = GameObject.FindWithTag(tag.Value);
+	       		if (go == null) {
+	       			return TaskStatus.Failure;
+	       		}
 
 			Player player = go.GetComponent<Player> ();
 			if (player.HP <= 0) {
 				return TaskStatus.Failure;
 			}
 
+			target.Value = go.transform.position;
 
-
-       		Vector3 offset = go.transform.position - transform.position;
-       		distance.Value = offset.magnitude;
+	       		Vector3 offset = go.transform.position - transform.position;
+	       		distance.Value = offset.magnitude;
 
 			if (distance.Value <= _owner.DisSight) {
 				// calculate dir

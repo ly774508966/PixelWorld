@@ -7,10 +7,13 @@ namespace AISystem
 {
 	public class MoveToTarget : Action 
 	{
+		public SharedVector3 target;
 		public SharedVector3 direction;
 
 		private Character _owner;
        		private Animator animator;
+		private CharacterController characterController;
+       		private NavMeshAgent agent;
 
 		public override void OnAwake ()
 		{
@@ -18,14 +21,19 @@ namespace AISystem
 		}
 		public override void OnStart()
 	        {
-	                animator = GetComponent<Animator>();
+			animator = GetComponent<Animator>();
+			characterController = GetComponent<CharacterController>();
+			agent = GetComponent<NavMeshAgent>();
 	        }
 		public override TaskStatus OnUpdate ()
 		{
 	
 			transform.forward = direction.Value;
-			transform.position += _owner.Speed * direction.Value * Time.deltaTime;
-            		//targetTransform.Translate(translation.Value, relativeTo);
+			Vector3 move =  _owner.Speed * direction.Value * Time.deltaTime;
+			//transform.position += _owner.Speed * direction.Value * Time.deltaTime;
+			move.y = -10;
+			//characterController.Move(move);
+			agent.SetDestination(target.Value);
 
 			animator.SetBool("bAttack", false);
 			animator.SetBool("bMoving", true);

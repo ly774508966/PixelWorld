@@ -37,21 +37,13 @@ function battle.init(obj)
 end
 
 function battle.init_scene()
-	--	new prefab in scene	
-	local prefab = resMgr:LoadAsset('Prefabs/Scene/Barrel1')
-	for i = 0, 10 do
-	    local go = GameObject.Instantiate(prefab)
-		go.transform:SetParent(transform)
-		go.transform.localScale = Vector3.one
-		go.transform.localPosition = Vector3.New(math.random(-5, 5), 0.4, math.random(-5, 5))
-	end
-
+	--	new prefab in scene
 	local prefab = resMgr:LoadAsset('Prefabs/Scene/Box2')
-	for i = 0, 10 do
+	for i = 0, 3 do
 	    local go = GameObject.Instantiate(prefab)
 		go.transform:SetParent(transform)
 		go.transform.localScale = Vector3.one
-		go.transform.localPosition = Vector3.New(math.random(-5, 5), 0, math.random(-5, 5))
+		go.transform.localPosition = Vector3.New(math.random(2, 40), 0, math.random(1, 10))
 	end
 end
 
@@ -60,7 +52,7 @@ function battle.init_player()
 
     local go = GameObject.Instantiate(prefab)
 	go.transform.localScale = Vector3.one
-	go.transform.localPosition = Vector3.New(0, 0, 0)
+	go.transform.localPosition = Vector3.New(5, 0, 5)
 
 	this.player = go:GetComponent("Player")
 	this.player.ID = this.UID

@@ -10,7 +10,8 @@ namespace AISystem
 		public SharedVector3 direction;
 
 		private Character _owner;
-       		private Animator animator;
+		private Animator animator;
+       		private NavMeshAgent agent;
 
 		public override void OnAwake ()
 		{
@@ -19,7 +20,11 @@ namespace AISystem
 
 		public override void OnStart()
 	        {
-	                animator = GetComponent<Animator>();
+			animator = GetComponent<Animator>();
+			agent = GetComponent<NavMeshAgent>();
+			if (agent.hasPath) {
+				agent.ResetPath();
+			}
 	        }
 		
 		public override TaskStatus OnUpdate ()
