@@ -11,6 +11,7 @@ resMgr = ResourceManager.GetInstance()
 lanMgr = LanguageManager.GetInstance()
 sceneMgr = SceneManager.GetInstance()
 networkMgr = NetworkManager.GetInstance()
+chMgr = CharacterManager.GetInstance()
 
 require "config"
 require "network/network"
@@ -24,6 +25,7 @@ require "battle/battle"
 require "scene/SceneMain"
 require "scene/SceneLoading"
 require "scene/SceneBattle"
+require "scene/SceneCity"
 
 -- register windows
 facade = Facade:getInstance()

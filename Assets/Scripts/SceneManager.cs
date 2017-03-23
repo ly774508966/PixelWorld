@@ -11,7 +11,7 @@ public enum SceneID {
 	Main,
 	Loading,
 	Battle,	
-	Magic,	
+	City,	
 }
 
 public class SceneManager {
@@ -38,7 +38,7 @@ public class SceneManager {
 		case SceneID.Battle:
 			UnityEngine.SceneManagement.SceneManager.LoadScene(3);
 			break;
-		case SceneID.Magic:
+		case SceneID.City:
 			UnityEngine.SceneManagement.SceneManager.LoadScene(4);
 			break;
 		default:

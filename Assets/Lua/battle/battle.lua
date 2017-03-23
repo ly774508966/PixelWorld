@@ -48,17 +48,12 @@ function battle.init_scene()
 end
 
 function battle.init_player()
-	local prefab = resMgr:LoadAsset('Prefabs/Character/king')
 
-    local go = GameObject.Instantiate(prefab)
-	go.transform.localScale = Vector3.one
-	go.transform.localPosition = Vector3.New(5, 0, 5)
-
-	this.player = go:GetComponent("Player")
+	this.player = chMgr:AddPlayer(math.random(10, 20), 0, math.random(2, 10))
 	this.player.ID = this.UID
 	this.UID = this.UID + 1
 
-	this.player_tf = go.transform
+	this.player_tf = this.player.transform
 end
 
 function battle.player_hit(id, attackid)
@@ -86,7 +81,8 @@ function battle.player_hit(id, attackid)
 
 	-- effect
 	local pos = this.player_tf.position + Vector3.New(0, 1, 0)
-	effect_mgr.create_hit(pos, -attack)
+	effect_mgr.create_hit_label(pos, -attack)
+	effect_mgr.create_hit(this.player_tf)
 	
 end
 
@@ -100,11 +96,28 @@ function battle.enemy_hit(id, attackid)
 	if enemy then
 		-- effect
 		local pos = enemy[3].position + Vector3.New(0, 1, 0)
-		effect_mgr.create_hit(pos, -attack)
+		effect_mgr.create_hit_label(pos, -attack)
+
+		effect_mgr.create_hit(enemy[3])
+	end
+
+end
+
+function battle.player_enter_npc(id, npcid)
+	print("player_enter_npc", id, npcid)
+
+
+	if npcid == 0 then
+		facade:sendNotification(TIP, {data={lanMgr:GetValue('ITEM_COMPOSE_SUCCESS')}})
+	elseif npcid == 1 then
+    	facade:sendNotification(OPEN_WINDOW, {name="PanelEquip"})
+	elseif npcid == 2 then
+
 	end
 
 end
 
 function battle.destroy()
 	-- body
+	chMgr:RemoveAll()
 end

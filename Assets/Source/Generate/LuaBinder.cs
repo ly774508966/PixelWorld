@@ -23,6 +23,7 @@ public static class LuaBinder
 		LanguageManagerWrap.Register(L);
 		SceneManagerWrap.Register(L);
 		SceneIDWrap.Register(L);
+		CharacterManagerWrap.Register(L);
 		CharacterWrap.Register(L);
 		PlayerWrap.Register(L);
 		MonsterWrap.Register(L);

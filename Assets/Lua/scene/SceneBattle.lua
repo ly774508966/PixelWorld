@@ -26,4 +26,5 @@ end
 
 function SceneBattle.OnDestroy()
 	print(TAG, 'OnDestroy')
+	battle.destroy()
 end

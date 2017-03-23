@@ -167,6 +167,7 @@ public static class CustomSettings
 		_GT(typeof(LanguageManager)),
 		_GT(typeof(SceneManager)),
 		_GT(typeof(SceneID)),
+		_GT(typeof(CharacterManager)),
 
 		_GT(typeof(Character)),
 		_GT(typeof(Player)),

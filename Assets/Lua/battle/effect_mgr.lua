@@ -18,7 +18,7 @@ function effect_mgr.init()
 
 end
 
-function effect_mgr.create_hit(wpos, num)
+function effect_mgr.create_hit_label(wpos, num)
 	local pos = battle.camera:WorldToScreenPoint(wpos)
 
 	local prefab = resMgr:LoadAsset('UI/Widget/CritNum')
@@ -44,8 +44,14 @@ function effect_mgr.create_hit(wpos, num)
 	text:CrossFadeAlpha(0, 1, true)
 end
 
-function effect_mgr.create(id)
-	-- body
+function effect_mgr.create_hit(parent)
+	
+	local prefab = resMgr:LoadAsset('Prefabs/Effect/Hit')
+    local go = GameObject.Instantiate(prefab)
+	go.transform:SetParent(parent)
+	go.transform.localScale = Vector3.one
+	go.transform.localPosition = Vector3.New(0, 0.5, 0)
+	--GameObject.Destroy(go, 0.5)
 end
 
 _G['effect_mgr'] = effect_mgr

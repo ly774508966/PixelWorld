@@ -48,6 +48,7 @@ public class PlayerController : MonoBehaviour {
 		float horizontal = CrossPlatformInputManager.GetAxis("Horizontal");
 		float vertical = CrossPlatformInputManager.GetAxis("Vertical");
 
+
 		bool bJump = CrossPlatformInputManager.GetButtonDown ("Jump");
 		bool bAttack = CrossPlatformInputManager.GetButtonDown ("Fire1");
 		if (bJump) {
@@ -65,10 +66,15 @@ public class PlayerController : MonoBehaviour {
 			if (mDir.sqrMagnitude > 1) {
 				mDir.Normalize();
 			}
+
+			// camera 
+			mDir = Camera.main.transform.forward * mDir.z + Camera.main.transform.right * mDir.x;
+			mDir.y = 0;
 		} else {
 			// move stop
 			isMoving = false;
 		}
+
 
 		if (m_Controller.isGrounded == false) {
 			bJump = false;
@@ -118,6 +124,7 @@ public class PlayerController : MonoBehaviour {
 				}
 				Debug.Log("jump " + cur.normalizedTime);
 			} else if (cur.IsName("attack1_1")) {
+				if (isMoving)  transform.forward = mDir;
 				move.x = 0;
 				move.z = 0;
 				if (bAttack && m_AttackIdx == 1) {
@@ -125,6 +132,7 @@ public class PlayerController : MonoBehaviour {
 					m_Animator.SetInteger("AttackIdx", m_AttackIdx);
 				}
 			} else if (cur.IsName("attack1_2")) {
+				if (isMoving)  transform.forward = mDir;
 				move.x = 0;
 				move.z = 0;
 				if (bAttack && m_AttackIdx == 2) {
@@ -132,6 +140,7 @@ public class PlayerController : MonoBehaviour {
 					m_Animator.SetInteger("AttackIdx", m_AttackIdx);
 				}
 			} else if (cur.IsName("attack1_3")) {
+				if (isMoving)  transform.forward = mDir;
 				move = Vector3.zero;
 			} else if (cur.IsName("hit")) {
 				move = Vector3.zero;

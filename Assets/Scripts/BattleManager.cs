@@ -22,6 +22,10 @@ public class BattleManager : MonoBehaviour {
 		return Util.CallMethod("battle", func, args);
 	}
 
+	public void PlayerEnterNpc(int id, int attackid){
+		CallMethod("player_enter_npc", id, attackid);
+	}
+
 	public void PlayerHit(int id, int attackid){
 		CallMethod("player_hit", id, attackid);
 	}

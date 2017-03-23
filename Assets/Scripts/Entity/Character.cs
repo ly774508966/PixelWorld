@@ -37,7 +37,7 @@ public class Character : MonoBehaviour {
 	public CharaterState CharcterState {get{return m_CharacterState;}}
 
 
-	private GameObject AttackBox;
+	protected GameObject AttackBox;
 
 	void Awake() {
 		m_Animator = GetComponentInChildren<Animator>();
@@ -87,10 +87,16 @@ public class Character : MonoBehaviour {
 	}
 
 
+	protected virtual void StartAttack() {
+		
+	}
+
 	public void OnEventAttack(string param) {
 		//Debug.LogFormat("OnEventAttack {0} {1}", ID, param);
 		if (param == "start") {
 			AttackBox.SetActive(true);
+
+			StartAttack();
 		} else {
 			AttackBox.SetActive(false);
 		}

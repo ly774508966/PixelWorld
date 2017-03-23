@@ -24,27 +24,25 @@ function enemy_mgr.init()
 end
 
 function enemy_mgr.create(id)
-	local prefab = resMgr:LoadAsset('Prefabs/Monster/1001')
-	local prefab_bar = resMgr:LoadAsset('UI/Widget/HealthBar')
-	
-    local go = GameObject.Instantiate(prefab)
-	go.transform.localScale = Vector3.one
-	go.transform.localPosition = Vector3.New(math.random(2, 40), 0, math.random(2, 10))
-	local monster = go:GetComponent("Monster")
+
+	local monster = chMgr:AddEnemy(1001, math.random(2, 40), 0, math.random(2, 10))
 	monster.ID = this.UID
 	this.UID = this.UID + 1
 
+	local transform = monster.transform
+
+	local prefab_bar = resMgr:LoadAsset('UI/Widget/HealthBar')
 	local bar = GameObject.Instantiate(prefab_bar)
 	bar.transform:SetParent(battle.canvas)
 	bar.transform.localScale = Vector3.one
 	local follow = bar:GetComponent('Follow')
-	follow.target = go.transform
+	follow.target = transform
 	follow.offset = Vector3.New(0, 1, 0)
 
 	local slider = bar.transform:Find('Slider'):GetComponent('Slider') 
 	slider.value = 1
 
-	this.enemys[monster.ID] = {monster, go, go.transform, bar, slider}
+	this.enemys[monster.ID] = {monster, go, transform, bar, slider}
 end
 
 function enemy_mgr.Update()
@@ -98,7 +96,7 @@ function enemy_mgr.enemy_die(id)
 	sequence:AppendInterval(2)
 	sequence:AppendCallback(DG.Tweening.TweenCallback(function ()
 		-- remove
-		GameObject.Destroy(enemy[2])
+		chMgr:Remove(enemy[1])
 		this.enemys[id] = nil
 	end))
 	sequence:Play()

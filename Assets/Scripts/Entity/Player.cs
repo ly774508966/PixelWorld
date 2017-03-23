@@ -69,13 +69,38 @@ public class Player : Character {
 	}
 
 
+	protected override void StartAttack ()
+	{
+		base.StartAttack ();
+
+		bool hasEnemy = CharacterManager.GetInstance().CheckEnemyInArea(AttackBox.transform.position, DisAttack);
+		Debug.Log("hasEnemy " + hasEnemy);
+
+		if (hasEnemy == false) {
+			// auto-rotate
+			float distance = 0;
+			Monster monster = CharacterManager.GetInstance().FindNearestEnemy(transform.position, out distance);
+			if (distance < DisAttack*10) {
+				Vector3 offset = monster.transform.position - transform.position;
+				offset.y = 0;
+				transform.forward = offset.normalized;
+			}
+		}
+	}
+
 	void OnTriggerEnter(Collider collider)   { 
-		Debug.Log("OnTriggerEnter");  
-		if (collider.gameObject.layer == LayerMask.NameToLayer("Enemy")) {
+		string tag = collider.gameObject.tag;
+		Debug.Log("OnTriggerEnter " + tag);  
+		if ( tag == "Enemy") {
 			Monster monster = collider.transform.parent.GetComponent<Monster>();
 			Debug.Log("Enemy " + monster.ID);
 			ActHit();
 			BattleManager.GetInstance ().PlayerHit (ID, monster.ID);
+		} else if (tag == "NPC") {
+
+			NPC npc = collider.transform.GetComponent<NPC>();
+
+			BattleManager.GetInstance ().PlayerEnterNpc (ID, npc.ID);
 		}
 	}  
 	void OnTriggerExit(Collider collider)  {  

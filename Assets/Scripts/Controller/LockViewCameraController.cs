@@ -6,7 +6,7 @@ public class LockViewCameraController : MonoBehaviour {
 	[SerializeField] protected Transform m_Target;            // The target object to follow
 	[SerializeField] private float m_MoveSpeed = 10f;           // How fast the rig will move to keep up with the target's position.
 	[SerializeField] private Vector3 m_Offset = new Vector3(0, 5, -10);                // offset
-        [SerializeField] private bool m_IgnoreY = true;                // ignore y move
+    [SerializeField] private bool m_IgnoreY = true;                // ignore y move
 
 	public void SetTarget(Transform target) {
 		m_Target = target;
