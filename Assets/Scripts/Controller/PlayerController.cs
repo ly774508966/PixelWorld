@@ -51,6 +51,8 @@ public class PlayerController : MonoBehaviour {
 
 		bool bJump = CrossPlatformInputManager.GetButtonDown ("Jump");
 		bool bAttack = CrossPlatformInputManager.GetButtonDown ("Fire1");
+		bool bSkill1 = CrossPlatformInputManager.GetButtonDown ("Fire2");
+		bool bSkill2 = CrossPlatformInputManager.GetButtonDown ("Fire3");
 		if (bJump) {
 			Debug.LogFormat("bJump {0}", bJump);
 		}
@@ -79,6 +81,8 @@ public class PlayerController : MonoBehaviour {
 		if (m_Controller.isGrounded == false) {
 			bJump = false;
 			bAttack = false;
+			bSkill1 = false;
+			bSkill2 = false;
 		}
 
 		if (bJump) {
@@ -105,6 +109,7 @@ public class PlayerController : MonoBehaviour {
 					m_AttackIdx = 1;
 				}
 				m_Animator.SetInteger("AttackIdx", m_AttackIdx);
+				m_Animator.SetBool("bSkill1", bSkill1);
 				m_Animator.SetBool("bHit", false);
 				//Debug.Log("run");
 			} else if (cur.IsName("idle")) {
@@ -116,6 +121,7 @@ public class PlayerController : MonoBehaviour {
 					m_AttackIdx = 1;
 				}
 				m_Animator.SetInteger("AttackIdx", m_AttackIdx);
+				m_Animator.SetBool("bSkill1", bSkill1);
 				//Debug.Log("idle");
 			} else if (cur.IsName("jump")) {
 				if (yMove > 0 && cur.normalizedTime < 0.5f) {	// ¿ªÊ¼jump
@@ -141,10 +147,16 @@ public class PlayerController : MonoBehaviour {
 				}
 			} else if (cur.IsName("attack1_3")) {
 				if (isMoving)  transform.forward = mDir;
-				move = Vector3.zero;
+				move.x = 0;
+				move.z = 0;
 			} else if (cur.IsName("hit")) {
-				move = Vector3.zero;
+				move.x = 0;
+				move.z = 0;
 				m_Animator.SetBool("bHit", false);
+			} else if (cur.IsName("skill1")) {
+				move.x = 0;
+				move.z = 0;
+				m_Animator.SetBool("bSkill1", false);
 			}
 		}
 

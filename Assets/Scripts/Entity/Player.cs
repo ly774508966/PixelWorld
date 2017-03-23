@@ -8,11 +8,16 @@ public class Player : Character {
 
 	private int m_AttackIdx = 1;
 
+
+	protected GameObject SkillBox;
+
 	// Use this for initialization
 	void Start () {
 
 		m_Controller=GetComponent<CharacterController>();
 
+		SkillBox = transform.Find("SkillBox").gameObject;
+		SkillBox.SetActive(false);
 	}
 	
 	// Update is called once per frame
@@ -69,6 +74,17 @@ public class Player : Character {
 	}
 
 
+	public void OnEventSkill1(string param) {
+		//Debug.LogFormat("OnEventAttack {0} {1}", ID, param);
+		if (param == "start") {
+			SkillBox.SetActive(true);
+
+			StartSkill1();
+		} else {
+			SkillBox.SetActive(false);
+		}
+	}
+
 	protected override void StartAttack ()
 	{
 		base.StartAttack ();
@@ -86,6 +102,25 @@ public class Player : Character {
 				transform.forward = offset.normalized;
 			}
 		}
+	}
+
+	protected void StartSkill1 ()
+	{
+		bool hasEnemy = CharacterManager.GetInstance().CheckEnemyInArea(AttackBox.transform.position, DisAttack);
+		Debug.Log("hasEnemy " + hasEnemy);
+
+		if (hasEnemy == false) {
+			// auto-rotate
+			float distance = 0;
+			Monster monster = CharacterManager.GetInstance().FindNearestEnemy(transform.position, out distance);
+			if (distance < DisAttack*10) {
+				Vector3 offset = monster.transform.position - transform.position;
+				offset.y = 0;
+				transform.forward = offset.normalized;
+			}
+		}
+
+		// mis
 	}
 
 	void OnTriggerEnter(Collider collider)   { 

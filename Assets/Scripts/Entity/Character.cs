@@ -44,6 +44,7 @@ public class Character : MonoBehaviour {
 
 		AttackBox = transform.Find("AttackBox").gameObject;
 		AttackBox.SetActive(false);
+
 	}
 
 	// Use this for initialization
@@ -86,9 +87,7 @@ public class Character : MonoBehaviour {
 		m_Animator.SetBool(name, false);
 	}
 
-
 	protected virtual void StartAttack() {
-		
 	}
 
 	public void OnEventAttack(string param) {

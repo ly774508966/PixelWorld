@@ -16,12 +16,13 @@ public class Monster : Character {
 
 	void OnTriggerEnter(Collider collider)   { 
 		Debug.Log("OnTriggerEnter");
-		if (collider.gameObject.layer == LayerMask.NameToLayer("Player")) {
+		string tag = collider.gameObject.tag;
+		if (tag == "Player") {
 			Player player = collider.transform.parent.GetComponent<Player>();
 			Debug.Log("player " + player.ID);
 			ActHit();
 			BattleManager.GetInstance ().EnemyHit (ID, player.ID);
-		}  
+		} else 
 	}
 	void OnTriggerExit(Collider collider)  {  
 		//Debug.Log("OnTriggerExit");  

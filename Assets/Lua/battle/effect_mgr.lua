@@ -51,7 +51,7 @@ function effect_mgr.create_hit(parent)
 	go.transform:SetParent(parent)
 	go.transform.localScale = Vector3.one
 	go.transform.localPosition = Vector3.New(0, 0.5, 0)
-	--GameObject.Destroy(go, 0.5)
+	GameObject.Destroy(go, 0.5)
 end
 
 _G['effect_mgr'] = effect_mgr
