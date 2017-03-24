@@ -198,8 +198,6 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		CollisionFlags flags = m_Controller.Move(move * Time.deltaTime);
-
-		//Debug.Log(m_Controller.isGrounded);
 	}
  
 }

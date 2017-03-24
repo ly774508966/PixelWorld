@@ -22,7 +22,13 @@ public class Monster : Character {
 			Debug.Log("player " + player.ID);
 			ActHit();
 			BattleManager.GetInstance ().EnemyHit (ID, player.ID);
-		} else 
+		} else if (tag == "PlayerMissile") {
+			Missile missile = collider.transform.GetComponent<Missile>();
+			missile.OnCollision();
+			Debug.Log("missile " + missile.ID);
+			ActHit();
+			BattleManager.GetInstance ().EnemyHit (ID, missile.ID);
+		}
 	}
 	void OnTriggerExit(Collider collider)  {  
 		//Debug.Log("OnTriggerExit");  

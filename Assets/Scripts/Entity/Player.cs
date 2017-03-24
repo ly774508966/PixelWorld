@@ -77,11 +77,10 @@ public class Player : Character {
 	public void OnEventSkill1(string param) {
 		//Debug.LogFormat("OnEventAttack {0} {1}", ID, param);
 		if (param == "start") {
-			SkillBox.SetActive(true);
-
+			//SkillBox.SetActive(true);
 			StartSkill1();
 		} else {
-			SkillBox.SetActive(false);
+			//SkillBox.SetActive(false);
 		}
 	}
 
@@ -106,21 +105,23 @@ public class Player : Character {
 
 	protected void StartSkill1 ()
 	{
-		bool hasEnemy = CharacterManager.GetInstance().CheckEnemyInArea(AttackBox.transform.position, DisAttack);
-		Debug.Log("hasEnemy " + hasEnemy);
-
-		if (hasEnemy == false) {
-			// auto-rotate
-			float distance = 0;
-			Monster monster = CharacterManager.GetInstance().FindNearestEnemy(transform.position, out distance);
-			if (distance < DisAttack*10) {
-				Vector3 offset = monster.transform.position - transform.position;
-				offset.y = 0;
-				transform.forward = offset.normalized;
-			}
+		// auto-rotate
+		float distance = 0;
+		Monster monster = CharacterManager.GetInstance().FindNearestEnemy(transform.position, out distance);
+		if (distance < DisAttack*10) {
+			Vector3 offset = monster.transform.position - transform.position;
+			offset.y = 0;
+			transform.forward = offset.normalized;
 		}
 
-		// mis
+		// missile
+		Object prefab = ResourceManager.GetInstance().LoadAsset("Prefabs/Effect/efx_arrow");
+		GameObject go = GameObject.Instantiate(prefab) as GameObject;
+		go.tag = gameObject.tag + "Missile";
+		go.transform.localScale = Vector3.one;
+		go.transform.forward = transform.forward;
+		go.transform.position = transform.position + new Vector3(0, 0.5f, 0) + transform.forward;
+		Missile missile = go.GetComponent<Missile>();
 	}
 
 	void OnTriggerEnter(Collider collider)   { 
@@ -131,12 +132,15 @@ public class Player : Character {
 			Debug.Log("Enemy " + monster.ID);
 			ActHit();
 			BattleManager.GetInstance ().PlayerHit (ID, monster.ID);
+		} else if (tag == "EnemyMissile") {
+			Missile missile = collider.transform.GetComponent<Missile>();
+			Debug.Log("missile " + missile.ID);
+			ActHit();
+			BattleManager.GetInstance ().PlayerHit (ID, missile.ID);
 		} else if (tag == "NPC") {
-
 			NPC npc = collider.transform.GetComponent<NPC>();
-
 			BattleManager.GetInstance ().PlayerEnterNpc (ID, npc.ID);
-		}
+		} 
 	}  
 	void OnTriggerExit(Collider collider)  {  
 		//Debug.Log("OnTriggerExit");  
