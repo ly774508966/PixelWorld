@@ -9,12 +9,15 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public class FullViewCameraController : MonoBehaviour {
 	
-	public GameObject target; //a target look at
+	public Transform target; //a target look at
+	public float height;
 	public float distance;
 	public float xSpeed; //speed pan x
 	public float ySpeed; //speed pan y
 	public float yMinLimit; //y min limit
 	public float yMaxLimit; //y max limit
+	public bool protectFromWallClip = true;
+	public LayerMask clipLayer;
 
 	//Private variable
 	private float m_LookAngle;	// y rotation
@@ -26,12 +29,15 @@ public class FullViewCameraController : MonoBehaviour {
 		//Warning when not found target
 		if(target == null)
 		{
-			target = GameObject.FindGameObjectWithTag("Player");
+			GameObject player = GameObject.FindGameObjectWithTag("Player");
 			
-			if(target == null)
+			if(player == null)
 			{
 				Debug.LogWarning("Don't found player tag please change player tag to Player");	
+				return;
 			}
+
+			target = player.transform;
 		}
 		
 
@@ -63,20 +69,33 @@ public class FullViewCameraController : MonoBehaviour {
 		m_LookAngle += x * xSpeed;
 
 		m_TiltAngle -= y * ySpeed;
-
 	
 		m_TiltAngle = ClampAngle(m_TiltAngle, yMinLimit, yMaxLimit);
 
-
 		Quaternion rotation = Quaternion.Euler(m_TiltAngle, m_LookAngle, 0);
+
+		Vector3 targetPos = target.position + new Vector3(0, height, 0);
 
 		Vector3 calPos = new Vector3(0, 0, -distance);
 
-		Vector3 position = rotation * calPos + target.transform.position;
+		Vector3 position = rotation * calPos + targetPos;
 
 		transform.rotation = rotation;
-		transform.position = position;
-	
+		transform.position = Vector3.Lerp(transform.position, position, Time.time);
+
+		// clip from walls
+		if (protectFromWallClip) {
+			Vector3 dir = (targetPos - transform.position).normalized;
+			Vector3 end = targetPos + transform.eulerAngles.y * dir;
+
+			Debug.DrawLine(position, targetPos, Color.red);
+
+			RaycastHit hit;
+			if (Physics.Linecast(targetPos, position, out hit, clipLayer)) {
+				//Debug.Log(hit.collider.name);
+				transform.position = hit.point;
+			}
+		}
 	}
 
 	float ClampAngle(float angle, float min, float max) {

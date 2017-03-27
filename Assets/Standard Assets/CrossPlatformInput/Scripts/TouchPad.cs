@@ -106,6 +106,14 @@ namespace UnityStandardAssets.CrossPlatformInput
         if (controlStyle != ControlStyle.Absolute )
             m_Center = data.position;
 #endif
+
+			// bugfix, move when clickdown
+#if !UNITY_EDITOR
+               		m_PreviousTouchPos = Input.touches[m_Id].position;
+#else
+			m_PreviousMouse.x = Input.mousePosition.x;
+			m_PreviousMouse.y = Input.mousePosition.y;
+#endif
 		}
 
 		void Update()
